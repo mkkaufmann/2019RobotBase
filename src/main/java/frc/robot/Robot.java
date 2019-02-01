@@ -25,6 +25,7 @@ import java.util.Arrays;
  */
 //TODO add vision and cameras -> Auto align, auto pickup, auto line up, auto grab cargo
 //TODO restrict mechanisms before climb
+//TODO implement controls
 public class Robot extends TimedRobot {
     private static final String kDefaultAuto = "Default";
     private static final String kCustomAuto = "My Auto";
