@@ -2,18 +2,19 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Spark;
 import frc.robot.Constants;
+import frc.robot.lib.GenericPWMSpeedController;
 
 public class Climber extends Subsystem{
 
     private static Climber mInstance = null;
-    private Spark mLeftMaster;
-    private Spark mRightMaster;
+    private GenericPWMSpeedController mLeftMaster;
+    private GenericPWMSpeedController mRightMaster;
     private ClimberState mState = ClimberState.STOWED;
     private PeriodicIO mPeriodicIO = new PeriodicIO();
 
     private Climber(){
-        mLeftMaster = new Spark(Constants.kClimber.leftSparkPort);
-        mRightMaster = new Spark(Constants.kClimber.rightSparkPort);
+        mLeftMaster = new GenericPWMSpeedController(Constants.kClimber.leftMasterPort);
+        mRightMaster = new GenericPWMSpeedController(Constants.kClimber.rightMasterPort);
     }
 
     public static Climber getInstance(){
@@ -21,6 +22,10 @@ public class Climber extends Subsystem{
             mInstance = new Climber();
         }
         return mInstance;
+    }
+
+    public synchronized void toggleState(){
+        mState = mState == ClimberState.PERCENT_OUTPUT ? ClimberState.STOWED : ClimberState.PERCENT_OUTPUT;
     }
 
     public synchronized void setState(ClimberState state){
@@ -63,7 +68,7 @@ public class Climber extends Subsystem{
         public double demand = 0;
     }
 
-    private enum ClimberState{
+    public enum ClimberState{
         STOWED,
         PERCENT_OUTPUT
     }

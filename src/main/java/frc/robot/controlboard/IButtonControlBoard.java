@@ -3,32 +3,31 @@ package frc.robot.controlboard;
 public interface IButtonControlBoard {
 
     // Elevator
-    boolean getGoToHighScaleHeight();
+    boolean getGoToHighHeight();
 
-    boolean getGoToNeutralScaleHeight();
+    boolean getGoToNeutralHeight();
 
-    boolean getGoToLowScaleHeight();
+    boolean getGoToLowHeight();
 
-    boolean getGoToSwitchHeight();
+    boolean getGoToCargoShipCargoHeight();
 
-    boolean getGoToStowHeight();
+    boolean getHatchOrCargo();
 
-    boolean getBackwardsModifier();
+    boolean getArmToggle();
 
-    boolean getAutoHeightModifier();
+    boolean getArmToStart();
 
-    // Jog Elevator
-    double getJogElevatorThrottle();
+    boolean getClawToggle();
 
     // Intake
     boolean getRunIntake();
 
-    boolean getIntakePosition();
-
     void setRumble(boolean on);
 
     // Climbing
-    boolean getEnableHangMode();
+    boolean getEnableClimbMode();
+
+    double getClimberThrottle();
 
     double getElevatorThrottle();
 }

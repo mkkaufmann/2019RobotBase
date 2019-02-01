@@ -19,6 +19,20 @@ public class Superstructure extends Subsystem{
     private SuperstructureStateMachine mStateMachine = new SuperstructureStateMachine();
     private SuperstructureStateMachine.WantedAction mWantedAction = SuperstructureStateMachine.WantedAction.IDLE;
 
+    public MechanismMode getMode() {
+        return mMode;
+    }
+
+    public void setMode(MechanismMode mode) {
+        this.mMode = mode;
+    }
+
+    public void toggleMode(){
+        mMode = mMode == MechanismMode.CARGO ? MechanismMode.HATCH : MechanismMode.CARGO;
+    }
+
+    private MechanismMode mMode = MechanismMode.HATCH;
+
     private boolean isClimbMode;
     private boolean isElevatorJogging = true;
 
@@ -27,6 +41,11 @@ public class Superstructure extends Subsystem{
             mInstance = new Superstructure();
         }
         return mInstance;
+    }
+
+    public enum MechanismMode{
+        CARGO,
+        HATCH
     }
 
     @Override

@@ -11,7 +11,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.lib.CheesyDriveHelper;
 import frc.robot.loops.Looper;
+import frc.robot.states.SuperstructureConstants;
+import frc.robot.states.SuperstructureState;
 import frc.robot.subsystems.*;
 
 import java.util.Arrays;
@@ -25,7 +28,7 @@ import java.util.Arrays;
  */
 //TODO add vision and cameras -> Auto align, auto pickup, auto line up, auto grab cargo
 //TODO restrict mechanisms before climb
-//TODO implement controls
+//TODO implement toggled controls
 public class Robot extends TimedRobot {
     private static final String kDefaultAuto = "Default";
     private static final String kCustomAuto = "My Auto";
@@ -33,6 +36,16 @@ public class Robot extends TimedRobot {
     private final SendableChooser<String> m_chooser = new SendableChooser<>();
     private Looper mEnabledLooper = new Looper();
     private Looper mDisabledLooper = new Looper();
+    private Drive mDrive = Drive.getInstance();
+    private CheesyDriveHelper mCheesyDriveHelper = new CheesyDriveHelper();
+    private ControlBoard mControlBoard = new ControlBoard();
+    private Arm mArm = Arm.getInstance();
+    private Claw mClaw = Claw.getInstance();
+    private Climber mClimber = Climber.getInstance();
+    private Elevator mElevator = Elevator.getInstance();
+    private Mouth mMouth = Mouth.getInstance();
+    private Strafe mStrafe = Strafe.getInstance();
+    private Superstructure mSuperStructure = Superstructure.getInstance();
 
     private final SubsystemManager mSubsystemManager = new SubsystemManager(
             Arrays.asList(
@@ -126,6 +139,64 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
+        mDrive.setOpenLoop(mCheesyDriveHelper.cheesyDrive(mControlBoard.getThrottle(), mControlBoard.getTurn(), mControlBoard.getQuickTurn()));
+
+        if(mControlBoard.getArmToStart()){
+            mArm.setWantedTargetPosition(Arm.ArmPosition.START);
+        }else if(mControlBoard.getArmToggle()){
+            mArm.toggleTargetPosition();
+        }
+
+
+
+        if(mControlBoard.getEnableClimbMode()){
+            mClimber.toggleState();
+        }
+        mClimber.setOutput(mControlBoard.getClimberThrottle());
+
+        //TODO move to superstructure
+        if(mControlBoard.getHatchOrCargo()){
+            mSuperStructure.toggleMode();
+            SmartDashboard.putBoolean("isHatchMode", mSuperStructure.getMode() == Superstructure.MechanismMode.HATCH);
+        }
+
+        if(mSuperStructure.getMode() == Superstructure.MechanismMode.HATCH){
+            if(mControlBoard.getClawToggle()){
+                mClaw.toggleState();
+            }
+
+            if(mControlBoard.getGoToLowHeight()){
+                mElevator.setPositionPID(SuperstructureConstants.kRocketHatchLow);
+            }else if(mControlBoard.getGoToNeutralHeight()){
+                mElevator.setPositionPID(SuperstructureConstants.kRocketHatchMiddle);
+            }else if(mControlBoard.getGoToHighHeight()){
+                mElevator.setPositionPID(SuperstructureConstants.kRocketHatchHigh);
+            }
+
+        }else {
+            if (mControlBoard.getShootSpeed() > 0) {
+                mMouth.setState(Mouth.MouthState.OUTTAKE);
+                mMouth.setSpeed(mControlBoard.getShootSpeed());
+            }
+            if (mControlBoard.getRunIntake()) {
+                mMouth.toggleIntake();
+            }
+            if (mControlBoard.getGoToCargoShipCargoHeight()) {
+                mElevator.setPositionPID(SuperstructureConstants.kCargoShipCargo);
+            }
+            if(mControlBoard.getGoToLowHeight()){
+                mElevator.setPositionPID(SuperstructureConstants.kRocketCargoLow);
+            }else if(mControlBoard.getGoToNeutralHeight()){
+                mElevator.setPositionPID(SuperstructureConstants.kRocketCargoMiddle);
+            }else if(mControlBoard.getGoToHighHeight()){
+                mElevator.setPositionPID(SuperstructureConstants.kRocketCargoHigh);
+            }
+        }
+
+        if(mControlBoard.getElevatorThrottle() > 0){
+            mElevator.setOpenLoop(mControlBoard.getClimberThrottle());
+        }
+
     }
 
     @Override

@@ -4,14 +4,14 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Victor;
 import frc.robot.Constants;
+import frc.robot.lib.GenericPWMSpeedController;
 import frc.robot.lib.Util;
 import frc.robot.states.SuperstructureConstants;
-import org.omg.PortableInterceptor.HOLDING;
 
 public class Strafe extends Subsystem {
 
     private static Strafe mInstance = null;
-    private Victor mMaster;
+    private GenericPWMSpeedController mMaster;
     private Encoder mEncoder;
     private DigitalInput mLimitSwitch;//on left
     private static double kEncoderTicksPerInch = 0;//TODO Tune!!!
@@ -21,7 +21,7 @@ public class Strafe extends Subsystem {
     private PeriodicIO mPeriodicIO = new PeriodicIO();
 
     private Strafe(){
-        mMaster = new Victor(Constants.kStrafe.victorPort);
+        mMaster = new GenericPWMSpeedController(Constants.kStrafe.masterPort);
         mEncoder = new Encoder(Constants.kStrafe.encoderPort1, Constants.kStrafe.encoderPort2);
         mLimitSwitch = new DigitalInput(Constants.kStrafe.limitPort);
     }

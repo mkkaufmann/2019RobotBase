@@ -1,7 +1,10 @@
 package frc.robot.controlboard;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants;
+import frc.robot.lib.Util;
 
 public class GamepadDriveControlBoard implements IDriveControlBoard {
     private static GamepadDriveControlBoard mInstance = null;
@@ -14,10 +17,10 @@ public class GamepadDriveControlBoard implements IDriveControlBoard {
         return mInstance;
     }
 
-    private Joystick mJoystick;
+    private XboxController mJoystick;
 
     private GamepadDriveControlBoard() {
-        mJoystick = new Joystick(Constants.kControlBoard.kDriveGamepadPort);
+        mJoystick = new XboxController(Constants.kControlBoard.kDriveGamepadPort);
     }
 
     @Override
@@ -31,22 +34,19 @@ public class GamepadDriveControlBoard implements IDriveControlBoard {
     }
 
     @Override
-    public boolean getPoopyShoot() {
-        return false;
-    }
-
-    @Override
     public boolean getQuickTurn() {
         return mJoystick.getRawButton(6);
     }
 
     @Override
-    public boolean getOpenJaw() {
-        return mJoystick.getRawAxis(3) != 0;
-    }
-
-    @Override
-    public boolean getShoot() {
-        return mJoystick.getRawAxis(2) != 0;
+    public double getShootSpeed() {
+        double speed = Util.deadband(mJoystick.getTriggerAxis(GenericHID.Hand.kLeft));
+        if(speed == 0){
+            return 0;
+        }else if(speed < 0.5){
+            return 0.5;
+        }else {
+            return 1.0;
+        }
     }
 }

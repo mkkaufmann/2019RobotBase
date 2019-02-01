@@ -2,8 +2,10 @@ package frc.robot.controlboard;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants;
-//TODO configure
+import frc.robot.lib.Util;
+
 public class GamepadButtonControlBoard implements IButtonControlBoard {
     private static GamepadButtonControlBoard mInstance = null;
 
@@ -15,64 +17,56 @@ public class GamepadButtonControlBoard implements IButtonControlBoard {
         return mInstance;
     }
 
-    private Joystick mJoystick;
+    private XboxController mJoystick;
 
     private GamepadButtonControlBoard() {
-        mJoystick = new Joystick(Constants.kControlBoard.kButtonGamepadPort);
+        mJoystick = new XboxController(Constants.kControlBoard.kButtonGamepadPort);
     }
 
     //Elevator
     @Override
-    public boolean getGoToHighScaleHeight() {
+    public boolean getGoToHighHeight() {
         return mJoystick.getRawButton(4);
     }
 
     @Override
-    public boolean getGoToNeutralScaleHeight() {
+    public boolean getGoToNeutralHeight() {
         return mJoystick.getRawButton(2);
     }
 
     @Override
-    public boolean getGoToLowScaleHeight() {
+    public boolean getGoToLowHeight() {
         return mJoystick.getRawButton(1);
     }
 
     @Override
-    public boolean getGoToSwitchHeight() {
+    public boolean getGoToCargoShipCargoHeight() {
         return mJoystick.getRawButton(3);
     }
 
     @Override
-    public boolean getGoToStowHeight() {
+    public boolean getHatchOrCargo() {
         return mJoystick.getRawButton(6);
     }
 
     @Override
-    public boolean getBackwardsModifier() {
-        return mJoystick.getRawAxis(3) > Constants.kControlBoard.kJoystickThreshold;
+    public boolean getArmToggle() {
+        return mJoystick.getRawButton(5);
     }
 
     @Override
-    public boolean getAutoHeightModifier() {
-        return false;
+    public boolean getArmToStart() {
+        return mJoystick.getRawButton(5) && mJoystick.getPOV() == 180;//TODO make sure other is not activated
     }
 
-    //Jog Elevator
     @Override
-    public double getJogElevatorThrottle() {
-        return -mJoystick.getRawAxis(5);
-    }
-
-
-    //Intake
-    @Override
-    public boolean getIntakePosition() {
-        return mJoystick.getRawAxis(2) > Constants.kControlBoard.kJoystickThreshold;
+    public boolean getClawToggle() {
+        return Util.deadband(mJoystick.getTriggerAxis(GenericHID.Hand.kRight), 0.2) > 0;
     }
 
     @Override
     public boolean getRunIntake() {
-        return mJoystick.getRawButton(5);
+        return this.getClawToggle();//TODO make sure implemented properly
     }
 
     @Override
@@ -80,15 +74,20 @@ public class GamepadButtonControlBoard implements IButtonControlBoard {
         mJoystick.setRumble(GenericHID.RumbleType.kRightRumble, on ? 1.0 : 0);
     }
 
-    //Climbing
+
     @Override
-    public boolean getEnableHangMode() {
+    public boolean getEnableClimbMode() {
         return mJoystick.getRawButton(8) && mJoystick.getRawButton(7);
     }
 
     @Override
+    public double getClimberThrottle() {
+        return Util.deadband(mJoystick.getRawAxis(1));
+    }
+
+    @Override
     public double getElevatorThrottle() {
-        return mJoystick.getRawAxis(5);
+        return Util.deadband(mJoystick.getRawAxis(5));
     }
 
 }

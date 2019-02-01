@@ -8,44 +8,45 @@ public class ControlBoard implements IControlBoard{
     GamepadButtonControlBoard mButtonControlBoard = GamepadButtonControlBoard.getInstance();
     GamepadDriveControlBoard mDriveControlBoard = GamepadDriveControlBoard.getInstance();
 
+
     @Override
-    public boolean getGoToHighScaleHeight() {
-        return mButtonControlBoard.getGoToHighScaleHeight();
+    public boolean getGoToHighHeight() {
+        return mButtonControlBoard.getGoToHighHeight();
     }
 
     @Override
-    public boolean getGoToNeutralScaleHeight() {
-        return mButtonControlBoard.getGoToNeutralScaleHeight();
+    public boolean getGoToNeutralHeight() {
+        return mButtonControlBoard.getGoToNeutralHeight();
     }
 
     @Override
-    public boolean getGoToLowScaleHeight() {
-        return mButtonControlBoard.getGoToLowScaleHeight();
+    public boolean getGoToLowHeight() {
+        return mButtonControlBoard.getGoToLowHeight();
     }
 
     @Override
-    public boolean getGoToSwitchHeight() {
-        return mButtonControlBoard.getGoToSwitchHeight();
+    public boolean getGoToCargoShipCargoHeight() {
+        return mButtonControlBoard.getGoToCargoShipCargoHeight();//TODO finish
     }
 
     @Override
-    public boolean getGoToStowHeight() {
-        return mButtonControlBoard.getGoToStowHeight();
+    public boolean getHatchOrCargo() {
+        return mButtonControlBoard.getHatchOrCargo();
     }
 
     @Override
-    public boolean getBackwardsModifier() {
-        return mButtonControlBoard.getBackwardsModifier();
+    public boolean getArmToggle() {
+        return mButtonControlBoard.getArmToggle();
     }
 
     @Override
-    public boolean getAutoHeightModifier() {
-        return mButtonControlBoard.getAutoHeightModifier();
+    public boolean getArmToStart() {
+        return mButtonControlBoard.getArmToStart();
     }
 
     @Override
-    public double getJogElevatorThrottle() {
-        return mButtonControlBoard.getJogElevatorThrottle();
+    public boolean getClawToggle() {
+        return mButtonControlBoard.getClawToggle();
     }
 
     @Override
@@ -53,10 +54,6 @@ public class ControlBoard implements IControlBoard{
         return mButtonControlBoard.getRunIntake();
     }
 
-    @Override
-    public boolean getIntakePosition() {
-        return mButtonControlBoard.getIntakePosition();
-    }
 
     @Override
     public void setRumble(boolean on) {
@@ -64,9 +61,15 @@ public class ControlBoard implements IControlBoard{
     }
 
     @Override
-    public boolean getEnableHangMode() {
-        return mButtonControlBoard.getEnableHangMode();
+    public boolean getEnableClimbMode() {
+        return mButtonControlBoard.getEnableClimbMode();
     }
+
+    @Override
+    public double getClimberThrottle() {
+        return mButtonControlBoard.getClimberThrottle();
+    }
+
 
     @Override
     public double getElevatorThrottle() {
@@ -82,24 +85,13 @@ public class ControlBoard implements IControlBoard{
     public double getTurn() {
         return mDriveControlBoard.getTurn();
     }
-
-    @Override
-    public boolean getPoopyShoot() {
-        return mDriveControlBoard.getPoopyShoot();
-    }
-
     @Override
     public boolean getQuickTurn() {
         return mDriveControlBoard.getQuickTurn();
     }
 
     @Override
-    public boolean getOpenJaw() {
-        return mDriveControlBoard.getOpenJaw();
-    }
-
-    @Override
-    public boolean getShoot() {
-        return mDriveControlBoard.getShoot();
+    public double getShootSpeed() {
+        return mDriveControlBoard.getShootSpeed();
     }
 }

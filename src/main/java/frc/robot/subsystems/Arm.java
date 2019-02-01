@@ -1,8 +1,10 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.VictorSP;
 import frc.robot.Constants;
+import frc.robot.lib.GenericPWMSpeedController;
 import frc.robot.loops.ILooper;
 import frc.robot.states.SuperstructureConstants;
 
@@ -10,7 +12,7 @@ import frc.robot.states.SuperstructureConstants;
 public class Arm extends Subsystem {
 
     private static Arm mInstance = null;
-    private final VictorSP mMaster;
+    private final GenericPWMSpeedController mMaster;
     private static final DigitalInput mScoreLimit = new DigitalInput(Constants.kArm.scoreLimitPort);;
     private static final DigitalInput mStowLimit = new DigitalInput(Constants.kArm.stowLimitPort);;
     private static final DigitalInput mStartLimit = new DigitalInput(Constants.kArm.startLimitPort);;
@@ -21,7 +23,7 @@ public class Arm extends Subsystem {
     private static PeriodicIO mPeriodicIO = new PeriodicIO();
 
     private Arm(){
-        mMaster = new VictorSP(Constants.kArm.SPPort);
+        mMaster = new GenericPWMSpeedController(Constants.kArm.masterPort);
         setTargetPosition(mTargetPosition);
     }
 
@@ -50,6 +52,22 @@ public class Arm extends Subsystem {
     public enum ArmControlState{
         HOLDING_POSITION,
         MOVING_TO_POSITION
+    }
+
+    public synchronized void toggleTargetPosition(){
+        if(mControlState == ArmControlState.HOLDING_POSITION){
+            if(mPreviousPosition == ArmPosition.START || mPreviousPosition == ArmPosition.STOW){
+                setWantedTargetPosition(ArmPosition.SCORE);
+            }else{
+                setWantedTargetPosition(ArmPosition.STOW);
+            }
+        }else{
+            if(mTargetPosition == ArmPosition.STOW || mTargetPosition == ArmPosition.START){
+                setWantedTargetPosition(ArmPosition.SCORE);
+            }else{
+                setWantedTargetPosition(ArmPosition.STOW);
+            }
+        }
     }
 
     public synchronized void setWantedTargetPosition(ArmPosition wantedTargetPosition){

@@ -61,4 +61,12 @@ public class Util {
         }
         return result;
     }
+
+    public static double deadband(double input, double minimum){
+        return Math.abs(input) > minimum ? input : 0;
+    }
+
+    public static double deadband(double input){
+        return deadband(input, 0.04);
+    }
 }

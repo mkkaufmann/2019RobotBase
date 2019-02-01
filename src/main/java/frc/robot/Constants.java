@@ -15,23 +15,23 @@ public class Constants {
         //TODO add limit switches
     }
     public static class kMouth{
-        public static final int SRPort = 0;//PWM
+        public static final int masterPort = 0;//PWM
     }
     public static class kClaw{
         public static final int servoPort = 1;//PWM
     }
     public static class kArm{
-        public static final int SPPort = 2;//PWM
+        public static final int masterPort = 2;//PWM
         public static final int scoreLimitPort = 0;//DIO
         public static final int stowLimitPort = 1;//DIO
         public static final int startLimitPort = 2;//DIO
     }
     public static class kClimber{
-        public static final int leftSparkPort = 3;//PWM
-        public static final int rightSparkPort = 4;//PWM
+        public static final int leftMasterPort = 3;//PWM
+        public static final int rightMasterPort = 4;//PWM
     }
     public static class kStrafe{
-        public static final int victorPort = 5;//PWM
+        public static final int masterPort = 5;//PWM
         public static final int encoderPort1 = 6;//PWM
         public static final int encoderPort2 = 7;//PWM
         public static final int limitPort = 3;//DIO
@@ -39,7 +39,5 @@ public class Constants {
     public static class kControlBoard{
         public static final int kDriveGamepadPort = 0;
         public static final int kButtonGamepadPort = 1;
-        public static final double kJoystickThreshold = 0.5;//TODO what are these for?
-        public static final double kJoystickJogThreshold = 0.4;
     }
 }

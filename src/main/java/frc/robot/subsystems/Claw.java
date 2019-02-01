@@ -7,7 +7,7 @@ import frc.robot.lib.Util;
 public class Claw extends Subsystem {
 
     private static Claw mInstance = null;
-    private static ClawState mState;
+    private ClawState mState;
     private Servo mMaster;
     private double kTargetThreshold = 3;
 
@@ -16,8 +16,12 @@ public class Claw extends Subsystem {
         mState = mMaster.getAngle() >= ClawState.OPEN.value ? ClawState.OPEN : ClawState.CLOSED;
     }
 
-    public static synchronized void setState(ClawState mState) {
-        Claw.mState = mState;
+    public synchronized void toggleState(){
+        setState(mState == ClawState.CLOSED? ClawState.OPEN : ClawState.CLOSED);
+    }
+
+    public synchronized void setState(ClawState mState) {
+        this.mState = mState;
     }
 
     public static Claw getInstance(){
