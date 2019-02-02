@@ -8,8 +8,6 @@ public class Mouth extends Subsystem {
 
     private static Mouth mInstance = null;
     private GenericPWMSpeedController mMaster;
-    private static final double kSlowShoot = 0.5;
-    private static final double kFastShoot = 1.0;
     private static final double kIntake = -1.0;
     private MouthState mState = MouthState.NEUTRAL;
     private PeriodicIO mPeriodicIO = new PeriodicIO();
@@ -59,7 +57,7 @@ public class Mouth extends Subsystem {
                 mPeriodicIO.demand = kIntake;
                 break;
             case NEUTRAL:
-                mPeriodicIO.demand = 0;
+                mPeriodicIO.demand = -0.2;
                 break;
                 //if outtake, its already set
         }

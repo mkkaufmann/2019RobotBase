@@ -29,7 +29,7 @@ public class SuperstructureConstants {
     public static final double kCargoShipCargo = 45.0; // TUNE THIS?
 
     //Strafe values
-    public static final double kStrafeInchesWidth = 16;//TUNE!!!!
+    public static final double kStrafeInchesWidth = 12;//TUNE!!!!
     public static final double kStrafeMinEncoderValue = 0;//TUNE!!!!
     public static final double kStrafeMaxEncoderValue = 1000;//TUNE!!!!
     public static final double kStrafeMidEncoderValue = (kStrafeMinEncoderValue+kStrafeMaxEncoderValue)/2;

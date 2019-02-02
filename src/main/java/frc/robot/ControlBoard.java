@@ -50,6 +50,11 @@ public class ControlBoard implements IControlBoard{
     }
 
     @Override
+    public boolean getCenterStrafe() {
+        return mButtonControlBoard.getCenterStrafe();
+    }
+
+    @Override
     public boolean getRunIntake() {
         return mButtonControlBoard.getRunIntake();
     }
@@ -68,6 +73,11 @@ public class ControlBoard implements IControlBoard{
     @Override
     public double getClimberThrottle() {
         return mButtonControlBoard.getClimberThrottle();
+    }
+
+    @Override
+    public double getStrafeThrottle() {
+        return mButtonControlBoard.getStrafeThrottle();
     }
 
 

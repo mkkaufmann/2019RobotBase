@@ -19,6 +19,8 @@ public interface IButtonControlBoard {
 
     boolean getClawToggle(); //toggle
 
+    boolean getCenterStrafe();
+
     // Intake
     boolean getRunIntake(); //toggle
 
@@ -28,6 +30,8 @@ public interface IButtonControlBoard {
     boolean getEnableClimbMode(); //toggle
 
     double getClimberThrottle();
+
+    double getStrafeThrottle();
 
     double getElevatorThrottle();
 }

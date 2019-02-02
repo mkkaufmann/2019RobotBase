@@ -8,13 +8,12 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.lib.CheesyDriveHelper;
+import frc.robot.lib.LatchedBoolean;
 import frc.robot.loops.Looper;
 import frc.robot.states.SuperstructureConstants;
-import frc.robot.states.SuperstructureState;
 import frc.robot.subsystems.*;
 
 import java.util.Arrays;
@@ -46,6 +45,19 @@ public class Robot extends TimedRobot {
     private Mouth mMouth = Mouth.getInstance();
     private Strafe mStrafe = Strafe.getInstance();
     private Superstructure mSuperStructure = Superstructure.getInstance();
+
+    private LatchedBoolean goToHighHeight = new LatchedBoolean();
+    private LatchedBoolean goToNeutralHeight = new LatchedBoolean();
+    private LatchedBoolean goToLowHeight = new LatchedBoolean();
+    private LatchedBoolean goToCargoShipCargoHeight = new LatchedBoolean();
+    private LatchedBoolean hatchorCargo = new LatchedBoolean();
+    private LatchedBoolean armToggle = new LatchedBoolean();
+    private LatchedBoolean armToStart = new LatchedBoolean();
+    private LatchedBoolean clawToggle = new LatchedBoolean();
+    private LatchedBoolean runIntake = new LatchedBoolean();
+    private LatchedBoolean enableClimbMode = new LatchedBoolean();
+    private LatchedBoolean centerStrafe = new LatchedBoolean();
+
 
     private final SubsystemManager mSubsystemManager = new SubsystemManager(
             Arrays.asList(
@@ -141,35 +153,42 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         mDrive.setOpenLoop(mCheesyDriveHelper.cheesyDrive(mControlBoard.getThrottle(), mControlBoard.getTurn(), mControlBoard.getQuickTurn()));
 
-        if(mControlBoard.getArmToStart()){
+        if(armToStart.update(mControlBoard.getArmToStart())){
             mArm.setWantedTargetPosition(Arm.ArmPosition.START);
-        }else if(mControlBoard.getArmToggle()){
+        }else if(armToggle.update(mControlBoard.getArmToggle())){
             mArm.toggleTargetPosition();
         }
 
-
-
-        if(mControlBoard.getEnableClimbMode()){
+        if(enableClimbMode.update(mControlBoard.getEnableClimbMode())){
             mClimber.toggleState();
         }
-        mClimber.setOutput(mControlBoard.getClimberThrottle());
+        if(mClimber.getState() == Climber.ClimberState.PERCENT_OUTPUT){
+            mClimber.setOutput(mControlBoard.getClimberThrottle());
+        }else{
+            if(mControlBoard.getStrafeThrottle() > 0){
+                mStrafe.setSpeed(mControlBoard.getStrafeThrottle());
+            }
+            if(centerStrafe.update(mControlBoard.getCenterStrafe())){
+                mStrafe.setSetpoint(SuperstructureConstants.kStrafeMidEncoderValue);//TODO implement vision
+            }
+        }
 
         //TODO move to superstructure
-        if(mControlBoard.getHatchOrCargo()){
+        if(hatchorCargo.update(mControlBoard.getHatchOrCargo())){
             mSuperStructure.toggleMode();
             SmartDashboard.putBoolean("isHatchMode", mSuperStructure.getMode() == Superstructure.MechanismMode.HATCH);
         }
 
         if(mSuperStructure.getMode() == Superstructure.MechanismMode.HATCH){
-            if(mControlBoard.getClawToggle()){
+            if(clawToggle.update(mControlBoard.getClawToggle())){
                 mClaw.toggleState();
             }
 
-            if(mControlBoard.getGoToLowHeight()){
+            if(goToLowHeight.update(mControlBoard.getGoToLowHeight())){
                 mElevator.setPositionPID(SuperstructureConstants.kRocketHatchLow);
-            }else if(mControlBoard.getGoToNeutralHeight()){
+            }else if(goToNeutralHeight.update(mControlBoard.getGoToNeutralHeight())){
                 mElevator.setPositionPID(SuperstructureConstants.kRocketHatchMiddle);
-            }else if(mControlBoard.getGoToHighHeight()){
+            }else if(goToHighHeight.update(mControlBoard.getGoToHighHeight())){
                 mElevator.setPositionPID(SuperstructureConstants.kRocketHatchHigh);
             }
 
@@ -178,17 +197,17 @@ public class Robot extends TimedRobot {
                 mMouth.setState(Mouth.MouthState.OUTTAKE);
                 mMouth.setSpeed(mControlBoard.getShootSpeed());
             }
-            if (mControlBoard.getRunIntake()) {
+            if (runIntake.update(mControlBoard.getRunIntake())) {
                 mMouth.toggleIntake();
             }
-            if (mControlBoard.getGoToCargoShipCargoHeight()) {
+            if (goToCargoShipCargoHeight.update(mControlBoard.getGoToCargoShipCargoHeight())) {
                 mElevator.setPositionPID(SuperstructureConstants.kCargoShipCargo);
             }
-            if(mControlBoard.getGoToLowHeight()){
+            if(goToLowHeight.update(mControlBoard.getGoToLowHeight())){
                 mElevator.setPositionPID(SuperstructureConstants.kRocketCargoLow);
-            }else if(mControlBoard.getGoToNeutralHeight()){
+            }else if(goToNeutralHeight.update(mControlBoard.getGoToNeutralHeight())){
                 mElevator.setPositionPID(SuperstructureConstants.kRocketCargoMiddle);
-            }else if(mControlBoard.getGoToHighHeight()){
+            }else if(goToHighHeight.update(mControlBoard.getGoToHighHeight())){
                 mElevator.setPositionPID(SuperstructureConstants.kRocketCargoHigh);
             }
         }

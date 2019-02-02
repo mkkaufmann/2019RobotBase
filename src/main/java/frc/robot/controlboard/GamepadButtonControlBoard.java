@@ -65,6 +65,11 @@ public class GamepadButtonControlBoard implements IButtonControlBoard {
     }
 
     @Override
+    public boolean getCenterStrafe() {
+        return Util.deadband(mJoystick.getTriggerAxis(GenericHID.Hand.kLeft), 0.2) > 0;
+    }
+
+    @Override
     public boolean getRunIntake() {
         return this.getClawToggle();//TODO make sure implemented properly
     }
@@ -83,6 +88,11 @@ public class GamepadButtonControlBoard implements IButtonControlBoard {
     @Override
     public double getClimberThrottle() {
         return Util.deadband(mJoystick.getRawAxis(1));
+    }
+
+    @Override
+    public double getStrafeThrottle(){
+        return Util.deadband(mJoystick.getRawAxis(0));
     }
 
     @Override

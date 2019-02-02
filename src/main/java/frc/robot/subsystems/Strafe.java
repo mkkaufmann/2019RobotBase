@@ -19,6 +19,7 @@ public class Strafe extends Subsystem {
     private static double kSpeed = 0.5;//TODO stagger speeds
     private StrafeState mState = StrafeState.HOLDING_POSITION;
     private PeriodicIO mPeriodicIO = new PeriodicIO();
+    private ControlState mControlState = ControlState.MANUAL;
 
     private Strafe(){
         mMaster = new GenericPWMSpeedController(Constants.kStrafe.masterPort);
@@ -48,7 +49,13 @@ public class Strafe extends Subsystem {
 
     }
 
+    public synchronized void setSpeed(double demand){
+        mControlState = ControlState.MANUAL;
+        mPeriodicIO.demand = demand;
+    }
+
     public synchronized void setSetpoint(double demand){
+        mControlState = ControlState.POSITION;
         mPeriodicIO.demand = demand;
         if(Util.epsilonEquals(mPeriodicIO.position_ticks, mPeriodicIO.demand, kTargetThreshold)){
             mState = StrafeState.HOLDING_POSITION;
@@ -67,12 +74,30 @@ public class Strafe extends Subsystem {
         if(mLimitSwitch.get()){
             mEncoder.reset();
         }
+        if(mControlState == ControlState.MANUAL){
+            mMaster.set(mPeriodicIO.demand);
+        }
         if(mState == StrafeState.HOLDING_POSITION){
             return;
         }
-        double direction = mPeriodicIO.position_ticks > mPeriodicIO.demand ? -1 : 1;
-        if(mLimitSwitch.get() || mPeriodicIO.position_ticks >= SuperstructureConstants.kStrafeMaxEncoderValue || Util.epsilonEquals(mPeriodicIO.position_ticks, mPeriodicIO.demand, kTargetThreshold)){
+
+        if(Util.epsilonEquals(mPeriodicIO.position_ticks, mPeriodicIO.demand, kTargetThreshold)){
             mState = StrafeState.HOLDING_POSITION;
+            return;
+        }
+
+        double direction = mPeriodicIO.position_ticks > mPeriodicIO.demand ? -1 : 1;
+
+        if(direction == -1){
+            if(mLimitSwitch.get()){
+                mState = StrafeState.HOLDING_POSITION;
+                return;
+            }
+        }else{
+            if(mPeriodicIO.position_ticks >= SuperstructureConstants.kStrafeMaxEncoderValue){
+                mState = StrafeState.HOLDING_POSITION;
+                return;
+            }
         }
         mMaster.set(kSpeed * direction);
     }
@@ -81,7 +106,7 @@ public class Strafe extends Subsystem {
         //INPUT
         public double position_ticks = 0;
         //OUTPUT
-        public double demand = 0;//ticks
+        public double demand = 0;//ticks in position mode, speed otherwise;
     }
 
     private enum StrafeState{
@@ -89,4 +114,8 @@ public class Strafe extends Subsystem {
         HOLDING_POSITION
     }
 
+    private enum ControlState{
+        MANUAL,
+        POSITION
+    }
 }

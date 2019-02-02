@@ -24,6 +24,10 @@ public class Climber extends Subsystem{
         return mInstance;
     }
 
+    public ClimberState getState() {
+        return mState;
+    }
+
     public synchronized void toggleState(){
         mState = mState == ClimberState.PERCENT_OUTPUT ? ClimberState.STOWED : ClimberState.PERCENT_OUTPUT;
     }
