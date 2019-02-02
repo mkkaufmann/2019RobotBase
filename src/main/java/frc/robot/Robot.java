@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.lib.CheesyDriveHelper;
@@ -45,6 +46,9 @@ public class Robot extends TimedRobot {
     private Mouth mMouth = Mouth.getInstance();
     private Strafe mStrafe = Strafe.getInstance();
     private Superstructure mSuperStructure = Superstructure.getInstance();
+    private Timer timer = new Timer();
+    private boolean shortRumble = false;
+    private boolean longRumble = false;
 
     private LatchedBoolean goToHighHeight = new LatchedBoolean();
     private LatchedBoolean goToNeutralHeight = new LatchedBoolean();
@@ -172,11 +176,33 @@ public class Robot extends TimedRobot {
                 mStrafe.setSetpoint(SuperstructureConstants.kStrafeMidEncoderValue);//TODO implement vision
             }
         }
-
-        //TODO move to superstructure
+        
         if(hatchorCargo.update(mControlBoard.getHatchOrCargo())){
-            mSuperStructure.toggleMode();
+            mSuperStructure.toggleMode();//TODO move to superstructure
+
+            timer.reset();
+            timer.start();
+            shortRumble = true;
+            if(mSuperStructure.getMode() == Superstructure.MechanismMode.HATCH){
+                mControlBoard.setButtonRumble(false, true);
+            }else{
+                mControlBoard.setButtonRumble(true, false);
+            }
             SmartDashboard.putBoolean("isHatchMode", mSuperStructure.getMode() == Superstructure.MechanismMode.HATCH);
+        }
+
+        if(Timer.getMatchTime() < 30 && Timer.getMatchTime() > 29 && !longRumble){
+            longRumble = true;
+            mControlBoard.setRumble(true);
+        }
+
+        if(timer.hasPeriodPassed(0.5) && shortRumble){
+            shortRumble = false;
+            mControlBoard.setButtonRumble(false);
+        }
+        if(timer.hasPeriodPassed(1) && longRumble){
+            longRumble = false;
+            mControlBoard.setRumble(false);
         }
 
         if(mSuperStructure.getMode() == Superstructure.MechanismMode.HATCH){

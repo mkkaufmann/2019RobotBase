@@ -61,8 +61,13 @@ public class ControlBoard implements IControlBoard{
 
 
     @Override
-    public void setRumble(boolean on) {
-        mButtonControlBoard.setRumble(on);
+    public void setButtonRumble(boolean on) {
+        mButtonControlBoard.setButtonRumble(on);
+    }
+
+    @Override
+    public void setButtonRumble(boolean left, boolean right) {
+        mButtonControlBoard.setButtonRumble(left, right);
     }
 
     @Override
@@ -98,6 +103,26 @@ public class ControlBoard implements IControlBoard{
     @Override
     public boolean getQuickTurn() {
         return mDriveControlBoard.getQuickTurn();
+    }
+
+    @Override
+    public void setDriverRumble(boolean on) {
+        mDriveControlBoard.setDriverRumble(on);
+    }
+
+    @Override
+    public void setDriverRumble(boolean left, boolean right) {
+        mDriveControlBoard.setDriverRumble(left, right);
+    }
+
+    public void setRumble(boolean left, boolean right){
+        setButtonRumble(left, right);
+        setDriverRumble(left, right);
+    }
+
+    public void setRumble(boolean on){
+        setDriverRumble(on);
+        setButtonRumble(on);
     }
 
     @Override

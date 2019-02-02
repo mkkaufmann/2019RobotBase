@@ -13,5 +13,9 @@ public interface IDriveControlBoard {
 //
 //    boolean getShoot();
 
+    void setDriverRumble(boolean on);
+
+    void setDriverRumble(boolean left, boolean right);
+
     double getShootSpeed();
 }

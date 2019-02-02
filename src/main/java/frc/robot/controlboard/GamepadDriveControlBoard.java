@@ -1,7 +1,6 @@
 package frc.robot.controlboard;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants;
 import frc.robot.lib.Util;
@@ -36,6 +35,17 @@ public class GamepadDriveControlBoard implements IDriveControlBoard {
     @Override
     public boolean getQuickTurn() {
         return mJoystick.getRawButton(6);
+    }
+
+    @Override
+    public void setDriverRumble(boolean on) {
+        setDriverRumble(on, on);
+    }
+
+    @Override
+    public void setDriverRumble(boolean left, boolean right) {
+        mJoystick.setRumble(GenericHID.RumbleType.kLeftRumble, left ? 1.0 : 0);
+        mJoystick.setRumble(GenericHID.RumbleType.kRightRumble, right ? 1.0 : 0);
     }
 
     @Override

@@ -24,7 +24,9 @@ public interface IButtonControlBoard {
     // Intake
     boolean getRunIntake(); //toggle
 
-    void setRumble(boolean on);
+    void setButtonRumble(boolean on);
+
+    void setButtonRumble(boolean left, boolean right);
 
     // Climbing
     boolean getEnableClimbMode(); //toggle

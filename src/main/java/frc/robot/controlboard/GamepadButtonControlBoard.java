@@ -1,7 +1,6 @@
 package frc.robot.controlboard;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants;
 import frc.robot.lib.Util;
@@ -75,8 +74,14 @@ public class GamepadButtonControlBoard implements IButtonControlBoard {
     }
 
     @Override
-    public void setRumble(boolean on) {
-        mJoystick.setRumble(GenericHID.RumbleType.kRightRumble, on ? 1.0 : 0);
+    public void setButtonRumble(boolean on) {
+        setButtonRumble(on, on);
+    }
+
+    @Override
+    public void setButtonRumble(boolean left, boolean right) {
+        mJoystick.setRumble(GenericHID.RumbleType.kLeftRumble, left ? 1.0 : 0);
+        mJoystick.setRumble(GenericHID.RumbleType.kRightRumble, right ? 1.0 : 0);
     }
 
 
