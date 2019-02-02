@@ -176,7 +176,7 @@ public class Robot extends TimedRobot {
                 mStrafe.setSetpoint(SuperstructureConstants.kStrafeMidEncoderValue);//TODO implement vision
             }
         }
-        
+
         if(hatchorCargo.update(mControlBoard.getHatchOrCargo())){
             mSuperStructure.toggleMode();//TODO move to superstructure
 
