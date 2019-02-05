@@ -5,13 +5,13 @@ public class Constants {
     public static double kLooperDt = 0.01;
 
     public static class kDrivetrain{
-        public static final int leftMasterID = 0;//CAN
-        public static final int leftFollowerID = 1;//CAN
-        public static final int rightMasterID = 2;//CAN
-        public static final int rightFollowerID = 3;//CAN
+        public static final int leftMasterID = 3;//CAN
+        public static final int leftFollowerID = 0;//CAN
+        public static final int rightMasterID = 1;//CAN
+        public static final int rightFollowerID = 4;//CAN
     }
     public static class kElevator{
-        public static final int masterID = 4;//
+        public static final int masterID = 2;//
         //TODO add limit switches
     }
     public static class kMouth{

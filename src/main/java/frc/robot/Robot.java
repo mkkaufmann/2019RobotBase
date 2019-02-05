@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.lib.CheesyDriveHelper;
 import frc.robot.lib.LatchedBoolean;
+import frc.robot.lib.Util;
 import frc.robot.loops.Looper;
 import frc.robot.states.SuperstructureConstants;
 import frc.robot.subsystems.*;
@@ -91,8 +92,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
-        mEnabledLooper.stop();
-        mDisabledLooper.start();
+//        mEnabledLooper.stop();
+//        mDisabledLooper.start();
     }
 
     /**
@@ -121,8 +122,8 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         m_autoSelected = m_chooser.getSelected();
-        mEnabledLooper.start();
-        mDisabledLooper.stop();
+//        mEnabledLooper.start();
+//        mDisabledLooper.stop();
         // autoSelected = SmartDashboard.getString("Auto Selector",
         // defaultAuto);
         System.out.println("Auto selected: " + m_autoSelected);
@@ -146,8 +147,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        mEnabledLooper.start();
-        mDisabledLooper.stop();
+        //mDisabledLooper.stop();
+        //mEnabledLooper.start();
     }
 
     /**
@@ -155,7 +156,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        mDrive.setOpenLoop(mCheesyDriveHelper.cheesyDrive(mControlBoard.getThrottle(), mControlBoard.getTurn(), mControlBoard.getQuickTurn()));
+        mDrive.setOpenLoop(mCheesyDriveHelper.cheesyDrive(mControlBoard.getThrottle(), mControlBoard.getTurn(),
+                mControlBoard.getQuickTurn() || Util.deadband(mControlBoard.getThrottle()) == 0));
 
         if(armToStart.update(mControlBoard.getArmToStart())){
             mArm.setWantedTargetPosition(Arm.ArmPosition.START);
@@ -169,7 +171,7 @@ public class Robot extends TimedRobot {
         if(mClimber.getState() == Climber.ClimberState.PERCENT_OUTPUT){
             mClimber.setOutput(mControlBoard.getClimberThrottle());
         }else{
-            if(mControlBoard.getStrafeThrottle() > 0){
+            if(Math.abs(mControlBoard.getStrafeThrottle()) > 0){
                 mStrafe.setSpeed(mControlBoard.getStrafeThrottle());
             }
             if(centerStrafe.update(mControlBoard.getCenterStrafe())){
@@ -238,16 +240,17 @@ public class Robot extends TimedRobot {
             }
         }
 
-        if(mControlBoard.getElevatorThrottle() > 0){
-            mElevator.setOpenLoop(mControlBoard.getClimberThrottle());
+        if(Math.abs(mControlBoard.getElevatorThrottle()) > 0){
+            mElevator.setOpenLoop(mControlBoard.getElevatorThrottle());
+        }else if(mElevator.getState() == Elevator.ElevatorState.OPEN_LOOP){
+            mElevator.setOpenLoop(0);
         }
-
     }
 
     @Override
     public void testInit() {
-        mEnabledLooper.stop();
-        mDisabledLooper.stop();
+//        mEnabledLooper.stop();
+//        mDisabledLooper.stop();
     }
 
     /**

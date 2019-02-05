@@ -17,7 +17,11 @@ public class Elevator extends Subsystem {
 
     private Elevator(){
         mMaster = new TalonSRX(Constants.kElevator.masterID);
-        mMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder,0, 100);
+        System.out.println("elevator started");
+        mMaster.config_kP(0, 0.05);
+        mMaster.config_kI(0,0);
+        mMaster.config_kD(0,0);
+        //mMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder,0, 100);
         //TODO config limit switch(es)
         //TODO config PID
         mMaster.setNeutralMode(NeutralMode.Brake);
@@ -28,6 +32,10 @@ public class Elevator extends Subsystem {
             mInstance = new Elevator();
         }
         return mInstance;
+    }
+
+    public ElevatorState getState() {
+        return mState;
     }
 
     @Override
@@ -78,6 +86,7 @@ public class Elevator extends Subsystem {
                 break;
             case POSITION:
                 mMaster.set(ControlMode.Position, mPeriodicIO.demand);
+                break;
         }
     }
 
@@ -89,7 +98,7 @@ public class Elevator extends Subsystem {
         public double demand = 0;
     }
 
-    private enum ElevatorState{
+    public enum ElevatorState{
         OPEN_LOOP,
         POSITION
     }

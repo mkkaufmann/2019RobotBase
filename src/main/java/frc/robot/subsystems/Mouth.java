@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Talon;
 import frc.robot.Constants;
 import frc.robot.lib.GenericPWMSpeedController;
 
@@ -9,7 +8,12 @@ public class Mouth extends Subsystem {
     private static Mouth mInstance = null;
     private GenericPWMSpeedController mMaster;
     private static final double kIntake = -1.0;
-    private MouthState mState = MouthState.NEUTRAL;
+
+    public MouthState getState() {
+        return mState;
+    }
+
+    private MouthState mState = MouthState.NEUTRAL_CARGO;
     private PeriodicIO mPeriodicIO = new PeriodicIO();
 
     private Mouth(){
@@ -25,7 +29,7 @@ public class Mouth extends Subsystem {
 
     @Override
     public void stop() {
-        mState = MouthState.NEUTRAL;
+        mState = MouthState.NEUTRAL_CARGO;
     }
 
     @Override
@@ -39,7 +43,7 @@ public class Mouth extends Subsystem {
     }
 
     public synchronized void toggleIntake(){
-        mState = mState == MouthState.INTAKE? MouthState.NEUTRAL : MouthState.INTAKE;
+        mState = mState == MouthState.INTAKE? MouthState.NEUTRAL_CARGO : MouthState.INTAKE;
     }
 
     public synchronized void setState(MouthState state){
@@ -56,9 +60,11 @@ public class Mouth extends Subsystem {
             case INTAKE:
                 mPeriodicIO.demand = kIntake;
                 break;
-            case NEUTRAL:
+            case NEUTRAL_CARGO:
                 mPeriodicIO.demand = -0.2;
                 break;
+            case NEUTRAL_NO_CARGO:
+                mPeriodicIO.demand = 0;
                 //if outtake, its already set
         }
     }
@@ -70,13 +76,14 @@ public class Mouth extends Subsystem {
 
     public static class PeriodicIO{
         //INPUT
-        public boolean slow = false;
+
         //OUTPUT
         public double demand = 0;
     }
 
     public enum MouthState{
-        NEUTRAL,
+        NEUTRAL_CARGO,
+        NEUTRAL_NO_CARGO,
         INTAKE,
         OUTTAKE
     }

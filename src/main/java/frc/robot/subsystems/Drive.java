@@ -82,7 +82,7 @@ public class Drive extends Subsystem{
                 break;
             case OPEN_LOOP:
                 mLeftMaster.set(ControlMode.PercentOutput, mPeriodicIO.left_demand);
-                mRightMaster.set(ControlMode.PercentOutput, mPeriodicIO.right_demand);
+                mRightMaster.set(ControlMode.PercentOutput, -mPeriodicIO.right_demand);
                 break;
         }
     }

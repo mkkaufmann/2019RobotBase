@@ -25,10 +25,22 @@ public class Superstructure extends Subsystem{
 
     public void setMode(MechanismMode mode) {
         this.mMode = mode;
+        changeIntakeNeutral();
     }
 
     public void toggleMode(){
         mMode = mMode == MechanismMode.CARGO ? MechanismMode.HATCH : MechanismMode.CARGO;
+        changeIntakeNeutral();
+    }
+
+    private void changeIntakeNeutral(){
+        if(this.mMode == MechanismMode.HATCH){
+            mMouth.setState(Mouth.MouthState.NEUTRAL_NO_CARGO);
+        }else{
+            if(mMouth.getState() == Mouth.MouthState.NEUTRAL_NO_CARGO){
+                mMouth.setState(Mouth.MouthState.NEUTRAL_CARGO);
+            }
+        }
     }
 
     private MechanismMode mMode = MechanismMode.HATCH;
