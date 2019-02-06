@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.drive.pathfollowing.DrivePath;
+import frc.robot.commands.paths.Straight_Path;
+import frc.robot.controlboard.ControlBoard;
 import frc.robot.lib.CheesyDriveHelper;
 import frc.robot.lib.LatchedBoolean;
 import frc.robot.lib.Util;
@@ -55,7 +58,7 @@ public class Robot extends TimedRobot {
     private LatchedBoolean goToNeutralHeight = new LatchedBoolean();
     private LatchedBoolean goToLowHeight = new LatchedBoolean();
     private LatchedBoolean goToCargoShipCargoHeight = new LatchedBoolean();
-    private LatchedBoolean hatchorCargo = new LatchedBoolean();
+    private LatchedBoolean hatchOrCargo = new LatchedBoolean();
     private LatchedBoolean armToggle = new LatchedBoolean();
     private LatchedBoolean armToStart = new LatchedBoolean();
     private LatchedBoolean clawToggle = new LatchedBoolean();
@@ -73,7 +76,8 @@ public class Robot extends TimedRobot {
                     Arm.getInstance(),
                     Climber.getInstance(),
                     Mouth.getInstance(),
-                    Strafe.getInstance())
+                    Strafe.getInstance(),
+                    RobotStateEstimator.getInstance())
     );
 
     /**
@@ -126,6 +130,9 @@ public class Robot extends TimedRobot {
 //        mDisabledLooper.stop();
         // autoSelected = SmartDashboard.getString("Auto Selector",
         // defaultAuto);
+        DrivePath command = new DrivePath(new Straight_Path());
+        command.start();
+
         System.out.println("Auto selected: " + m_autoSelected);
     }
 
@@ -179,7 +186,7 @@ public class Robot extends TimedRobot {
             }
         }
 
-        if(hatchorCargo.update(mControlBoard.getHatchOrCargo())){
+        if(hatchOrCargo.update(mControlBoard.getHatchOrCargo())){
             mSuperStructure.toggleMode();//TODO move to superstructure
 
             timer.reset();
