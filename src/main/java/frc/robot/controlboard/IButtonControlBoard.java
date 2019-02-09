@@ -28,12 +28,9 @@ public interface IButtonControlBoard {
 
     void setButtonRumble(boolean left, boolean right);
 
-    // Climbing
-    boolean getEnableClimbMode(); //toggle
-
-    double getClimberThrottle();
-
     double getStrafeThrottle();
 
     double getElevatorThrottle();
+
+    double getShootSpeed();
 }

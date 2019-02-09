@@ -16,6 +16,7 @@ public class DrivePath extends Command {
   }
 
   protected void initialize() {
+    System.out.println("initializing DrivePath");
     drive.setWantDrivePath(mPath, mPathContainer.isReversed());
   }
 

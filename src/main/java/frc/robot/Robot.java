@@ -7,11 +7,17 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.drive.DriveAtVelocityForTime;
+import frc.robot.commands.drive.EncoderDrive;
 import frc.robot.commands.drive.pathfollowing.DrivePath;
+import frc.robot.commands.paths.Left_To_Rocket_L;
 import frc.robot.commands.paths.Straight_Path;
 import frc.robot.controlboard.ControlBoard;
 import frc.robot.lib.CheesyDriveHelper;
@@ -40,6 +46,8 @@ public class Robot extends TimedRobot {
     private final SendableChooser<String> m_chooser = new SendableChooser<>();
     private Looper mEnabledLooper = new Looper();
     private Looper mDisabledLooper = new Looper();
+    private Looper mElevatorLooper = new Looper();
+
     private Drive mDrive = Drive.getInstance();
     private CheesyDriveHelper mCheesyDriveHelper = new CheesyDriveHelper();
     private ControlBoard mControlBoard = new ControlBoard();
@@ -66,17 +74,20 @@ public class Robot extends TimedRobot {
     private LatchedBoolean enableClimbMode = new LatchedBoolean();
     private LatchedBoolean centerStrafe = new LatchedBoolean();
 
+    private Command command;
+
 
     private final SubsystemManager mSubsystemManager = new SubsystemManager(
             Arrays.asList(
                     Drive.getInstance(),
                     Superstructure.getInstance(),
-                    Elevator.getInstance(),
+                    //Elevator.getInstance(),
                     Claw.getInstance(),
                     Arm.getInstance(),
                     Climber.getInstance(),
                     Mouth.getInstance(),
                     Strafe.getInstance(),
+                    Dashboard.getInstance(),
                     RobotStateEstimator.getInstance())
     );
 
@@ -92,12 +103,16 @@ public class Robot extends TimedRobot {
 
         mSubsystemManager.registerEnabledLoops(mEnabledLooper);
         mSubsystemManager.registerDisabledLoops(mDisabledLooper);
+        mElevator.registerEnabledLoops(mElevatorLooper);
+//        mElevatorLooper.start();
     }
+
+
 
     @Override
     public void disabledInit() {
-//        mEnabledLooper.stop();
-//        mDisabledLooper.start();
+        mEnabledLooper.stop();
+        mDisabledLooper.start();
     }
 
     /**
@@ -110,6 +125,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
+//        mElevator.readPeriodicInputs();
+//        mElevator.writePeriodicOutputs();
     }
 
     /**
@@ -126,12 +143,11 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         m_autoSelected = m_chooser.getSelected();
-//        mEnabledLooper.start();
-//        mDisabledLooper.stop();
+        mEnabledLooper.start();
+        mDisabledLooper.stop();
         // autoSelected = SmartDashboard.getString("Auto Selector",
         // defaultAuto);
-        DrivePath command = new DrivePath(new Straight_Path());
-        command.start();
+        command = new DrivePath(new Left_To_Rocket_L());
 
         System.out.println("Auto selected: " + m_autoSelected);
     }
@@ -141,6 +157,11 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
+        if(!command.isRunning()){
+            System.out.println("is not running");
+            command.start();
+        }
+        Scheduler.getInstance().run();
         switch (m_autoSelected) {
             case kCustomAuto:
                 // Put custom auto code here
@@ -154,8 +175,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        //mDisabledLooper.stop();
-        //mEnabledLooper.start();
+        mDisabledLooper.stop();
+        mEnabledLooper.start();
     }
 
     /**
@@ -163,6 +184,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
+
         mDrive.setOpenLoop(mCheesyDriveHelper.cheesyDrive(mControlBoard.getThrottle(), mControlBoard.getTurn(),
                 mControlBoard.getQuickTurn() || Util.deadband(mControlBoard.getThrottle()) == 0));
 
@@ -174,6 +196,7 @@ public class Robot extends TimedRobot {
 
         if(enableClimbMode.update(mControlBoard.getEnableClimbMode())){
             mClimber.toggleState();
+            System.out.println("climb toggled");
         }
         if(mClimber.getState() == Climber.ClimberState.PERCENT_OUTPUT){
             mClimber.setOutput(mControlBoard.getClimberThrottle());
@@ -229,8 +252,11 @@ public class Robot extends TimedRobot {
 
         }else {
             if (mControlBoard.getShootSpeed() > 0) {
+                System.out.println("shooting");
                 mMouth.setState(Mouth.MouthState.OUTTAKE);
                 mMouth.setSpeed(mControlBoard.getShootSpeed());
+            }else if(mMouth.getState() == Mouth.MouthState.OUTTAKE){
+                mMouth.setState(Mouth.MouthState.NEUTRAL_CARGO);
             }
             if (runIntake.update(mControlBoard.getRunIntake())) {
                 mMouth.toggleIntake();
@@ -247,17 +273,19 @@ public class Robot extends TimedRobot {
             }
         }
 
-        if(Math.abs(mControlBoard.getElevatorThrottle()) > 0){
-            mElevator.setOpenLoop(mControlBoard.getElevatorThrottle());
-        }else if(mElevator.getState() == Elevator.ElevatorState.OPEN_LOOP){
-            mElevator.setOpenLoop(0);
-        }
+
+//        if(Math.abs(mControlBoard.getElevatorThrottle()) > 0){
+//            mElevator.setOpenLoop(mControlBoard.getElevatorThrottle());
+//        }else if(mElevator.getState() == Elevator.ElevatorState.OPEN_LOOP){
+//            mElevator.setOpenLoop(0);
+//        }
+        mElevator.getMaster().set(ControlMode.PercentOutput,-Util.deadband(mControlBoard.getElevatorThrottle()));
     }
 
     @Override
     public void testInit() {
-//        mEnabledLooper.stop();
-//        mDisabledLooper.stop();
+        mEnabledLooper.stop();
+        mDisabledLooper.stop();
     }
 
     /**

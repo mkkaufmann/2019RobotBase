@@ -7,14 +7,12 @@ import frc.robot.lib.GenericPWMSpeedController;
 public class Climber extends Subsystem{
 
     private static Climber mInstance = null;
-    private GenericPWMSpeedController mLeftMaster;
-    private GenericPWMSpeedController mRightMaster;
+    private GenericPWMSpeedController mMaster;
     private ClimberState mState = ClimberState.STOWED;
     private PeriodicIO mPeriodicIO = new PeriodicIO();
 
     private Climber(){
-        mLeftMaster = new GenericPWMSpeedController(Constants.kClimber.leftMasterPort);
-        mRightMaster = new GenericPWMSpeedController(Constants.kClimber.rightMasterPort);
+        mMaster = new GenericPWMSpeedController(Constants.kClimber.mMasterPort);
     }
 
     public static Climber getInstance(){
@@ -58,10 +56,9 @@ public class Climber extends Subsystem{
     @Override
     public synchronized void writePeriodicOutputs(){
         if(mState == ClimberState.PERCENT_OUTPUT){
-            mLeftMaster.set(mPeriodicIO.demand);
+            mMaster.set(mPeriodicIO.demand);
         }else{
-            mLeftMaster.set(0);
-            mRightMaster.set(0);
+            mMaster.set(0);
         }
     }
 

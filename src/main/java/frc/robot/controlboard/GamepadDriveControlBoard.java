@@ -48,15 +48,31 @@ public class GamepadDriveControlBoard implements IDriveControlBoard {
         mJoystick.setRumble(GenericHID.RumbleType.kRightRumble, right ? 1.0 : 0);
     }
 
+
+
     @Override
-    public double getShootSpeed() {
-        double speed = Util.deadband(mJoystick.getTriggerAxis(GenericHID.Hand.kLeft));
-        if(speed == 0){
+    public boolean getEnableClimbMode() {
+        return mJoystick.getRawButton(8) && mJoystick.getRawButton(7);
+    }
+
+
+    @Override
+    public double getClimberThrottle() {
+        double up = Util.deadband(mJoystick.getTriggerAxis(GenericHID.Hand.kRight));
+        double down = Util.deadband(mJoystick.getTriggerAxis(GenericHID.Hand.kLeft));
+        if(down > 0 && up > 0){
             return 0;
-        }else if(speed < 0.5){
+        }else if(down > 0){
+            if(down > 0.5){
+                return -1;
+            }
+            return -0.5;
+        }else if(up > 0){
+            if(up > 0.5){
+                return 1;
+            }
             return 0.5;
-        }else {
-            return 1.0;
         }
+        return 0;
     }
 }

@@ -69,12 +69,12 @@ public class ControlBoard implements IControlBoard {
 
     @Override
     public boolean getEnableClimbMode() {
-        return mButtonControlBoard.getEnableClimbMode();
+        return mDriveControlBoard.getEnableClimbMode();
     }
 
     @Override
     public double getClimberThrottle() {
-        return mButtonControlBoard.getClimberThrottle();
+        return mDriveControlBoard.getClimberThrottle();
     }
 
     @Override
@@ -124,6 +124,6 @@ public class ControlBoard implements IControlBoard {
 
     @Override
     public double getShootSpeed() {
-        return mDriveControlBoard.getShootSpeed();
+        return mButtonControlBoard.getShootSpeed();
     }
 }

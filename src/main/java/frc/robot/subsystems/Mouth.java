@@ -43,7 +43,7 @@ public class Mouth extends Subsystem {
     }
 
     public synchronized void toggleIntake(){
-        mState = mState == MouthState.INTAKE? MouthState.NEUTRAL_CARGO : MouthState.INTAKE;
+        mState = mState == MouthState.INTAKE ? MouthState.NEUTRAL_CARGO : MouthState.INTAKE;
     }
 
     public synchronized void setState(MouthState state){
@@ -71,7 +71,7 @@ public class Mouth extends Subsystem {
 
     @Override
     public synchronized void writePeriodicOutputs(){
-        mMaster.set(mPeriodicIO.demand);
+        mMaster.set(-mPeriodicIO.demand);
     }
 
     public static class PeriodicIO{

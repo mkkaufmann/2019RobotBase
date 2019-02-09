@@ -50,7 +50,6 @@ public class Drive extends Subsystem{
         mLeftMaster.config_kD(0,0);
         mRightMaster.config_kD(0,0);
 
-
         mLeftFollower = new VictorSPX(Constants.kDrivetrain.leftFollowerID);
         mRightFollower = new VictorSPX(Constants.kDrivetrain.rightFollowerID);
         mLeftFollower.follow(mLeftMaster);
@@ -66,6 +65,7 @@ public class Drive extends Subsystem{
 
     @Override
     public void stop() {
+        System.out.println("stopping drive");
         setOpenLoop(0,0);
     }
 
@@ -81,8 +81,8 @@ public class Drive extends Subsystem{
 
     public synchronized void setOpenLoop(double left, double right){
         if(mState != DriveState.OPEN_LOOP){
-            mLeftMaster.setNeutralMode(NeutralMode.Coast);
-            mRightMaster.setNeutralMode(NeutralMode.Coast);
+            mLeftMaster.setNeutralMode(NeutralMode.Brake);
+            mRightMaster.setNeutralMode(NeutralMode.Brake);
             mState = DriveState.OPEN_LOOP;
             mLeftMaster.configNeutralDeadband(0.04, 0);
             mRightMaster.configNeutralDeadband(0.04, 0);
@@ -145,6 +145,7 @@ public class Drive extends Subsystem{
     }
 
     public synchronized void setWantDrivePath(Path path, boolean reversed) {
+        System.out.println("setting drive path");
         if (mCurrentPath != path || mState != mState.PATH_FOLLOWING) {
             RobotState.getInstance().resetDistanceDriven();
             mPathFollower = new PathFollower(path, reversed, new PathFollower.Parameters(
@@ -236,6 +237,7 @@ public class Drive extends Subsystem{
     }
 
     private void updatePathFollower() {
+        System.out.println("updating drive path");
         RigidTransform2d robot_pose = mRobotState.getLatestFieldToVehicle().getValue();
         // System.out.println(robot_pose.getTranslation().toString());
         Twist2d command = mPathFollower.update(Timer.getFPGATimestamp(), robot_pose,
@@ -249,6 +251,7 @@ public class Drive extends Subsystem{
     }
 
     private synchronized void updateVelocitySetpoint(double left_inches_per_sec, double right_inches_per_sec) {
+        System.out.println("updating velocity setpoint");
         final double max_desired = Math.max(Math.abs(left_inches_per_sec), Math.abs(right_inches_per_sec));
         final double scale = max_desired > Constants.kDriveMaxSetpoint
                 ? Constants.kDriveMaxSetpoint / max_desired
@@ -289,10 +292,16 @@ public class Drive extends Subsystem{
             case PATH_FOLLOWING:
                 if(mPathFollower != null){
                     updatePathFollower();
+                    System.out.println("NULL");
                 }
+                System.out.println("following path");
                 mLeftMaster.set(ControlMode.Velocity, mPeriodicIO.left_demand);
-                mLeftMaster.set(ControlMode.Velocity, mPeriodicIO.right_demand);
-
+                mRightMaster.set(ControlMode.Velocity, mPeriodicIO.right_demand);
+                break;
+            case VELOCITY:
+                mLeftMaster.set(ControlMode.Velocity, mPeriodicIO.left_demand);
+                mRightMaster.set(ControlMode.Velocity, -mPeriodicIO.right_demand);
+                break;
         }
     }
 

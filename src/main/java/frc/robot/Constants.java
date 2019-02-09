@@ -2,7 +2,7 @@ package frc.robot;
 
 public class Constants {
 
-    public static double kLooperDt = 0.01;
+    public static double kLooperDt = 0.005;
 
     public static double kTrackScrubFactor = 0.924;
     public static double kTrackWidthInches = 27.5;
@@ -55,8 +55,7 @@ public class Constants {
         public static final int startLimitPort = 2;//DIO
     }
     public static class kClimber{
-        public static final int leftMasterPort = 3;//PWM
-        public static final int rightMasterPort = 4;//PWM
+        public static final int mMasterPort = 3;//PWM
     }
     public static class kStrafe{
         public static final int masterPort = 5;//PWM
