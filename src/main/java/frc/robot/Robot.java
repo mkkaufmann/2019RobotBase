@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.drive.DriveAtVelocityForTime;
 import frc.robot.commands.drive.EncoderDrive;
 import frc.robot.commands.drive.pathfollowing.DrivePath;
+import frc.robot.commands.paths.CS_1;
+import frc.robot.commands.paths.Figure_8;
 import frc.robot.commands.paths.Left_To_Rocket_L;
 import frc.robot.commands.paths.Straight_Path;
 import frc.robot.controlboard.ControlBoard;
@@ -113,6 +115,7 @@ public class Robot extends TimedRobot {
     public void disabledInit() {
         mEnabledLooper.stop();
         mDisabledLooper.start();
+        mSubsystemManager.stop();
     }
 
     /**
@@ -143,11 +146,12 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         m_autoSelected = m_chooser.getSelected();
+        mSuperStructure.setMode(Dashboard.getIsHatchMode() ? Superstructure.MechanismMode.HATCH : Superstructure.MechanismMode.CARGO);
         mEnabledLooper.start();
         mDisabledLooper.stop();
         // autoSelected = SmartDashboard.getString("Auto Selector",
         // defaultAuto);
-        command = new DrivePath(new Left_To_Rocket_L());
+        command = new DrivePath(new Figure_8());
 
         System.out.println("Auto selected: " + m_autoSelected);
     }
@@ -209,7 +213,7 @@ public class Robot extends TimedRobot {
             }
         }
 
-        if(hatchOrCargo.update(mControlBoard.getHatchOrCargo())){
+        if(!hatchOrCargo.update(mControlBoard.getHatchOrCargo())){
             mSuperStructure.toggleMode();//TODO move to superstructure
 
             timer.reset();
@@ -220,7 +224,6 @@ public class Robot extends TimedRobot {
             }else{
                 mControlBoard.setButtonRumble(true, false);
             }
-            SmartDashboard.putBoolean("isHatchMode", mSuperStructure.getMode() == Superstructure.MechanismMode.HATCH);
         }
 
         if(Timer.getMatchTime() < 30 && Timer.getMatchTime() > 29 && !longRumble){

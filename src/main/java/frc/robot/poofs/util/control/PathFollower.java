@@ -119,6 +119,7 @@ public class PathFollower {
      * @return The velocity command to apply
      */
     public synchronized Twist2d update(double t, RigidTransform2d pose, double displacement, double velocity) {
+        System.out.println(mSteeringController);
         if (!mSteeringController.isFinished()) {
             final AdaptivePurePursuitController.Command steering_command = mSteeringController.update(pose);
             mDebugOutput.lookahead_point_x = steering_command.lookahead_point.x();

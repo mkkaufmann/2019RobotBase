@@ -33,10 +33,6 @@ public class RobotStateEstimator extends Subsystem {
 
     @Override
     public synchronized void writePeriodicOutputs(){
-
-    }
-
-    public void loop() {
         final double left_distance = drive_.getLeftDistanceInches();
         final double right_distance = drive_.getRightDistanceInches();
         final Rotation2d gyro_angle = drive_.getGyroAngle();
@@ -47,6 +43,19 @@ public class RobotStateEstimator extends Subsystem {
         robot_state_.addObservations(Timer.getFPGATimestamp(), odometry_velocity, predicted_velocity);
         left_encoder_prev_distance_ = left_distance;
         right_encoder_prev_distance_ = right_distance;
+    }
+
+    public void loop() {
+//        final double left_distance = drive_.getLeftDistanceInches();
+//        final double right_distance = drive_.getRightDistanceInches();
+//        final Rotation2d gyro_angle = drive_.getGyroAngle();
+//        final Twist2d odometry_velocity = robot_state_.generateOdometryFromSensors(
+//                left_distance - left_encoder_prev_distance_, right_distance - right_encoder_prev_distance_, gyro_angle);
+//        final Twist2d predicted_velocity = Kinematics.forwardKinematics(drive_.getLeftVelocityInchesPerSec(),
+//                drive_.getRightVelocityInchesPerSec());
+//        robot_state_.addObservations(Timer.getFPGATimestamp(), odometry_velocity, predicted_velocity);
+//        left_encoder_prev_distance_ = left_distance;
+//        right_encoder_prev_distance_ = right_distance;
     }
 
     @Override

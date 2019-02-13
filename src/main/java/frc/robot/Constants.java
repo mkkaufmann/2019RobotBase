@@ -6,9 +6,9 @@ public class Constants {
 
     public static double kTrackScrubFactor = 0.924;
     public static double kTrackWidthInches = 27.5;
-    public static double kPathFollowingMaxAccel = 120; //in/s^2
-    public static double kPathFollowingMaxVel = 120.0; // inches per second
-    public static double kDriveMaxSetpoint = 17.0 * 12.0; // 17 fps
+    public static double kPathFollowingMaxAccel = 24; //in/s^2
+    public static double kPathFollowingMaxVel = 110.4; // inches per second
+    public static double kDriveMaxSetpoint = 9.0 * 12.0; // 17 fps
 
     // Path constants
     public static double kMinLookAhead = 12.0; // inches
@@ -19,11 +19,11 @@ public class Constants {
     // our speed
     // in inches per sec
 
-    public static double kPathFollowingProfileKp = 5.00;
-    public static double kPathFollowingProfileKi = 0.03;
-    public static double kPathFollowingProfileKv = 0.02;
+    public static double kPathFollowingProfileKp=0;// = 5.00;
+    public static double kPathFollowingProfileKi=0;//= 0.03;
+    public static double kPathFollowingProfileKv=0;//= 0.02;
     public static double kPathFollowingProfileKffv = 1.0;
-    public static double kPathFollowingProfileKffa = 0.05;
+    public static double kPathFollowingProfileKffa = 0.42625;
 
     public static double kSegmentCompletionTolerance = 0.1;//inches
     public static double kPathFollowingGoalPosTolerance = 0.75;

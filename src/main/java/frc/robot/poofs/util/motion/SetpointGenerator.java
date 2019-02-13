@@ -24,6 +24,14 @@ public class SetpointGenerator {
             this.motion_state = motion_state;
             this.final_setpoint = final_setpoint;
         }
+
+        @Override
+        public String toString() {
+            return "Setpoint{" +
+                    "motion_state=" + motion_state +
+                    ", final_setpoint=" + final_setpoint +
+                    '}';
+        }
     }
 
     protected MotionProfile mProfile = null;

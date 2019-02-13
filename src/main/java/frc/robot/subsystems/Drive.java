@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
@@ -42,6 +43,7 @@ public class Drive extends Subsystem{
         mRightMaster = new TalonSRX(Constants.kDrivetrain.rightMasterID);
         mLeftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
         mRightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
+        mRightMaster.setSensorPhase(true);
 
         mLeftMaster.config_kP(0,0.05);
         mRightMaster.config_kP(0,0.05);
@@ -54,6 +56,8 @@ public class Drive extends Subsystem{
         mRightFollower = new VictorSPX(Constants.kDrivetrain.rightFollowerID);
         mLeftFollower.follow(mLeftMaster);
         mRightFollower.follow(mRightMaster);
+        zeroEncoders();
+        mNavX.reset();
     }
 
     public static Drive getInstance(){
@@ -121,23 +125,31 @@ public class Drive extends Subsystem{
     }
 
     public Double getLeftRotations() {
-        return mPeriodicIO.left_encoder_ticks * Constants.kDrivetrain.ENCODER_TICKS_PER_ROTATION;
+        return mPeriodicIO.left_encoder_ticks / Constants.kDrivetrain.ENCODER_TICKS_PER_ROTATION;
     }
 
     public Double getRightRotations() {
-        return mPeriodicIO.right_encoder_ticks * Constants.kDrivetrain.ENCODER_TICKS_PER_ROTATION;
+        return mPeriodicIO.right_encoder_ticks / Constants.kDrivetrain.ENCODER_TICKS_PER_ROTATION;
     }
 
     public double getLeftVelocityInchesPerSec() {
-        return rpmToInchesPerSecond(mPeriodicIO.left_encoder_vel) * Constants.kDrivetrain.ENCODER_TICKS_PER_ROTATION;
+        return rpmToInchesPerSecond(mPeriodicIO.left_encoder_vel / Constants.kDrivetrain.ENCODER_TICKS_PER_ROTATION);
     }
 
     public double getRightVelocityInchesPerSec() {
-        return rpmToInchesPerSecond(mPeriodicIO.right_encoder_vel) * Constants.kDrivetrain.ENCODER_TICKS_PER_ROTATION;
+        return rpmToInchesPerSecond(mPeriodicIO.right_encoder_vel / Constants.kDrivetrain.ENCODER_TICKS_PER_ROTATION);
     }
 
     private static double rpmToInchesPerSecond(double rpm) {
         return rotationsToInches(rpm) / 60;
+    }
+
+    private static double inchesPerSecondToRpm(double inches_per_second) {
+        return inchesToRotations(inches_per_second) * 60;
+    }
+
+    private static double rpmToTicksPer100ms(double rpm) {
+        return rpm * (1.0/60.0) * Constants.kDrivetrain.ENCODER_TICKS_PER_ROTATION * (1.0/10.0);
     }
 
     public synchronized Rotation2d getGyroAngle() {
@@ -164,8 +176,8 @@ public class Drive extends Subsystem{
             mRightMaster.setNeutralMode(NeutralMode.Brake);
 
         } else {
-            // stop();
-            // setVelocitySetpoint(0, 0);
+            stop();
+            //setVelocitySetpoint(0, 0);
         }
     }
 
@@ -237,11 +249,11 @@ public class Drive extends Subsystem{
     }
 
     private void updatePathFollower() {
-        System.out.println("updating drive path");
         RigidTransform2d robot_pose = mRobotState.getLatestFieldToVehicle().getValue();
-        // System.out.println(robot_pose.getTranslation().toString());
+        System.out.println(robot_pose.toString());
         Twist2d command = mPathFollower.update(Timer.getFPGATimestamp(), robot_pose,
                 RobotState.getInstance().getDistanceDriven(), RobotState.getInstance().getPredictedVelocity().dx);
+
         if (!mPathFollower.isFinished()) {
             Kinematics.DriveVelocity setpoint = Kinematics.inverseKinematics(command);
             updateVelocitySetpoint(setpoint.left, setpoint.right);
@@ -251,22 +263,16 @@ public class Drive extends Subsystem{
     }
 
     private synchronized void updateVelocitySetpoint(double left_inches_per_sec, double right_inches_per_sec) {
-        System.out.println("updating velocity setpoint");
         final double max_desired = Math.max(Math.abs(left_inches_per_sec), Math.abs(right_inches_per_sec));
         final double scale = max_desired > Constants.kDriveMaxSetpoint
                 ? Constants.kDriveMaxSetpoint / max_desired
                 : 1.0;
         mPeriodicIO.left_demand = rpmToTicksPer100ms((inchesPerSecondToRpm(left_inches_per_sec * scale)));
         mPeriodicIO.right_demand = -rpmToTicksPer100ms(inchesPerSecondToRpm(right_inches_per_sec * scale));
+        System.out.println(mPeriodicIO.left_demand + ", " + mPeriodicIO.right_demand);
     }
 
-    private static double inchesPerSecondToRpm(double inches_per_second) {
-        return inchesToRotations(inches_per_second) * 60;
-    }
 
-    private static double rpmToTicksPer100ms(double rpm) {
-        return rpm * (1.0/60.0) * 4096.0 * (1.0/10.0);
-    }
 
     @Override
     public synchronized void readPeriodicInputs(){
@@ -280,6 +286,8 @@ public class Drive extends Subsystem{
 
     @Override
     public synchronized void writePeriodicOutputs(){
+        System.out.println(mRobotState.getLatestFieldToVehicle().getValue());
+
         switch(mState){
             case NEUTRAL:
                 mLeftMaster.set(ControlMode.PercentOutput, 0);
@@ -288,11 +296,13 @@ public class Drive extends Subsystem{
             case OPEN_LOOP:
                 mLeftMaster.set(ControlMode.PercentOutput, mPeriodicIO.left_demand);
                 mRightMaster.set(ControlMode.PercentOutput, -mPeriodicIO.right_demand);
+//                if(!DriverStation.getInstance().isDisabled()){
+//                    System.out.println(inchesPerSecondToRpm(mPeriodicIO.left_encoder_vel * (1/Constants.kDrivetrain.ENCODER_TICKS_PER_ROTATION) * Constants.kDrivetrain.WHEEL_DIAMETER_IN * Math.PI));
+//                }
                 break;
             case PATH_FOLLOWING:
                 if(mPathFollower != null){
                     updatePathFollower();
-                    System.out.println("NULL");
                 }
                 System.out.println("following path");
                 mLeftMaster.set(ControlMode.Velocity, mPeriodicIO.left_demand);

@@ -17,6 +17,14 @@ public class Dashboard extends Subsystem {
         return mInstance;
     }
 
+    private Dashboard(){
+        SmartDashboard.putBoolean("isHatchMode", true);
+    }
+
+    public static boolean getIsHatchMode(){
+        return SmartDashboard.getBoolean("isHatchMode", true);
+    }
+
     @Override
     public synchronized void readPeriodicInputs(){
 
@@ -24,9 +32,12 @@ public class Dashboard extends Subsystem {
 
     @Override
     public synchronized void writePeriodicOutputs(){
-        SmartDashboard.putNumber("Match_Time", Timer.getFPGATimestamp());
+        SmartDashboard.putNumber("Match_Time", Timer.getMatchTime());
+        SmartDashboard.putBoolean("Claw_Is_Open", Claw.getInstance().getState() == Claw.ClawState.OPEN);
         SmartDashboard.putNumber("Battery_Voltage", RobotController.getBatteryVoltage());
+        SmartDashboard.putNumber("Elevator_Height", Elevator.getInstance().getInchesFromBottom());
     }
+
 
     @Override
     public void stop() {

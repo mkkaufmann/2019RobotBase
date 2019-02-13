@@ -49,7 +49,7 @@ public class Elevator extends Subsystem {
 
     @Override
     public void stop() {
-        //setOpenLoop(0);
+        setOpenLoop(0);
     }
 
     @Override
@@ -100,6 +100,15 @@ public class Elevator extends Subsystem {
         mPeriodicIO.demand = encoderPosition;
     }
 
+    public synchronized void setMotionMagic(double inchesFromBottom){
+        double encoderPosition = inchesFromBottom * kEncoderTicksPerInch;
+        if(mState != ElevatorState.MOTION_MAGIC){
+            mState = ElevatorState.MOTION_MAGIC;
+            //TODO profile slot
+        }
+        mPeriodicIO.demand = encoderPosition;
+    }
+
     public synchronized void setOpenLoop(double demand){
         mState = ElevatorState.OPEN_LOOP;
         mPeriodicIO.demand = demand;
@@ -121,6 +130,9 @@ public class Elevator extends Subsystem {
             case POSITION:
                 mMaster.set(ControlMode.Position, -mPeriodicIO.demand);
                 break;
+            case MOTION_MAGIC:
+                mMaster.set(ControlMode.MotionMagic, -mPeriodicIO.demand);
+                break;
         }
     }
 
@@ -134,6 +146,7 @@ public class Elevator extends Subsystem {
 
     public enum ElevatorState{
         OPEN_LOOP,
-        POSITION
+        POSITION,
+        MOTION_MAGIC
     }
 }

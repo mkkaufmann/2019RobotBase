@@ -43,7 +43,7 @@ public class Superstructure extends Subsystem{
         }
     }
 
-    private MechanismMode mMode = MechanismMode.CARGO;
+    private MechanismMode mMode = MechanismMode.HATCH;
 
     private boolean isClimbMode;
     private boolean isElevatorJogging = true;

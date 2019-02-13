@@ -18,10 +18,15 @@ public class Claw extends Subsystem {
 
     public synchronized void toggleState(){
         setState(mState == ClawState.CLOSED? ClawState.OPEN : ClawState.CLOSED);
+        System.out.println("toggled");
     }
 
     public synchronized void setState(ClawState mState) {
         this.mState = mState;
+    }
+
+    public synchronized ClawState getState(){
+        return mState;
     }
 
     public static Claw getInstance(){
@@ -49,14 +54,15 @@ public class Claw extends Subsystem {
 
     @Override
     public synchronized void writePeriodicOutputs(){
-        if(Util.epsilonEquals(mMaster.getAngle(), mState.value, kTargetThreshold)){
+        if(!Util.epsilonEquals(mMaster.getAngle(), mState.value, kTargetThreshold)){
             mMaster.setAngle(mState.value);
+            System.out.println(mState == ClawState.CLOSED? "Closed": "Open");
         }
     }
 
-    private enum ClawState{
-        CLOSED(60),
-        OPEN(120);
+    public enum ClawState{
+        CLOSED(0),
+        OPEN(140);
 
         public double value;
 

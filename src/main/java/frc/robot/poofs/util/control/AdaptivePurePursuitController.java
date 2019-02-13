@@ -17,6 +17,16 @@ import frc.robot.poofs.util.math.Twist2d;
 public class AdaptivePurePursuitController {
     private static final double kReallyBigNumber = 1E6;
 
+    @Override
+    public String toString() {
+        return "AdaptivePurePursuitController{" +
+                "mPath=" + mPath +
+                ", mAtEndOfPath=" + mAtEndOfPath +
+                ", mReversed=" + mReversed +
+                ", mLookahead=" + mLookahead +
+                '}';
+    }
+
     public static class Command {
         public Twist2d delta = Twist2d.identity();
         public double cross_track_error;
@@ -73,7 +83,7 @@ public class AdaptivePurePursuitController {
         final Arc arc = new Arc(pose, report.lookahead_point);
         double scale_factor = 1.0;
         // Ensure we don't overshoot the end of the path (once the lookahead speed drops to zero).
-        if (report.lookahead_point_speed < 1E-6 && report.remaining_path_distance < arc.length) {
+        if (report.lookahead_point_speed < 1E-6 && report.remaining_path_distance < arc.length) {//TODO
             scale_factor = Math.max(0.0, report.remaining_path_distance / arc.length);
             mAtEndOfPath = true;
         } else {

@@ -65,7 +65,7 @@ public class GamepadButtonControlBoard implements IButtonControlBoard {
 
     @Override
     public boolean getCenterStrafe() {
-        return Util.deadband(mJoystick.getTriggerAxis(GenericHID.Hand.kLeft), 0.2) > 0;
+        return Util.deadband(mJoystick.getRawAxis(1), 0.5) > 0;
     }
 
     @Override
@@ -87,7 +87,7 @@ public class GamepadButtonControlBoard implements IButtonControlBoard {
 
     @Override
     public double getStrafeThrottle(){
-        return Util.deadband(mJoystick.getRawAxis(0));
+        return Util.deadband(mJoystick.getRawAxis(0),0.05);
     }
 
     @Override
@@ -97,15 +97,14 @@ public class GamepadButtonControlBoard implements IButtonControlBoard {
 
     @Override
     public double getShootSpeed() {
-//        double speed = Util.deadband(mJoystick.getTriggerAxis(GenericHID.Hand.kLeft));
-////        double speed = Util.deadband(mJoystick.getRawAxis(1));
-//        if(speed == 0){
-//            return 0;
-//        }else if(speed < 0.5){
-//            return 0.5;
-//        }else {
-//            return 1.0;
-//        }
-        return 0;
+        double speed = Util.deadband(mJoystick.getTriggerAxis(GenericHID.Hand.kLeft));
+
+        if(speed == 0){
+            return 0;
+        }else if(speed < 0.5){
+            return 0.5;
+        }else {
+            return 1.0;
+        }
     }
 }
