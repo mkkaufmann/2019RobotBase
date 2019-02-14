@@ -20,7 +20,7 @@ public class AdaptivePurePursuitController {
     @Override
     public String toString() {
         return "AdaptivePurePursuitController{" +
-                "mPath=" + mPath +
+                //"mPath=" + mPath +
                 ", mAtEndOfPath=" + mAtEndOfPath +
                 ", mReversed=" + mReversed +
                 ", mLookahead=" + mLookahead +

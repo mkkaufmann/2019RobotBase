@@ -17,10 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.drive.DriveAtVelocityForTime;
 import frc.robot.commands.drive.EncoderDrive;
 import frc.robot.commands.drive.pathfollowing.DrivePath;
-import frc.robot.commands.paths.CS_1;
-import frc.robot.commands.paths.Figure_8;
-import frc.robot.commands.paths.Left_To_Rocket_L;
-import frc.robot.commands.paths.Straight_Path;
+import frc.robot.commands.paths.*;
 import frc.robot.controlboard.ControlBoard;
 import frc.robot.lib.CheesyDriveHelper;
 import frc.robot.lib.LatchedBoolean;
@@ -151,7 +148,7 @@ public class Robot extends TimedRobot {
         mDisabledLooper.stop();
         // autoSelected = SmartDashboard.getString("Auto Selector",
         // defaultAuto);
-        command = new DrivePath(new Figure_8());
+        command = new DrivePath(new TestPath());
 
         System.out.println("Auto selected: " + m_autoSelected);
     }

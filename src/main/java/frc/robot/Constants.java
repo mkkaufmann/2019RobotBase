@@ -19,9 +19,9 @@ public class Constants {
     // our speed
     // in inches per sec
 
-    public static double kPathFollowingProfileKp=0;// = 5.00;
+    public static double kPathFollowingProfileKp=5;// = 5.00;
     public static double kPathFollowingProfileKi=0;//= 0.03;
-    public static double kPathFollowingProfileKv=0;//= 0.02;
+    public static double kPathFollowingProfileKv=0.02;//= 0.02;
     public static double kPathFollowingProfileKffv = 1.0;
     public static double kPathFollowingProfileKffa = 0.42625;
 

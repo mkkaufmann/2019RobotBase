@@ -45,19 +45,19 @@ public class Drive extends Subsystem{
         mRightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
         mRightMaster.setSensorPhase(true);
 
-        mLeftMaster.config_kP(0,0.05);
-        mRightMaster.config_kP(0,0.05);
-        mLeftMaster.config_kI(0,0);
-        mRightMaster.config_kI(0,0);
-        mLeftMaster.config_kD(0,0);
-        mRightMaster.config_kD(0,0);
+//        mLeftMaster.config_kP(0,0.05);
+//        mRightMaster.config_kP(0,0.05);
+//        mLeftMaster.config_kI(0,0);
+//        mRightMaster.config_kI(0,0);
+//        mLeftMaster.config_kD(0,0);
+//        mRightMaster.config_kD(0,0);
 
         mLeftFollower = new VictorSPX(Constants.kDrivetrain.leftFollowerID);
         mRightFollower = new VictorSPX(Constants.kDrivetrain.rightFollowerID);
         mLeftFollower.follow(mLeftMaster);
         mRightFollower.follow(mRightMaster);
         zeroEncoders();
-        mNavX.reset();
+        zeroGyro();
     }
 
     public static Drive getInstance(){
@@ -133,11 +133,11 @@ public class Drive extends Subsystem{
     }
 
     public double getLeftVelocityInchesPerSec() {
-        return rpmToInchesPerSecond(mPeriodicIO.left_encoder_vel / Constants.kDrivetrain.ENCODER_TICKS_PER_ROTATION);
+        return rpmToInchesPerSecond((mPeriodicIO.left_encoder_vel / Constants.kDrivetrain.ENCODER_TICKS_PER_ROTATION));
     }
 
     public double getRightVelocityInchesPerSec() {
-        return rpmToInchesPerSecond(mPeriodicIO.right_encoder_vel / Constants.kDrivetrain.ENCODER_TICKS_PER_ROTATION);
+        return rpmToInchesPerSecond((mPeriodicIO.left_encoder_vel / Constants.kDrivetrain.ENCODER_TICKS_PER_ROTATION));
     }
 
     private static double rpmToInchesPerSecond(double rpm) {
@@ -158,7 +158,7 @@ public class Drive extends Subsystem{
 
     public synchronized void setWantDrivePath(Path path, boolean reversed) {
         System.out.println("setting drive path");
-        if (mCurrentPath != path || mState != mState.PATH_FOLLOWING) {
+        if (mCurrentPath != path || mState != DriveState.PATH_FOLLOWING) {
             RobotState.getInstance().resetDistanceDriven();
             mPathFollower = new PathFollower(path, reversed, new PathFollower.Parameters(
                     new Lookahead(Constants.kMinLookAhead, Constants.kMaxLookAhead, Constants.kMinLookAheadSpeed,
@@ -210,7 +210,7 @@ public class Drive extends Subsystem{
         mRightMaster.setNeutralMode(NeutralMode.Brake);
         mPeriodicIO.wanted_left_demand = left;
         mPeriodicIO.wanted_right_demand = right;
-        System.out.println(left + "\t" + right);
+        System.out.println("wanted speed: " + left + "\t" + right);
     }
 
     public synchronized void zeroGyro() {
@@ -250,7 +250,6 @@ public class Drive extends Subsystem{
 
     private void updatePathFollower() {
         RigidTransform2d robot_pose = mRobotState.getLatestFieldToVehicle().getValue();
-        System.out.println(robot_pose.toString());
         Twist2d command = mPathFollower.update(Timer.getFPGATimestamp(), robot_pose,
                 RobotState.getInstance().getDistanceDriven(), RobotState.getInstance().getPredictedVelocity().dx);
 
@@ -276,17 +275,22 @@ public class Drive extends Subsystem{
 
     @Override
     public synchronized void readPeriodicInputs(){
-        mPeriodicIO.left_demand = mPeriodicIO.wanted_left_demand;
-        mPeriodicIO.right_demand = mPeriodicIO.wanted_right_demand;
+        if(mState != DriveState.PATH_FOLLOWING){
+            mPeriodicIO.left_demand = mPeriodicIO.wanted_left_demand;
+            mPeriodicIO.right_demand = mPeriodicIO.wanted_right_demand;
+        }
         mPeriodicIO.left_encoder_ticks = (double) mLeftMaster.getSelectedSensorPosition(0);
         mPeriodicIO.left_encoder_vel = (double) mLeftMaster.getSelectedSensorVelocity(0);
         mPeriodicIO.right_encoder_ticks = (double) mRightMaster.getSelectedSensorPosition(0);
         mPeriodicIO.right_encoder_vel = (double) mRightMaster.getSelectedSensorVelocity(0);
+        if(!DriverStation.getInstance().isDisabled())
+            System.out.println("Current speed: " + mPeriodicIO.left_encoder_vel + ", " + mPeriodicIO.right_encoder_vel);
     }
 
     @Override
     public synchronized void writePeriodicOutputs(){
-        System.out.println(mRobotState.getLatestFieldToVehicle().getValue());
+        if(!DriverStation.getInstance().isDisabled())
+            System.out.println(mRobotState.getLatestFieldToVehicle().getValue());
 
         switch(mState){
             case NEUTRAL:

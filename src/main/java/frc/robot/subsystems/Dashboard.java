@@ -1,10 +1,8 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.poofs.RobotState;
 
 public class Dashboard extends Subsystem {
 
@@ -36,6 +34,9 @@ public class Dashboard extends Subsystem {
         SmartDashboard.putBoolean("Claw_Is_Open", Claw.getInstance().getState() == Claw.ClawState.OPEN);
         SmartDashboard.putNumber("Battery_Voltage", RobotController.getBatteryVoltage());
         SmartDashboard.putNumber("Elevator_Height", Elevator.getInstance().getInchesFromBottom());
+        SmartDashboard.putNumber("Robot_State_X", RobotState.getInstance().getLatestFieldToVehicle().getValue().getTranslation().x());
+        SmartDashboard.putNumber("Robot_State_Y", RobotState.getInstance().getLatestFieldToVehicle().getValue().getTranslation().y());
+        SmartDashboard.putNumber("Robot_State_R", RobotState.getInstance().getLatestFieldToVehicle().getValue().getRotation().getDegrees());
     }
 
 
