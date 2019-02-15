@@ -11,12 +11,15 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.drive.DriveAtVelocityForTime;
 import frc.robot.commands.drive.EncoderDrive;
 import frc.robot.commands.drive.pathfollowing.DrivePath;
+import frc.robot.commands.drive.pathfollowing.ResetPoseDrivePath;
+import frc.robot.commands.drive.pathfollowing.ResetPoseFromPath;
 import frc.robot.commands.paths.*;
 import frc.robot.controlboard.ControlBoard;
 import frc.robot.lib.CheesyDriveHelper;
@@ -148,7 +151,8 @@ public class Robot extends TimedRobot {
         mDisabledLooper.stop();
         // autoSelected = SmartDashboard.getString("Auto Selector",
         // defaultAuto);
-        command = new DrivePath(new TestPath());
+        command = new ResetPoseDrivePath(new TestPath());
+
 
         System.out.println("Auto selected: " + m_autoSelected);
     }
@@ -182,6 +186,7 @@ public class Robot extends TimedRobot {
 
     /**
      * This function is called periodically during operator control.
+     * TODO fix claw in ball mode
      */
     @Override
     public void teleopPeriodic() {

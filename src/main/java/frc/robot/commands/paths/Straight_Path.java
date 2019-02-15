@@ -10,8 +10,8 @@ public class Straight_Path extends PathContainer {
         this.sWaypoints = new ArrayList<Waypoint>();
         sWaypoints.add(new Waypoint(0, 205, 0, 0));
         sWaypoints.add(new Waypoint(30, 205, 0, 50));
-//        sWaypoints.add(new Waypoint(75, 205, 0, 50));
-//        sWaypoints.add(new Waypoint(145, 205, 0, 50));
+        sWaypoints.add(new Waypoint(75, 205, 0, 50));
+        sWaypoints.add(new Waypoint(145, 205, 0, 50));
     }
 
     @Override

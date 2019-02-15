@@ -45,12 +45,14 @@ public class Drive extends Subsystem{
         mRightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
         mRightMaster.setSensorPhase(true);
 
-//        mLeftMaster.config_kP(0,0.05);
-//        mRightMaster.config_kP(0,0.05);
-//        mLeftMaster.config_kI(0,0);
-//        mRightMaster.config_kI(0,0);
-//        mLeftMaster.config_kD(0,0);
-//        mRightMaster.config_kD(0,0);
+        mLeftMaster.config_kP(0,0.0);
+        mRightMaster.config_kP(0,0.0);
+        mLeftMaster.config_kI(0,0);
+        mRightMaster.config_kI(0,0);
+        mLeftMaster.config_kD(0,0);
+        mRightMaster.config_kD(0,0);
+        mLeftMaster.config_kF(0,0.4625);
+        mRightMaster.config_kF(0,0.4625);
 
         mLeftFollower = new VictorSPX(Constants.kDrivetrain.leftFollowerID);
         mRightFollower = new VictorSPX(Constants.kDrivetrain.rightFollowerID);
