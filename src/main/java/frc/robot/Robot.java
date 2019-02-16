@@ -153,8 +153,8 @@ public class Robot extends TimedRobot {
         mDisabledLooper.stop();
         // autoSelected = SmartDashboard.getString("Auto Selector",
         // defaultAuto);
-        command = new ResetPoseDrivePath(new TestPath());
-
+        command = new ResetPoseDrivePath(new Left_To_Rocket_L());
+        command.start();
 
         //System.out.printlnln("Auto selected: " + m_autoSelected);
     }
@@ -164,10 +164,6 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
-        if(!command.isRunning()){
-            //System.out.printlnln("is not running");
-            command.start();
-        }
         Scheduler.getInstance().run();
         switch (m_autoSelected) {
             case kCustomAuto:

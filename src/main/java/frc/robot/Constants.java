@@ -8,7 +8,7 @@ public class Constants {
     public static double kTrackWidthInches = 27.5;
     public static double kPathFollowingMaxAccel = 120; //in/s^2
     public static double kPathFollowingMaxVel = 120;//110.4; // inches per second
-    public static double kDriveMaxSetpoint = 20;//17.0 * 12.0; // 17 fps
+    public static double kDriveMaxSetpoint = 17*12;//17.0 * 12.0; // 17 fps
 
     // Path constants
     public static double kMinLookAhead = 12.0; // inches

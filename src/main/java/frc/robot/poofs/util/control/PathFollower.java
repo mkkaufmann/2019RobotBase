@@ -1,5 +1,6 @@
 package frc.robot.poofs.util.control;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.poofs.util.math.RigidTransform2d;
 import frc.robot.poofs.util.math.Twist2d;
 import frc.robot.poofs.util.motion.MotionProfileConstraints;
@@ -119,7 +120,9 @@ public class PathFollower {
      * @return The velocity command to apply
      */
     public synchronized Twist2d update(double t, RigidTransform2d pose, double displacement, double velocity) {
-        //System.out.printlnln(mSteeringController);
+        SmartDashboard.putNumber("Speed_Controller_TargetX", mDebugOutput.lookahead_point_x);
+        SmartDashboard.putNumber("Speed_Controller_TargetY", mDebugOutput.lookahead_point_y);
+        SmartDashboard.putNumber("Speed_Controller_TargetV", mDebugOutput.lookahead_point_velocity);
         if (!mSteeringController.isFinished()) {
             final AdaptivePurePursuitController.Command steering_command = mSteeringController.update(pose);
             mDebugOutput.lookahead_point_x = steering_command.lookahead_point.x();
@@ -159,6 +162,7 @@ public class PathFollower {
         mDebugOutput.pose_x = pose.getTranslation().x();
         mDebugOutput.pose_y = pose.getTranslation().y();
         mDebugOutput.pose_theta = pose.getRotation().getRadians();
+        SmartDashboard.putNumber("Speed_Controller_TargetR", mDebugOutput.pose_theta/Math.PI*180);
         mDebugOutput.linear_displacement = displacement;
         mDebugOutput.linear_velocity = velocity;
         mDebugOutput.profile_displacement = mVelocityController.getSetpoint().pos();

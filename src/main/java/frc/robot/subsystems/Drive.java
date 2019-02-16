@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.lib.DriveSignal;
 import frc.robot.poofs.Kinematics;
@@ -43,7 +44,7 @@ public class Drive extends Subsystem{
         mRightMaster = new TalonSRX(Constants.kDrivetrain.rightMasterID);
         mLeftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
         mRightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
-        mRightMaster.setSensorPhase(true);
+        mLeftMaster.setSensorPhase(true);
 
         mLeftMaster.config_kP(0,0.0);
         mRightMaster.config_kP(0,0.0);
@@ -311,6 +312,7 @@ public class Drive extends Subsystem{
                     updatePathFollower();
                 }
                 //System.out.printlnln("following path");
+                SmartDashboard.putString("Velocity", Double.toString(mPeriodicIO.left_demand) + Double.toString(mPeriodicIO.right_demand));
                 mLeftMaster.set(ControlMode.Velocity, mPeriodicIO.left_demand);
                 mRightMaster.set(ControlMode.Velocity, mPeriodicIO.right_demand);
                 break;
