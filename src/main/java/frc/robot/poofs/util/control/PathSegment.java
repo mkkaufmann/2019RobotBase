@@ -117,7 +117,7 @@ public class PathSegment {
                 Constants.kPathFollowingMaxAccel);
         MotionProfileGoal goal_state = new MotionProfileGoal(getLength(), end_speed);
         speedController = MotionProfileGenerator.generateProfile(motionConstraints, goal_state, start_state);
-        // System.out.println(speedController);
+        // //System.out.printlnln(speedController);
     }
 
     /**
@@ -237,7 +237,7 @@ public class PathSegment {
         if (state.isPresent()) {
             return state.get().vel();
         } else {
-            System.out.println("Velocity does not exist at that position!");
+            //System.out.printlnln("Velocity does not exist at that position!");
             return 0.0;
         }
     }

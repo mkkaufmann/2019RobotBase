@@ -26,7 +26,7 @@ public class Elevator extends Subsystem {
     private Elevator(){
         mMaster = new TalonSRX(Constants.kElevator.masterID);
         mMaster.configFactoryDefault();
-        System.out.println("elevator started");
+        //System.out.printlnln("elevator started");
 //        mMaster.config_kP(0, 0.05);
 //        mMaster.config_kI(0,0);
 //        mMaster.config_kD(0,0);
@@ -112,7 +112,7 @@ public class Elevator extends Subsystem {
     public synchronized void setOpenLoop(double demand){
         mState = ElevatorState.OPEN_LOOP;
         mPeriodicIO.demand = demand;
-        System.out.println("set open loop:"+demand);
+        //System.out.printlnln("set open loop:"+demand);
     }
 
     @Override
@@ -125,7 +125,7 @@ public class Elevator extends Subsystem {
         switch(mState){
             case OPEN_LOOP:
                 mMaster.set(ControlMode.PercentOutput, -mPeriodicIO.demand);
-                //System.out.println("wrote elevator output:"+-mPeriodicIO.demand);
+                ////System.out.printlnln("wrote elevator output:"+-mPeriodicIO.demand);
                 break;
             case POSITION:
                 mMaster.set(ControlMode.Position, -mPeriodicIO.demand);

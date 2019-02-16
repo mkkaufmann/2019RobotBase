@@ -23,6 +23,7 @@ import frc.robot.commands.drive.pathfollowing.ResetPoseFromPath;
 import frc.robot.commands.paths.*;
 import frc.robot.controlboard.ControlBoard;
 import frc.robot.lib.CheesyDriveHelper;
+import frc.robot.lib.GenericPWMSpeedController;
 import frc.robot.lib.LatchedBoolean;
 import frc.robot.lib.Util;
 import frc.robot.loops.Looper;
@@ -75,6 +76,7 @@ public class Robot extends TimedRobot {
     private LatchedBoolean runIntake = new LatchedBoolean();
     private LatchedBoolean enableClimbMode = new LatchedBoolean();
     private LatchedBoolean centerStrafe = new LatchedBoolean();
+    private GenericPWMSpeedController elevator = new GenericPWMSpeedController(4);//TODO
 
     private Command command;
 
@@ -88,7 +90,7 @@ public class Robot extends TimedRobot {
                     Arm.getInstance(),
                     Climber.getInstance(),
                     Mouth.getInstance(),
-                    Strafe.getInstance(),
+                    //Strafe.getInstance(),
                     Dashboard.getInstance(),
                     RobotStateEstimator.getInstance())
     );
@@ -154,7 +156,7 @@ public class Robot extends TimedRobot {
         command = new ResetPoseDrivePath(new TestPath());
 
 
-        System.out.println("Auto selected: " + m_autoSelected);
+        //System.out.printlnln("Auto selected: " + m_autoSelected);
     }
 
     /**
@@ -163,7 +165,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic() {
         if(!command.isRunning()){
-            System.out.println("is not running");
+            //System.out.printlnln("is not running");
             command.start();
         }
         Scheduler.getInstance().run();
@@ -202,8 +204,9 @@ public class Robot extends TimedRobot {
 
         if(enableClimbMode.update(mControlBoard.getEnableClimbMode())){
             mClimber.toggleState();
-            System.out.println("climb toggled");
+            //System.out.printlnln("climb toggled");
         }
+        Strafe.getInstance().getMaster().set(mControlBoard.getStrafeThrottle());
         if(mClimber.getState() == Climber.ClimberState.PERCENT_OUTPUT){
             mClimber.setOutput(mControlBoard.getClimberThrottle());
         }else{
@@ -215,7 +218,8 @@ public class Robot extends TimedRobot {
             }
         }
 
-        if(!hatchOrCargo.update(mControlBoard.getHatchOrCargo())){
+        if(hatchOrCargo.update(mControlBoard.getHatchOrCargo())){
+            System.out.println("hatch or cargo");
             mSuperStructure.toggleMode();//TODO move to superstructure
 
             timer.reset();
@@ -257,13 +261,14 @@ public class Robot extends TimedRobot {
 
         }else {
             if (mControlBoard.getShootSpeed() > 0) {
-                System.out.println("shooting");
+                //System.out.printlnln("shooting");
                 mMouth.setState(Mouth.MouthState.OUTTAKE);
                 mMouth.setSpeed(mControlBoard.getShootSpeed());
             }else if(mMouth.getState() == Mouth.MouthState.OUTTAKE){
                 mMouth.setState(Mouth.MouthState.NEUTRAL_CARGO);
             }
             if (runIntake.update(mControlBoard.getRunIntake())) {
+                System.out.println("toggled");
                 mMouth.toggleIntake();
             }
             if (goToCargoShipCargoHeight.update(mControlBoard.getGoToCargoShipCargoHeight())) {
@@ -284,7 +289,8 @@ public class Robot extends TimedRobot {
 //        }else if(mElevator.getState() == Elevator.ElevatorState.OPEN_LOOP){
 //            mElevator.setOpenLoop(0);
 //        }
-        mElevator.getMaster().set(ControlMode.PercentOutput,-Util.deadband(mControlBoard.getElevatorThrottle()));
+        elevator.set(-Util.deadband(mControlBoard.getElevatorThrottle()));
+//        mElevator.getMaster().set(ControlMode.PercentOutput,-Util.deadband(mControlBoard.getElevatorThrottle()));
     }
 
     @Override

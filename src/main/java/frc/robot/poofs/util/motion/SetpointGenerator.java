@@ -77,7 +77,7 @@ public class SetpointGenerator {
             mConstraints = constraints;
             mGoal = goal;
             mProfile = MotionProfileGenerator.generateProfile(constraints, goal, prev_state);
-            // System.out.println("Regenerating profile: " + mProfile);
+            // //System.out.printlnln("Regenerating profile: " + mProfile);
         }
 
         // Sample the profile at time t.

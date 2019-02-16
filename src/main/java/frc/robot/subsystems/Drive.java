@@ -71,7 +71,7 @@ public class Drive extends Subsystem{
 
     @Override
     public void stop() {
-        System.out.println("stopping drive");
+        //System.out.printlnln("stopping drive");
         setOpenLoop(0,0);
     }
 
@@ -159,7 +159,7 @@ public class Drive extends Subsystem{
     }
 
     public synchronized void setWantDrivePath(Path path, boolean reversed) {
-        System.out.println("setting drive path");
+        //System.out.printlnln("setting drive path");
         if (mCurrentPath != path || mState != DriveState.PATH_FOLLOWING) {
             RobotState.getInstance().resetDistanceDriven();
             mPathFollower = new PathFollower(path, reversed, new PathFollower.Parameters(
@@ -187,7 +187,7 @@ public class Drive extends Subsystem{
         if (mState == DriveState.PATH_FOLLOWING && mPathFollower != null) {
             return mPathFollower.isFinished();
         } else {
-            System.out.println("Robot is not in path following mode");
+            //System.out.printlnln("Robot is not in path following mode");
             return true;
         }
     }
@@ -201,7 +201,7 @@ public class Drive extends Subsystem{
         if (mState == DriveState.PATH_FOLLOWING && mPathFollower != null) {
             return mPathFollower.hasPassedMarker(marker);
         } else {
-            System.out.println("Robot is not in path following mode");
+            //System.out.printlnln("Robot is not in path following mode");
             return false;
         }
     }
@@ -212,7 +212,7 @@ public class Drive extends Subsystem{
         mRightMaster.setNeutralMode(NeutralMode.Brake);
         mPeriodicIO.wanted_left_demand = left;
         mPeriodicIO.wanted_right_demand = right;
-        System.out.println("wanted speed: " + left + "\t" + right);
+        //System.out.printlnln("wanted speed: " + left + "\t" + right);
     }
 
     public synchronized void zeroGyro() {
@@ -270,7 +270,7 @@ public class Drive extends Subsystem{
                 : 1.0;
         mPeriodicIO.left_demand = rpmToTicksPer100ms((inchesPerSecondToRpm(left_inches_per_sec * scale)));
         mPeriodicIO.right_demand = -rpmToTicksPer100ms(inchesPerSecondToRpm(right_inches_per_sec * scale));
-        System.out.println(mPeriodicIO.left_demand + ", " + mPeriodicIO.right_demand);
+        //System.out.printlnln(mPeriodicIO.left_demand + ", " + mPeriodicIO.right_demand);
     }
 
 
@@ -285,14 +285,14 @@ public class Drive extends Subsystem{
         mPeriodicIO.left_encoder_vel = (double) mLeftMaster.getSelectedSensorVelocity(0);
         mPeriodicIO.right_encoder_ticks = (double) mRightMaster.getSelectedSensorPosition(0);
         mPeriodicIO.right_encoder_vel = (double) mRightMaster.getSelectedSensorVelocity(0);
-        if(!DriverStation.getInstance().isDisabled())
-            System.out.println("Current speed: " + mPeriodicIO.left_encoder_vel + ", " + mPeriodicIO.right_encoder_vel);
+//        if(!DriverStation.getInstance().isDisabled())
+            //System.out.printlnln("Current speed: " + mPeriodicIO.left_encoder_vel + ", " + mPeriodicIO.right_encoder_vel);
     }
 
     @Override
     public synchronized void writePeriodicOutputs(){
-        if(!DriverStation.getInstance().isDisabled())
-            System.out.println(mRobotState.getLatestFieldToVehicle().getValue());
+        //if(!DriverStation.getInstance().isDisabled())
+            //System.out.printlnln(mRobotState.getLatestFieldToVehicle().getValue());
 
         switch(mState){
             case NEUTRAL:
@@ -303,14 +303,14 @@ public class Drive extends Subsystem{
                 mLeftMaster.set(ControlMode.PercentOutput, mPeriodicIO.left_demand);
                 mRightMaster.set(ControlMode.PercentOutput, -mPeriodicIO.right_demand);
 //                if(!DriverStation.getInstance().isDisabled()){
-//                    System.out.println(inchesPerSecondToRpm(mPeriodicIO.left_encoder_vel * (1/Constants.kDrivetrain.ENCODER_TICKS_PER_ROTATION) * Constants.kDrivetrain.WHEEL_DIAMETER_IN * Math.PI));
+//                    //System.out.printlnln(inchesPerSecondToRpm(mPeriodicIO.left_encoder_vel * (1/Constants.kDrivetrain.ENCODER_TICKS_PER_ROTATION) * Constants.kDrivetrain.WHEEL_DIAMETER_IN * Math.PI));
 //                }
                 break;
             case PATH_FOLLOWING:
                 if(mPathFollower != null){
                     updatePathFollower();
                 }
-                System.out.println("following path");
+                //System.out.printlnln("following path");
                 mLeftMaster.set(ControlMode.Velocity, mPeriodicIO.left_demand);
                 mRightMaster.set(ControlMode.Velocity, mPeriodicIO.right_demand);
                 break;

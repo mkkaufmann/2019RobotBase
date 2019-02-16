@@ -25,7 +25,7 @@ public class DriveAtVelocityForTime extends Command {
     return isTimedOut();
   }
   protected void end() {
-    System.out.println("COMMAND DONE!");
+    //System.out.printlnln("COMMAND DONE!");
     drive.stop();
   }
   protected void interrupted() {

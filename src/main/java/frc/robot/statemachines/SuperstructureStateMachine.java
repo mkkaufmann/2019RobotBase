@@ -113,7 +113,7 @@ public class SuperstructureStateMachine {
                     getManualCommandedState();
                     break;
                 default:
-                    System.out.println("Unexpected superstructure state output state: " + mSystemState);
+                    //System.out.printlnln("Unexpected superstructure state output state: " + mSystemState);
                     break;
             }
         }
@@ -124,11 +124,11 @@ public class SuperstructureStateMachine {
 //    private void updateMotionPlannerDesired(SuperstructureState currentState) {
 //        mDesiredEndState.height = mScoringHeight;
 //
-//        System.out.println("Setting motion planner to height: " + mDesiredEndState.height);
+//        //System.out.printlnln("Setting motion planner to height: " + mDesiredEndState.height);
 //
 //        // Push into elevator planner.
 //        if (!mPlanner.setDesiredState(mDesiredEndState, currentState)) {
-//            System.out.println("Unable to set elevator planner!");
+//            //System.out.printlnln("Unable to set elevator planner!");
 //        }
 //
 //        mScoringHeight = mDesiredEndState.height;

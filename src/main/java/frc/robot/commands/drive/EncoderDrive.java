@@ -43,7 +43,7 @@ public class EncoderDrive extends Command {
 
 	protected void end() {
 		drive.stop();
-		System.out.println("Encoder drive completed.");
+		//System.out.printlnln("Encoder drive completed.");
 	}
 
 	protected void interrupted() {

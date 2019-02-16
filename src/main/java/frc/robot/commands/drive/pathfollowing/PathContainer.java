@@ -40,7 +40,7 @@ public abstract class PathContainer {
         }
 
         if (minSpeed == 3452) {
-            System.out.println("ERROR Could not find nonzero speed for path " + other.getClass().getSimpleName());
+            //System.out.printlnln("ERROR Could not find nonzero speed for path " + other.getClass().getSimpleName());
             return null;
         }
 
@@ -87,20 +87,20 @@ public abstract class PathContainer {
     }
 
     public PathContainer print() {
-        System.out.println("PRINTING PATH  " + this.getClass().getSimpleName());
-        System.out.println("Reversed: " + this.isReversed());
-        System.out.println("Starting position: " + this.getStartPose());
-        System.out.println("Ending position: " + this.getEndPose());
+        //System.out.printlnln("PRINTING PATH  " + this.getClass().getSimpleName());
+        //System.out.printlnln("Reversed: " + this.isReversed());
+        //System.out.printlnln("Starting position: " + this.getStartPose());
+        //System.out.printlnln("Ending position: " + this.getEndPose());
 
-        System.out.println("|X-Y| |Radius| |Speed|");
+        //System.out.printlnln("|X-Y| |Radius| |Speed|");
         int counter = 1;
         for (Waypoint o : sWaypoints) {
-            System.out.println("Waypoint " + counter++ + " :" + o.position.toString() + "\t" + o.radius + "\t" + o.speed);
+            //System.out.printlnln("Waypoint " + counter++ + " :" + o.position.toString() + "\t" + o.radius + "\t" + o.speed);
         }
 
-        // System.out.println(this.buildPath().toString());
+        // //System.out.printlnln(this.buildPath().toString());
 
-        System.out.println("\n");
+        //System.out.printlnln("\n");
         return this;
     }
 

@@ -85,8 +85,8 @@ public class Util {
         double xDelta = point1.x() - point2.x();
 
         if (xDelta == 0 && yDelta == 0) {
-            System.out.println(
-                    "Translations " + point1.toString() + " and " + point2.toString() + " are in the same place!");
+            //System.out.printlnln(
+//                    "Translations " + point1.toString() + " and " + point2.toString() + " are in the same place!");
             return null;
         }
 

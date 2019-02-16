@@ -18,7 +18,7 @@ public class Claw extends Subsystem {
 
     public synchronized void toggleState(){
         setState(mState == ClawState.CLOSED? ClawState.OPEN : ClawState.CLOSED);
-        System.out.println("toggled");
+        //System.out.printlnln("toggled");
     }
 
     public synchronized void setState(ClawState mState) {
@@ -56,7 +56,7 @@ public class Claw extends Subsystem {
     public synchronized void writePeriodicOutputs(){
         if(!Util.epsilonEquals(mMaster.getAngle(), mState.value, kTargetThreshold)){
             mMaster.setAngle(mState.value);
-            System.out.println(mState == ClawState.CLOSED? "Closed": "Open");
+            //System.out.printlnln(mState == ClawState.CLOSED? "Closed": "Open");
         }
     }
 

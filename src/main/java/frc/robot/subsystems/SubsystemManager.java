@@ -44,7 +44,7 @@ public class SubsystemManager implements ILooper {
         public void onStart(double timestamp) {
             for (Loop l : mLoops) {
                 l.onStart(timestamp);
-                System.out.println("enabled");
+                //System.out.printlnln("enabled");
             }
         }
 

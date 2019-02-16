@@ -189,7 +189,7 @@ public class ProfileFollower {
      * @return True if we have actually achieved the current goal.
      */
     public boolean onTarget() {
-        System.out.println(mGoal + "<Goal, Setpoint>"+mLatestSetpoint);
+        ////System.out.printlnln(mGoal + "<Goal, Setpoint>"+mLatestSetpoint);
         if (mGoal == null || mLatestSetpoint == null) {
             return false;
         }

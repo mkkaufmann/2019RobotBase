@@ -19,7 +19,7 @@ public class PrintCommand extends InstantCommand {
   }
 
   protected void initialize() {
-    System.out.println(this.mPrintMessage);
+    //System.out.printlnln(this.mPrintMessage);
   }
 
 }

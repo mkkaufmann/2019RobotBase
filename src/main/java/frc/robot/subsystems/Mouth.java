@@ -13,6 +13,10 @@ public class Mouth extends Subsystem {
         return mState;
     }
 
+    public double getSpeed(){
+        return mPeriodicIO.demand;
+    }
+
     private MouthState mState = MouthState.NEUTRAL_CARGO;
     private PeriodicIO mPeriodicIO = new PeriodicIO();
 
