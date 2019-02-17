@@ -34,6 +34,10 @@ public class Strafe extends Subsystem {
         return mInstance;
     }
 
+    public GenericPWMSpeedController getMaster() {
+        return mMaster;
+    }
+
     @Override
     public void stop() {
         mMaster.set(0);
@@ -71,35 +75,37 @@ public class Strafe extends Subsystem {
 
     @Override
     public synchronized void writePeriodicOutputs(){
-        if(mLimitSwitch.get()){
-            mEncoder.reset();
-        }
-        if(mControlState == ControlState.MANUAL){
-            mMaster.set(mPeriodicIO.demand);
-        }
-        if(mState == StrafeState.HOLDING_POSITION){
-            return;
-        }
-
-        if(Util.epsilonEquals(mPeriodicIO.position_ticks, mPeriodicIO.demand, kTargetThreshold)){
-            mState = StrafeState.HOLDING_POSITION;
-            return;
-        }
-
-        double direction = mPeriodicIO.position_ticks > mPeriodicIO.demand ? -1 : 1;
-
-        if(direction == -1){
-            if(mLimitSwitch.get()){
-                mState = StrafeState.HOLDING_POSITION;
-                return;
-            }
-        }else{
-            if(mPeriodicIO.position_ticks >= SuperstructureConstants.kStrafeMaxEncoderValue){
-                mState = StrafeState.HOLDING_POSITION;
-                return;
-            }
-        }
-        mMaster.set(kSpeed * direction);
+//        if(mLimitSwitch.get()){
+//            mEncoder.reset();
+//        }
+        mMaster.set(mPeriodicIO.demand);
+//        if(mControlState == ControlState.MANUAL){
+//            mMaster.set(mPeriodicIO.demand);
+//            return;
+//        }
+//        if(mState == StrafeState.HOLDING_POSITION){
+//            return;
+//        }
+//
+//        if(Util.epsilonEquals(mPeriodicIO.position_ticks, mPeriodicIO.demand, kTargetThreshold)){
+//            mState = StrafeState.HOLDING_POSITION;
+//            return;
+//        }
+//
+//        double direction = mPeriodicIO.position_ticks > mPeriodicIO.demand ? -1 : 1;
+//
+//        if(direction == -1){
+//            if(mLimitSwitch.get()){
+//                mState = StrafeState.HOLDING_POSITION;
+//                return;
+//            }
+//        }else{
+//            if(mPeriodicIO.position_ticks >= SuperstructureConstants.kStrafeMaxEncoderValue){//TODO
+//                mState = StrafeState.HOLDING_POSITION;
+//                return;
+//            }
+//        }
+//        mMaster.set(kSpeed * direction);
     }
 
     private static class PeriodicIO{

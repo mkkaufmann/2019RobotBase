@@ -17,5 +17,7 @@ public interface IDriveControlBoard {
 
     void setDriverRumble(boolean left, boolean right);
 
-    double getShootSpeed();
+    boolean getEnableClimbMode();
+
+    double getClimberThrottle();
 }

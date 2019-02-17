@@ -7,12 +7,25 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.drive.DriveAtVelocityForTime;
+import frc.robot.commands.drive.EncoderDrive;
+import frc.robot.commands.drive.pathfollowing.DrivePath;
+import frc.robot.commands.drive.pathfollowing.ResetPoseDrivePath;
+import frc.robot.commands.drive.pathfollowing.ResetPoseFromPath;
+import frc.robot.commands.paths.*;
+import frc.robot.controlboard.ControlBoard;
 import frc.robot.lib.CheesyDriveHelper;
+import frc.robot.lib.GenericPWMSpeedController;
 import frc.robot.lib.LatchedBoolean;
+import frc.robot.lib.Util;
 import frc.robot.loops.Looper;
 import frc.robot.states.SuperstructureConstants;
 import frc.robot.subsystems.*;
@@ -36,6 +49,8 @@ public class Robot extends TimedRobot {
     private final SendableChooser<String> m_chooser = new SendableChooser<>();
     private Looper mEnabledLooper = new Looper();
     private Looper mDisabledLooper = new Looper();
+    private Looper mElevatorLooper = new Looper();
+
     private Drive mDrive = Drive.getInstance();
     private CheesyDriveHelper mCheesyDriveHelper = new CheesyDriveHelper();
     private ControlBoard mControlBoard = new ControlBoard();
@@ -54,25 +69,30 @@ public class Robot extends TimedRobot {
     private LatchedBoolean goToNeutralHeight = new LatchedBoolean();
     private LatchedBoolean goToLowHeight = new LatchedBoolean();
     private LatchedBoolean goToCargoShipCargoHeight = new LatchedBoolean();
-    private LatchedBoolean hatchorCargo = new LatchedBoolean();
+    private LatchedBoolean hatchOrCargo = new LatchedBoolean();
     private LatchedBoolean armToggle = new LatchedBoolean();
     private LatchedBoolean armToStart = new LatchedBoolean();
     private LatchedBoolean clawToggle = new LatchedBoolean();
     private LatchedBoolean runIntake = new LatchedBoolean();
     private LatchedBoolean enableClimbMode = new LatchedBoolean();
     private LatchedBoolean centerStrafe = new LatchedBoolean();
+    private GenericPWMSpeedController elevator = new GenericPWMSpeedController(4);//TODO
+
+    private Command command;
 
 
     private final SubsystemManager mSubsystemManager = new SubsystemManager(
             Arrays.asList(
                     Drive.getInstance(),
                     Superstructure.getInstance(),
-                    Elevator.getInstance(),
+                    //Elevator.getInstance(),
                     Claw.getInstance(),
                     Arm.getInstance(),
                     Climber.getInstance(),
                     Mouth.getInstance(),
-                    Strafe.getInstance())
+                    //Strafe.getInstance(),
+                    Dashboard.getInstance(),
+                    RobotStateEstimator.getInstance())
     );
 
     /**
@@ -87,12 +107,17 @@ public class Robot extends TimedRobot {
 
         mSubsystemManager.registerEnabledLoops(mEnabledLooper);
         mSubsystemManager.registerDisabledLoops(mDisabledLooper);
+        mElevator.registerEnabledLoops(mElevatorLooper);
+//        mElevatorLooper.start();
     }
+
+
 
     @Override
     public void disabledInit() {
         mEnabledLooper.stop();
         mDisabledLooper.start();
+        mSubsystemManager.stop();
     }
 
     /**
@@ -105,6 +130,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
+//        mElevator.readPeriodicInputs();
+//        mElevator.writePeriodicOutputs();
     }
 
     /**
@@ -121,11 +148,15 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         m_autoSelected = m_chooser.getSelected();
+        mSuperStructure.setMode(Dashboard.getIsHatchMode() ? Superstructure.MechanismMode.HATCH : Superstructure.MechanismMode.CARGO);
         mEnabledLooper.start();
         mDisabledLooper.stop();
         // autoSelected = SmartDashboard.getString("Auto Selector",
         // defaultAuto);
-        System.out.println("Auto selected: " + m_autoSelected);
+        command = new ResetPoseDrivePath(new Left_To_Rocket_L());
+        command.start();
+
+        //System.out.printlnln("Auto selected: " + m_autoSelected);
     }
 
     /**
@@ -133,6 +164,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
+        Scheduler.getInstance().run();
         switch (m_autoSelected) {
             case kCustomAuto:
                 // Put custom auto code here
@@ -146,16 +178,19 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        mEnabledLooper.start();
         mDisabledLooper.stop();
+        mEnabledLooper.start();
     }
 
     /**
      * This function is called periodically during operator control.
+     * TODO fix claw in ball mode
      */
     @Override
     public void teleopPeriodic() {
-        mDrive.setOpenLoop(mCheesyDriveHelper.cheesyDrive(mControlBoard.getThrottle(), mControlBoard.getTurn(), mControlBoard.getQuickTurn()));
+
+        mDrive.setOpenLoop(mCheesyDriveHelper.cheesyDrive(mControlBoard.getThrottle(), mControlBoard.getTurn(),
+                mControlBoard.getQuickTurn() || Util.deadband(mControlBoard.getThrottle()) == 0));
 
         if(armToStart.update(mControlBoard.getArmToStart())){
             mArm.setWantedTargetPosition(Arm.ArmPosition.START);
@@ -165,11 +200,13 @@ public class Robot extends TimedRobot {
 
         if(enableClimbMode.update(mControlBoard.getEnableClimbMode())){
             mClimber.toggleState();
+            //System.out.printlnln("climb toggled");
         }
+        Strafe.getInstance().getMaster().set(mControlBoard.getStrafeThrottle());
         if(mClimber.getState() == Climber.ClimberState.PERCENT_OUTPUT){
             mClimber.setOutput(mControlBoard.getClimberThrottle());
         }else{
-            if(mControlBoard.getStrafeThrottle() > 0){
+            if(Math.abs(mControlBoard.getStrafeThrottle()) > 0){
                 mStrafe.setSpeed(mControlBoard.getStrafeThrottle());
             }
             if(centerStrafe.update(mControlBoard.getCenterStrafe())){
@@ -177,7 +214,8 @@ public class Robot extends TimedRobot {
             }
         }
 
-        if(hatchorCargo.update(mControlBoard.getHatchOrCargo())){
+        if(hatchOrCargo.update(mControlBoard.getHatchOrCargo())){
+            System.out.println("hatch or cargo");
             mSuperStructure.toggleMode();//TODO move to superstructure
 
             timer.reset();
@@ -188,7 +226,6 @@ public class Robot extends TimedRobot {
             }else{
                 mControlBoard.setButtonRumble(true, false);
             }
-            SmartDashboard.putBoolean("isHatchMode", mSuperStructure.getMode() == Superstructure.MechanismMode.HATCH);
         }
 
         if(Timer.getMatchTime() < 30 && Timer.getMatchTime() > 29 && !longRumble){
@@ -220,10 +257,14 @@ public class Robot extends TimedRobot {
 
         }else {
             if (mControlBoard.getShootSpeed() > 0) {
+                //System.out.printlnln("shooting");
                 mMouth.setState(Mouth.MouthState.OUTTAKE);
                 mMouth.setSpeed(mControlBoard.getShootSpeed());
+            }else if(mMouth.getState() == Mouth.MouthState.OUTTAKE){
+                mMouth.setState(Mouth.MouthState.NEUTRAL_CARGO);
             }
             if (runIntake.update(mControlBoard.getRunIntake())) {
+                System.out.println("toggled");
                 mMouth.toggleIntake();
             }
             if (goToCargoShipCargoHeight.update(mControlBoard.getGoToCargoShipCargoHeight())) {
@@ -238,10 +279,14 @@ public class Robot extends TimedRobot {
             }
         }
 
-        if(mControlBoard.getElevatorThrottle() > 0){
-            mElevator.setOpenLoop(mControlBoard.getClimberThrottle());
-        }
 
+//        if(Math.abs(mControlBoard.getElevatorThrottle()) > 0){
+//            mElevator.setOpenLoop(mControlBoard.getElevatorThrottle());
+//        }else if(mElevator.getState() == Elevator.ElevatorState.OPEN_LOOP){
+//            mElevator.setOpenLoop(0);
+//        }
+        elevator.set(-Util.deadband(mControlBoard.getElevatorThrottle()));
+//        mElevator.getMaster().set(ControlMode.PercentOutput,-Util.deadband(mControlBoard.getElevatorThrottle()));
     }
 
     @Override
