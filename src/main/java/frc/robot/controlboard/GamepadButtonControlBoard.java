@@ -54,11 +54,6 @@ public class GamepadButtonControlBoard implements IButtonControlBoard {
     }
 
     @Override
-    public boolean getArmToStart() {
-        return mJoystick.getRawButton(5) && mJoystick.getPOV() == 180;//TODO make sure other is not activated
-    }
-
-    @Override
     public boolean getClawToggle() {
         return Util.deadband(mJoystick.getTriggerAxis(GenericHID.Hand.kRight), 0.2) > 0;
     }

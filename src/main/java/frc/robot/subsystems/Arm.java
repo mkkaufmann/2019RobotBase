@@ -2,25 +2,22 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import frc.robot.Constants;
 import frc.robot.lib.GenericPWMSpeedController;
 import frc.robot.loops.ILooper;
 import frc.robot.states.SuperstructureConstants;
 
-//TODO Check elevator height before moving to start position
 public class Arm extends Subsystem {
 
+    //TODO add timer and fix
     private static Arm mInstance = null;
     private final GenericPWMSpeedController mMaster;
-    private static final DigitalInput mScoreLimit = new DigitalInput(Constants.kArm.scoreLimitPort);;
-    private static final DigitalInput mStowLimit = new DigitalInput(Constants.kArm.stowLimitPort);;
-    private static final DigitalInput mStartLimit = new DigitalInput(Constants.kArm.startLimitPort);;
-    private static ArmPosition mTargetPosition = ArmPosition.SCORE;
-    private static ArmPosition mWantedTargetPosition = ArmPosition.SCORE;
-    private static ArmPosition mPreviousPosition = ArmPosition.START;
+    private static ArmPosition mTargetPosition = ArmPosition.STOW;
     private static ArmControlState mControlState = ArmControlState.HOLDING_POSITION;
     private static PeriodicIO mPeriodicIO = new PeriodicIO();
+    private static Timer timer = new Timer();
 
     private Arm(){
         mMaster = new GenericPWMSpeedController(Constants.kArm.masterPort);
@@ -35,19 +32,9 @@ public class Arm extends Subsystem {
     }
 
     public enum ArmPosition{
-        START(mStartLimit),
-        STOW(mStowLimit),
-        SCORE(mScoreLimit);
-
-        public DigitalInput limit;
-
-        ArmPosition(DigitalInput limit){
-            this.limit = limit;
-        }
+        STOW,
+        SCORE
     }
-
-    //TODO enum for between positions to change targets in transit
-
 
     public enum ArmControlState{
         HOLDING_POSITION,
@@ -55,27 +42,7 @@ public class Arm extends Subsystem {
     }
 
     public synchronized void toggleTargetPosition(){
-        if(mControlState == ArmControlState.HOLDING_POSITION){
-            if(mPreviousPosition == ArmPosition.START || mPreviousPosition == ArmPosition.STOW){
-                setWantedTargetPosition(ArmPosition.SCORE);
-            }else{
-                setWantedTargetPosition(ArmPosition.STOW);
-            }
-        }else{
-            if(mTargetPosition == ArmPosition.STOW || mTargetPosition == ArmPosition.START){
-                setWantedTargetPosition(ArmPosition.SCORE);
-            }else{
-                setWantedTargetPosition(ArmPosition.STOW);
-            }
-        }
-    }
-
-    public synchronized void setWantedTargetPosition(ArmPosition wantedTargetPosition){
-        //TODO make it able to change targets in transit
-        if(mControlState == ArmControlState.HOLDING_POSITION){
-            setTargetPosition(wantedTargetPosition);
-        }
-        mWantedTargetPosition = wantedTargetPosition;//so we don't have spastic behaviors when not updated
+        setTargetPosition(mTargetPosition == ArmPosition.STOW ? ArmPosition.SCORE : ArmPosition.STOW);
     }
 
     @Override
@@ -84,26 +51,19 @@ public class Arm extends Subsystem {
     }
 
     //only called when holding position (i.e. previous position is current position)
-    private synchronized void setTargetPosition(ArmPosition wantedTargetPosition){
-        if(wantedTargetPosition != mPreviousPosition){
-            if(mPreviousPosition == ArmPosition.START){
-                mPeriodicIO.isForward = true;
-            }else if(mPreviousPosition == ArmPosition.SCORE){
-                mPeriodicIO.isForward = false;
-            }else{
-                mPeriodicIO.isForward = wantedTargetPosition == ArmPosition.SCORE;
-            }
-        }
-        mPeriodicIO.demand = SuperstructureConstants.kArmDefaultSpeed;
+    public synchronized void setTargetPosition(ArmPosition wantedTargetPosition){
+        mTargetPosition = wantedTargetPosition;
+        mPeriodicIO.demand = SuperstructureConstants.kArmDefaultSpeed * (wantedTargetPosition == ArmPosition.STOW ? 1 : -1);
         mControlState = ArmControlState.MOVING_TO_POSITION;
+        timer.reset();
+        timer.start();
+
     }
 
     @Override
     public synchronized void writePeriodicOutputs(){
-        if(!mTargetPosition.limit.get()){
-            mMaster.set(mPeriodicIO.demand * (mPeriodicIO.isForward ? 1 : -1) );
-        }else{
-            stopAtPosition();
+        if(!timer.hasPeriodPassed(1)){
+            mMaster.set(mPeriodicIO.demand);
         }
     }
 
@@ -112,23 +72,14 @@ public class Arm extends Subsystem {
 
         //OUTPUTS
         public double demand = 0;
-        public boolean isForward = true;
     }
 
-    private synchronized void stopAtPosition(){
-        mControlState = ArmControlState.HOLDING_POSITION;
-        mPreviousPosition = mTargetPosition;
-        mPeriodicIO.demand = 0;
-        setTargetPosition(mWantedTargetPosition);//just in case changed target TODO remove
-        stop();
+    public ArmPosition getPosition(){
+        return mTargetPosition;
     }
 
     public ArmControlState getState(){
         return mControlState;
-    }
-
-    public ArmPosition getLastPosition(){
-        return mPreviousPosition;
     }
 
     @Override

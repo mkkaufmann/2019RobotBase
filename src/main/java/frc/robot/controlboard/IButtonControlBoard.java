@@ -15,8 +15,6 @@ public interface IButtonControlBoard {
 
     boolean getArmToggle(); //toggle
 
-    boolean getArmToStart(); //toggle
-
     boolean getClawToggle(); //toggle
 
     boolean getCenterStrafe();

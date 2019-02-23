@@ -153,7 +153,7 @@ public class Robot extends TimedRobot {
         mDisabledLooper.stop();
         // autoSelected = SmartDashboard.getString("Auto Selector",
         // defaultAuto);
-        command = new ResetPoseDrivePath(new Left_To_Rocket_L());
+        command = new ResetPoseDrivePath(new FieldAdapterTest());
         command.start();
 
         //System.out.printlnln("Auto selected: " + m_autoSelected);
@@ -189,12 +189,16 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
 
+        double throttle = mControlBoard.getTurn();
+        if(Superstructure.getInstance().getVisionDriveMode() == Superstructure.VisionDriveMode.ANGLE_ADJUST){
+            double yaw = Dashboard.getInstance().getTargetYaw();
+
+        }
+
         mDrive.setOpenLoop(mCheesyDriveHelper.cheesyDrive(mControlBoard.getThrottle(), mControlBoard.getTurn(),
                 mControlBoard.getQuickTurn() || Util.deadband(mControlBoard.getThrottle()) == 0));
 
-        if(armToStart.update(mControlBoard.getArmToStart())){
-            mArm.setWantedTargetPosition(Arm.ArmPosition.START);
-        }else if(armToggle.update(mControlBoard.getArmToggle())){
+        if(armToggle.update(mControlBoard.getArmToggle())){
             mArm.toggleTargetPosition();
         }
 

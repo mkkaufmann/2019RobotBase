@@ -65,7 +65,7 @@ public class Mouth extends Subsystem {
                 mPeriodicIO.demand = kIntake;
                 break;
             case NEUTRAL_CARGO:
-                mPeriodicIO.demand = -0.2;
+                mPeriodicIO.demand = 0;
                 break;
             case NEUTRAL_NO_CARGO:
                 mPeriodicIO.demand = 0;

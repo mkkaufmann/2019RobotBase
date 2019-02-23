@@ -37,11 +37,6 @@ public class ControlBoard implements IControlBoard {
     }
 
     @Override
-    public boolean getArmToStart() {
-        return mButtonControlBoard.getArmToStart();
-    }
-
-    @Override
     public boolean getClawToggle() {
         return mButtonControlBoard.getClawToggle();
     }

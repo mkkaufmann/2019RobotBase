@@ -50,9 +50,6 @@ public class Constants {
     }
     public static class kArm{
         public static final int masterPort = 2;//PWM
-        public static final int scoreLimitPort = 0;//DIO
-        public static final int stowLimitPort = 1;//DIO
-        public static final int startLimitPort = 2;//DIO
     }
     public static class kClimber{
         public static final int mMasterPort = 3;//PWM

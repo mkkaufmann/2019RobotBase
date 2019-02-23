@@ -35,6 +35,6 @@ public class SuperstructureConstants {
     public static final double kStrafeMidEncoderValue = (kStrafeMinEncoderValue+kStrafeMaxEncoderValue)/2;
 
     //Arm values
-    public static final double kArmDefaultSpeed = 0.5;
+    public static final double kArmDefaultSpeed = 1;
 
 }
