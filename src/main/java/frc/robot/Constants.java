@@ -56,8 +56,8 @@ public class Constants {
     }
     public static class kStrafe{
         public static final int masterPort = 5;//PWM
-        public static final int encoderPort1 = 6;//PWM
-        public static final int encoderPort2 = 7;//PWM
+        public static final int encoderPort1 = 6;//DIO
+        public static final int encoderPort2 = 7;//DIO
         public static final int limitPort = 3;//DIO
     }
     public static class kControlBoard{

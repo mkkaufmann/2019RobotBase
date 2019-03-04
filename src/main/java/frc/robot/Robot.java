@@ -90,7 +90,8 @@ public class Robot extends TimedRobot {
                     Arm.getInstance(),
                     Climber.getInstance(),
                     Mouth.getInstance(),
-                    //Strafe.getInstance(),
+                    //RollerClaw.getInstance(),
+                    Strafe.getInstance(),
                     Dashboard.getInstance(),
                     RobotStateEstimator.getInstance())
     );
@@ -153,7 +154,7 @@ public class Robot extends TimedRobot {
         mDisabledLooper.stop();
         // autoSelected = SmartDashboard.getString("Auto Selector",
         // defaultAuto);
-        command = new ResetPoseDrivePath(new FieldAdapterTest());
+        command = new ResetPoseDrivePath(new Left_To_Rocket_L());
         command.start();
 
         //System.out.printlnln("Auto selected: " + m_autoSelected);
@@ -189,14 +190,25 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
 
-        double throttle = mControlBoard.getTurn();
-        if(Superstructure.getInstance().getVisionDriveMode() == Superstructure.VisionDriveMode.ANGLE_ADJUST){
-            double yaw = Dashboard.getInstance().getTargetYaw();
+        double turn = mControlBoard.getTurn();
+        double pTurn = turn;
+        boolean quickTurn = mControlBoard.getQuickTurn() || (Util.deadband(mControlBoard.getThrottle()) == 0 && Math.abs(Util.deadband(turn)) > 0);
 
+        if(quickTurn){
+            turn = Math.sin(turn * Math.PI/2);
+            turn = Math.sin(turn * Math.PI/2);
+            turn = Math.sin(turn * Math.PI/2);
         }
 
-        mDrive.setOpenLoop(mCheesyDriveHelper.cheesyDrive(mControlBoard.getThrottle(), mControlBoard.getTurn(),
-                mControlBoard.getQuickTurn() || Util.deadband(mControlBoard.getThrottle()) == 0));
+        if(mControlBoard.getVisionAssist()){
+            turn = Dashboard.getInstance().getTargetYaw()/250;
+            quickTurn = true;
+        }
+
+        System.out.println("Yaw" + Dashboard.getInstance().getTargetYaw() + "Vision Assist: " + mControlBoard.getVisionAssist() + " Turn: " + turn + " Quickturn:" + quickTurn + "quickturn pressed: " + mControlBoard.getQuickTurn() + "pturn: " + pTurn);
+
+        mDrive.setOpenLoop(mCheesyDriveHelper.cheesyDrive(mControlBoard.getThrottle(), turn,
+                quickTurn));
 
         if(armToggle.update(mControlBoard.getArmToggle())){
             mArm.toggleTargetPosition();
@@ -206,12 +218,16 @@ public class Robot extends TimedRobot {
             mClimber.toggleState();
             //System.out.printlnln("climb toggled");
         }
-        Strafe.getInstance().getMaster().set(mControlBoard.getStrafeThrottle());
+
+//        Strafe.getInstance().getMaster().set(mControlBoard.getStrafeThrottle());
+
         if(mClimber.getState() == Climber.ClimberState.PERCENT_OUTPUT){
             mClimber.setOutput(mControlBoard.getClimberThrottle());
         }else{
             if(Math.abs(mControlBoard.getStrafeThrottle()) > 0){
                 mStrafe.setSpeed(mControlBoard.getStrafeThrottle());
+            }else if(mStrafe.getControlState() == Strafe.ControlState.MANUAL){
+                mStrafe.setSpeed(0);
             }
             if(centerStrafe.update(mControlBoard.getCenterStrafe())){
                 mStrafe.setSetpoint(SuperstructureConstants.kStrafeMidEncoderValue);//TODO implement vision

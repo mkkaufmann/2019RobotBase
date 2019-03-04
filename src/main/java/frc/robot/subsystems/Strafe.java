@@ -14,11 +14,15 @@ public class Strafe extends Subsystem {
     private GenericPWMSpeedController mMaster;
     private Encoder mEncoder;
     private DigitalInput mLimitSwitch;//on left
-    private static double kEncoderTicksPerInch = 0;//TODO Tune!!!
-    private static double kTargetThreshold = 0.5 * kEncoderTicksPerInch;
+    private static double kTargetThreshold = 0.5 * SuperstructureConstants.kStrafeEncoderTicksPerInch;
     private static double kSpeed = 0.5;//TODO stagger speeds
     private StrafeState mState = StrafeState.HOLDING_POSITION;
     private PeriodicIO mPeriodicIO = new PeriodicIO();
+
+    public ControlState getControlState() {
+        return mControlState;
+    }
+
     private ControlState mControlState = ControlState.MANUAL;
 
     private Strafe(){
@@ -33,6 +37,8 @@ public class Strafe extends Subsystem {
         }
         return mInstance;
     }
+
+
 
     public GenericPWMSpeedController getMaster() {
         return mMaster;
@@ -71,6 +77,7 @@ public class Strafe extends Subsystem {
     @Override
     public synchronized void readPeriodicInputs(){
         mPeriodicIO.position_ticks = mEncoder.get();
+        System.out.println("Strafe Encoder: " + mPeriodicIO.position_ticks);
     }
 
     @Override
@@ -120,7 +127,7 @@ public class Strafe extends Subsystem {
         HOLDING_POSITION
     }
 
-    private enum ControlState{
+    public enum ControlState{
         MANUAL,
         POSITION
     }

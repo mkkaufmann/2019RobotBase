@@ -92,6 +92,12 @@ public class ControlBoard implements IControlBoard {
     public double getTurn() {
         return mDriveControlBoard.getTurn();
     }
+
+    @Override
+    public boolean getVisionAssist(){
+        return mDriveControlBoard.getVisionAssist();
+    }
+
     @Override
     public boolean getQuickTurn() {
         return mDriveControlBoard.getQuickTurn();

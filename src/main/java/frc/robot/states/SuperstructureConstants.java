@@ -29,12 +29,16 @@ public class SuperstructureConstants {
     public static final double kCargoShipCargo = 45.0; // TUNE THIS?
 
     //Strafe values
-    public static final double kStrafeInchesWidth = 12;//TUNE!!!!
-    public static final double kStrafeMinEncoderValue = 0;//TUNE!!!!
-    public static final double kStrafeMaxEncoderValue = 1000;//TUNE!!!!
+    public static final double kStrafeInchesWidth = 16;
+    public static final int kStrafeEncoderTicksPerInch = 2048;//TUNE
+    public static final double kStrafeMinEncoderValue = 0;
+    public static final double kStrafeMaxEncoderValue = kStrafeInchesWidth * kStrafeEncoderTicksPerInch;//22898
     public static final double kStrafeMidEncoderValue = (kStrafeMinEncoderValue+kStrafeMaxEncoderValue)/2;
 
     //Arm values
     public static final double kArmDefaultSpeed = 1;
 
+    //Mouth
+    public static final double kRunningCurrent = 0;
+    public static final double kStalledCurrentThreshold = 0;
 }
