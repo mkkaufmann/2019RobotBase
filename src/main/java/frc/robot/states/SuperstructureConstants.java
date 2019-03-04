@@ -38,7 +38,7 @@ public class SuperstructureConstants {
     //Arm values
     public static final double kArmDefaultSpeed = 1;
 
-    //Mouth
+    //mouth
     public static final double kRunningCurrent = 0;
     public static final double kStalledCurrentThreshold = 0;
 }
