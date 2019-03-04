@@ -4,16 +4,9 @@
     <bookmark url="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/paths/TestPath90.java" line="10" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4432b08c-e15c-4d38-b0af-0ceb0fd5b372" name="Default Changelist" comment="Some odd stuff here and there&#10;Started command framework&#10;Started new claw">
-      <change beforePath="$PROJECT_DIR$/.gradle/5.0/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.0/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.0/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.0/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.0/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.0/javaCompile/classAnalysis.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.0/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.0/javaCompile/javaCompile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.0/taskHistory/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.0/taskHistory/taskHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.0/taskHistory/taskHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.0/taskHistory/taskHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+    <list default="true" id="4432b08c-e15c-4d38-b0af-0ceb0fd5b372" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/RollerClaw.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/libs/2019RobotBase.jar" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/2019RobotBase.jar" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -52,8 +45,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/claw/ClawOut.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+            <state relative-caret-position="136">
+              <caret line="11" column="4" lean-forward="true" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="4" />
             </state>
           </provider>
         </entry>
@@ -250,10 +243,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-11" />
-    <option name="y" value="-11" />
-    <option name="width" value="1943" />
-    <option name="height" value="1103" />
+    <option name="x" value="-1118" />
+    <option name="y" value="88" />
+    <option name="width" value="863" />
+    <option name="height" value="463" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -316,27 +309,6 @@
               <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="robot" type="462c0819:PsiDirectoryNode" />
-              <item name="commands" type="462c0819:PsiDirectoryNode" />
-              <item name="actions" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="2019RobotBase" type="b2602c69:ProjectViewProjectNode" />
-              <item name="2019RobotBase" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="robot" type="462c0819:PsiDirectoryNode" />
-              <item name="commands" type="462c0819:PsiDirectoryNode" />
-              <item name="actions" type="462c0819:PsiDirectoryNode" />
-              <item name="claw" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="2019RobotBase" type="b2602c69:ProjectViewProjectNode" />
-              <item name="2019RobotBase" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="robot" type="462c0819:PsiDirectoryNode" />
               <item name="statemachines" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -371,7 +343,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1551738161160" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1551738297818" />
     <property name="external.system.task.project.file.to.start" value="$PROJECT_DIR$" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="SDKs" />
@@ -473,7 +445,7 @@
       <workItem from="1549490758420" duration="12821000" />
       <workItem from="1549663355841" duration="28183000" />
       <workItem from="1550096053843" duration="33812000" />
-      <workItem from="1550630296799" duration="26582000" />
+      <workItem from="1550630296799" duration="27190000" />
     </task>
     <task id="LOCAL-00001" summary="implemented basic controls (need toggles)">
       <created>1549061240346</created>
@@ -580,18 +552,24 @@
       <option name="project" value="LOCAL" />
       <updated>1551738049822</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Some odd stuff here and there&#10;Started command framework&#10;Started new claw&#10;removed field adapter for now">
+      <created>1551738250715</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1551738250715</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="136357000" />
+    <option name="totallyTimeSpent" value="136965000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
-    <editor active="true" />
+    <frame x="-1928" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.8229665" visible="true" weight="0.27449393" />
-      <window_info id="Structure" order="1" sideWeight="0.1770335" side_tool="true" visible="true" weight="0.27449393" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.83161956" visible="true" weight="0.18070363" />
+      <window_info id="Structure" order="1" sideWeight="0.16838047" side_tool="true" visible="true" weight="0.18070363" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
       <window_info id="Capture Tool" order="4" />
@@ -599,7 +577,7 @@
       <window_info id="Favorites" order="6" side_tool="true" weight="0.32955465" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.25932506" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.25754884" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.15709643" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39761648" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -641,7 +619,8 @@
     <MESSAGE value="fixed MPs!!!" />
     <MESSAGE value="Started field adapter without much success,&#10;Reprogrammed arm for the projector&#10;started vision framework" />
     <MESSAGE value="Some odd stuff here and there&#10;Started command framework&#10;Started new claw" />
-    <option name="LAST_COMMIT_MESSAGE" value="Some odd stuff here and there&#10;Started command framework&#10;Started new claw" />
+    <MESSAGE value="Some odd stuff here and there&#10;Started command framework&#10;Started new claw&#10;removed field adapter for now" />
+    <option name="LAST_COMMIT_MESSAGE" value="Some odd stuff here and there&#10;Started command framework&#10;Started new claw&#10;removed field adapter for now" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1087,8 +1066,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/claw/ClawOut.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+        <state relative-caret-position="136">
+          <caret line="11" column="4" lean-forward="true" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="4" />
         </state>
       </provider>
     </entry>
