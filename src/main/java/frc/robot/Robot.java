@@ -7,19 +7,13 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.drive.DriveAtVelocityForTime;
-import frc.robot.commands.drive.EncoderDrive;
-import frc.robot.commands.drive.pathfollowing.DrivePath;
 import frc.robot.commands.drive.pathfollowing.ResetPoseDrivePath;
-import frc.robot.commands.drive.pathfollowing.ResetPoseFromPath;
 import frc.robot.commands.paths.*;
 import frc.robot.controlboard.ControlBoard;
 import frc.robot.lib.CheesyDriveHelper;
@@ -278,14 +272,17 @@ public class Robot extends TimedRobot {
         }else {
             if (mControlBoard.getShootSpeed() > 0) {
                 //System.out.printlnln("shooting");
-                mMouth.setState(Mouth.MouthState.OUTTAKE);
-                mMouth.setSpeed(mControlBoard.getShootSpeed());
-            }else if(mMouth.getState() == Mouth.MouthState.OUTTAKE){
-                mMouth.setState(Mouth.MouthState.NEUTRAL_CARGO);
+                if(mControlBoard.getShootSpeed() > 0.5){
+                    mMouth.setState(Mouth.MouthState.OUT);
+                }else{
+                    mMouth.setState(Mouth.MouthState.OUT_SLOW);
+                }
+            }else if(mMouth.getState() == Mouth.MouthState.OUT){
+                mMouth.setState(Mouth.MouthState.NEUTRAL);
             }
             if (runIntake.update(mControlBoard.getRunIntake())) {
                 System.out.println("toggled");
-                mMouth.toggleIntake();
+                mMouth.setState(Mouth.MouthState.IN);
             }
             if (goToCargoShipCargoHeight.update(mControlBoard.getGoToCargoShipCargoHeight())) {
                 mElevator.setPositionPID(SuperstructureConstants.kCargoShipCargo);

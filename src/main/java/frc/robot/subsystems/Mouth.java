@@ -70,8 +70,9 @@ public class Mouth extends Subsystem {
 
     public enum MouthState{
         NEUTRAL(0),
-        INTAKE(-1),
-        OUTTAKE(1);
+        IN(-1),
+        OUT(1),
+        OUT_SLOW(0.5);
 
         public double value;
 

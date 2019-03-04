@@ -4,9 +4,14 @@
     <bookmark url="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/paths/TestPath90.java" line="10" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4432b08c-e15c-4d38-b0af-0ceb0fd5b372" name="Default Changelist" comment="">
+    <list default="true" id="4432b08c-e15c-4d38-b0af-0ceb0fd5b372" name="Default Changelist" comment="added mouth commands">
+      <change afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/mouth/MouthIn.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/mouth/MouthNeutral.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/mouth/MouthOut.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/mouth/MouthOutSlow.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/mouth/SetMouthState.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/states/SuperstructureConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/states/SuperstructureConstants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/Robot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/Robot.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/Mouth.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/Mouth.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -44,15 +49,6 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/claw/ClawOut.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/claw/ClawNeutral.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="68">
@@ -61,35 +57,73 @@
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/Robot.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="249">
+              <caret line="278" column="17" lean-forward="true" selection-start-line="278" selection-start-column="17" selection-end-line="278" selection-end-column="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/mouth/MouthNeutral.java">
-          <provider selected="true" editor-type-id="text-editor" />
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="9" column="30" selection-start-line="9" selection-start-column="30" selection-end-line="9" selection-end-column="30" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#200#201#0" expanded="true" />
+                <element signature="e#247#248#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/mouth/MouthOut.java">
-          <provider selected="true" editor-type-id="text-editor" />
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="102">
+              <caret line="8" column="34" selection-start-line="8" selection-start-column="34" selection-end-line="8" selection-end-column="34" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/mouth/MouthOutSlow.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="102">
+              <caret line="8" column="39" selection-start-line="8" selection-start-column="39" selection-end-line="8" selection-end-column="39" />
+            </state>
+          </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/mouth/MouthIn.java">
-          <provider selected="true" editor-type-id="text-editor" />
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="102">
+              <caret line="8" column="33" selection-start-line="8" selection-start-column="33" selection-end-line="8" selection-end-column="33" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/mouth/SetMouthState.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="17" column="14" selection-start-line="17" selection-start-column="14" selection-end-line="17" selection-end-column="14" />
+            <state relative-caret-position="187">
+              <caret line="13" column="5" lean-forward="true" selection-start-line="13" selection-start-column="5" selection-end-line="13" selection-end-column="5" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/subsystems/Mouth.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+            <state relative-caret-position="459">
+              <caret line="74" column="22" selection-start-line="74" selection-start-column="22" selection-end-line="74" selection-end-column="22" />
             </state>
           </provider>
         </entry>
@@ -102,22 +136,6 @@
               <folding>
                 <element signature="e#1014#1015#0" expanded="true" />
                 <element signature="e#1057#1058#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/claw/SetClawState.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#461#462#0" expanded="true" />
-                <element signature="e#493#494#0" expanded="true" />
-                <element signature="e#477#478#0" expanded="true" />
-                <element signature="e#505#506#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -190,10 +208,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/frc/robot/poofs/util/math/Rotation2d.java" />
-        <option value="$PROJECT_DIR$/src/main/java/frc/robot/poofs/util/motion/MotionProfile.java" />
-        <option value="$PROJECT_DIR$/src/main/java/frc/robot/poofs/util/motion/MotionProfileGoal.java" />
-        <option value="$PROJECT_DIR$/src/main/java/frc/robot/poofs/util/control/PathSegment.java" />
         <option value="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/SubsystemManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/frc/robot/lib/CheesyDriveHelper.java" />
         <option value="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/Climber.java" />
@@ -232,7 +246,6 @@
         <option value="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/RollerClaw.java" />
         <option value="$PROJECT_DIR$/src/main/java/frc/robot/states/SuperstructureConstants.java" />
         <option value="$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/claw/SetClawSpeed.java" />
-        <option value="$PROJECT_DIR$/src/main/java/frc/robot/Robot.java" />
         <option value="$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/claw/SetClawState.java" />
         <option value="$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/claw/ClawIn.java" />
         <option value="$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/claw/ClawOut.java" />
@@ -240,7 +253,12 @@
         <option value="$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/claw/ClawNeutral.java" />
         <option value="$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/mouth/SetClawState.java" />
         <option value="$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/mouth/SetMouthState.java" />
+        <option value="$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/mouth/MouthNeutral.java" />
+        <option value="$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/mouth/MouthOut.java" />
+        <option value="$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/mouth/MouthIn.java" />
         <option value="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/Mouth.java" />
+        <option value="$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/mouth/MouthOutSlow.java" />
+        <option value="$PROJECT_DIR$/src/main/java/frc/robot/Robot.java" />
       </list>
     </option>
   </component>
@@ -377,7 +395,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1551740055170" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1551740389523" />
     <property name="external.system.task.project.file.to.start" value="$PROJECT_DIR$" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="SDKs" />
@@ -395,11 +413,11 @@
       <recent name="C:\Users\4409\IdeaProjects\2019RobotBase\src\main\java\frc\robot\lib" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="frc.robot.commands.actions.mouth" />
       <recent name="frc.robot.commands.actions.claw" />
       <recent name="frc.robot.subsystems" />
       <recent name="frc.robot.commands.claw" />
       <recent name="frc.robot.poofs" />
-      <recent name="frc.robot.commands.paths" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\4409\IdeaProjects\2019RobotBase\src\main\java\frc\robot\commands" />
@@ -601,18 +619,25 @@
       <option name="project" value="LOCAL" />
       <updated>1551739609398</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="updated mouth">
+      <created>1551740090750</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1551740090750</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="138154000" />
+    <option name="totallyTimeSpent" value="138488000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1928" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.83206934" visible="true" weight="0.18070363" />
-      <window_info id="Structure" order="1" sideWeight="0.16793066" side_tool="true" visible="true" weight="0.18070363" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.83064514" visible="true" weight="0.18070363" />
+      <window_info id="Structure" order="1" sideWeight="0.16935484" side_tool="true" visible="true" weight="0.18070363" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
       <window_info id="Capture Tool" order="4" />
@@ -631,7 +656,7 @@
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Database Changes" order="11" />
       <window_info anchor="bottom" id="Version Control" order="12" weight="0.3285968" />
-      <window_info anchor="bottom" id="Messages" order="13" weight="0.3285968" />
+      <window_info anchor="bottom" id="Messages" order="13" visible="true" weight="0.32827735" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -664,7 +689,9 @@
     <MESSAGE value="Some odd stuff here and there&#10;Started command framework&#10;Started new claw" />
     <MESSAGE value="Some odd stuff here and there&#10;Started command framework&#10;Started new claw&#10;removed field adapter for now" />
     <MESSAGE value="added claw commands" />
-    <option name="LAST_COMMIT_MESSAGE" value="added claw commands" />
+    <MESSAGE value="updated mouth" />
+    <MESSAGE value="added mouth commands" />
+    <option name="LAST_COMMIT_MESSAGE" value="added mouth commands" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -679,13 +706,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/subsystems/Claw.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="56" column="27" selection-start-line="56" selection-start-column="27" selection-end-line="56" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/drive/pathfollowing/PathBuilder.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="9">
@@ -992,13 +1012,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/Robot.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="85" column="40" lean-forward="true" selection-start-line="85" selection-start-column="40" selection-end-line="85" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/claw/ClawHolding.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
@@ -1060,22 +1073,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/mouth/MouthNeutral.java">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/mouth/MouthOut.java">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/mouth/MouthIn.java">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/mouth/SetMouthState.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="17" column="14" selection-start-line="17" selection-start-column="14" selection-end-line="17" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/subsystems/RollerClaw.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="671">
@@ -1087,10 +1084,60 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/mouth/MouthNeutral.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="30" selection-start-line="9" selection-start-column="30" selection-end-line="9" selection-end-column="30" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#200#201#0" expanded="true" />
+            <element signature="e#247#248#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/mouth/MouthIn.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="8" column="33" selection-start-line="8" selection-start-column="33" selection-end-line="8" selection-end-column="33" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/mouth/SetMouthState.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="13" column="5" lean-forward="true" selection-start-line="13" selection-start-column="5" selection-end-line="13" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/subsystems/Mouth.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+        <state relative-caret-position="459">
+          <caret line="74" column="22" selection-start-line="74" selection-start-column="22" selection-end-line="74" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/mouth/MouthOut.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="8" column="34" selection-start-line="8" selection-start-column="34" selection-end-line="8" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/mouth/MouthOutSlow.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="8" column="39" selection-start-line="8" selection-start-column="39" selection-end-line="8" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/Robot.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="278" column="17" lean-forward="true" selection-start-line="278" selection-start-column="17" selection-end-line="278" selection-end-column="17" />
         </state>
       </provider>
     </entry>
