@@ -13,6 +13,10 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.actions.mouth.MouthIn;
+import frc.robot.commands.actions.mouth.MouthNeutral;
+import frc.robot.commands.actions.mouth.MouthOut;
+import frc.robot.commands.actions.mouth.MouthOutSlow;
 import frc.robot.commands.drive.pathfollowing.ResetPoseDrivePath;
 import frc.robot.commands.paths.*;
 import frc.robot.controlboard.ControlBoard;
@@ -129,6 +133,10 @@ public class Robot extends TimedRobot {
 //        mElevator.writePeriodicOutputs();
     }
 
+    public void runCommand(Command command){
+        command.start();
+    }
+
     /**
      * This autonomous (along with the chooser code above) shows how to select
      * between different autonomous modes using the dashboard. The sendable
@@ -188,11 +196,11 @@ public class Robot extends TimedRobot {
         double pTurn = turn;
         boolean quickTurn = mControlBoard.getQuickTurn() || (Util.deadband(mControlBoard.getThrottle()) == 0 && Math.abs(Util.deadband(turn)) > 0);
 
-        if(quickTurn){
-            turn = Math.sin(turn * Math.PI/2);
-            turn = Math.sin(turn * Math.PI/2);
-            turn = Math.sin(turn * Math.PI/2);
-        }
+//        if(quickTurn){
+//            turn = Math.sin(turn * Math.PI/2);
+//            turn = Math.sin(turn * Math.PI/2);
+//            turn = Math.sin(turn * Math.PI/2);
+//        }
 
         if(mControlBoard.getVisionAssist()){
             turn = Dashboard.getInstance().getTargetYaw()/250;
@@ -273,16 +281,20 @@ public class Robot extends TimedRobot {
             if (mControlBoard.getShootSpeed() > 0) {
                 //System.out.printlnln("shooting");
                 if(mControlBoard.getShootSpeed() > 0.5){
-                    mMouth.setState(Mouth.MouthState.OUT);
+//                    mMouth.setState(Mouth.MouthState.OUT);
+                    runCommand(new MouthOut());
                 }else{
-                    mMouth.setState(Mouth.MouthState.OUT_SLOW);
+//                    mMouth.setState(Mouth.MouthState.OUT_SLOW);
+                    runCommand(new MouthOutSlow());
                 }
             }else if(mMouth.getState() == Mouth.MouthState.OUT){
-                mMouth.setState(Mouth.MouthState.NEUTRAL);
+//                mMouth.setState(Mouth.MouthState.NEUTRAL);
+                runCommand(new MouthNeutral());
             }
             if (runIntake.update(mControlBoard.getRunIntake())) {
                 System.out.println("toggled");
-                mMouth.setState(Mouth.MouthState.IN);
+//                mMouth.setState(Mouth.MouthState.IN);
+                runCommand(new MouthIn());
             }
             if (goToCargoShipCargoHeight.update(mControlBoard.getGoToCargoShipCargoHeight())) {
                 mElevator.setPositionPID(SuperstructureConstants.kCargoShipCargo);
