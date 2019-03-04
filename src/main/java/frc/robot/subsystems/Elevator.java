@@ -30,6 +30,8 @@ public class Elevator extends Subsystem {
 //        mMaster.config_kP(0, 0.05);
 //        mMaster.config_kI(0,0);
 //        mMaster.config_kD(0,0);
+        //mMaster.config_kF(0,0);
+
         //mMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder,0, 100);
         //TODO config limit switch(es)
         //TODO config PID

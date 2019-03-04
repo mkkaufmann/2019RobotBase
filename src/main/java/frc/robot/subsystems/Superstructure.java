@@ -1,7 +1,9 @@
 package frc.robot.subsystems;
 
+import frc.robot.commands.drive.pathfollowing.PathBuilder;
 import frc.robot.loops.ILooper;
 import frc.robot.loops.Loop;
+import frc.robot.paths.FieldAdapter;
 import frc.robot.statemachines.SuperstructureStateMachine;
 import frc.robot.states.SuperstructureCommand;
 import frc.robot.states.SuperstructureConstants;
@@ -18,6 +20,11 @@ public class Superstructure extends Subsystem{
     private Strafe mStrafe = Strafe.getInstance();
     private SuperstructureStateMachine mStateMachine = new SuperstructureStateMachine();
     private SuperstructureStateMachine.WantedAction mWantedAction = SuperstructureStateMachine.WantedAction.IDLE;
+    private VisionDriveMode mVisionDriveMode = VisionDriveMode.OFF;
+
+    public VisionDriveMode getVisionDriveMode() {
+        return mVisionDriveMode;
+    }
 
     public MechanismMode getMode() {
         return mMode;
@@ -60,6 +67,12 @@ public class Superstructure extends Subsystem{
         HATCH
     }
 
+    public enum VisionDriveMode{
+        OFF,
+        ANGLE_ADJUST,
+        FULL_DRIVE
+    }
+
     @Override
     public void stop() {
     }
@@ -80,8 +93,7 @@ public class Superstructure extends Subsystem{
 
     private synchronized void updateObservedState(SuperstructureState state) {
         state.height = mElevator.getInchesFromBottom();
-        state.armExtended = mArm.getLastPosition() == Arm.ArmPosition.SCORE
-                && mArm.getState() == Arm.ArmControlState.HOLDING_POSITION;
+        state.armExtended = mArm.getPosition() == Arm.ArmPosition.SCORE;
 
         //TODO motion planner
 //        state.elevatorSentLastTrajectory = mElevator.hasFinishedTrajectory();
@@ -163,8 +175,7 @@ public class Superstructure extends Subsystem{
     }
 
     public synchronized boolean isArmInStartingConfiguration() {
-        return mArm.getLastPosition() == Arm.ArmPosition.START
-                && mArm.getState() == Arm.ArmControlState.HOLDING_POSITION;
+        return mArm.getPosition() == Arm.ArmPosition.STOW;
     }
 
     //TODO add arm, etc. methods and values

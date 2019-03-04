@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.poofs.Kinematics;
 import frc.robot.poofs.RobotState;
+import frc.robot.poofs.RobotState2;
 import frc.robot.poofs.util.math.Rotation2d;
 import frc.robot.poofs.util.math.Twist2d;
 
@@ -21,6 +22,7 @@ public class RobotStateEstimator extends Subsystem {
     }
 
     RobotState robot_state_ = RobotState.getInstance();
+    RobotState2 robot_state_2 = RobotState2.getInstance();
     Drive drive_ = Drive.getInstance();
     double left_encoder_prev_distance_ = 0;
     double right_encoder_prev_distance_ = 0;
@@ -41,6 +43,7 @@ public class RobotStateEstimator extends Subsystem {
         final Twist2d predicted_velocity = Kinematics.forwardKinematics(drive_.getLeftVelocityInchesPerSec(),
                 drive_.getRightVelocityInchesPerSec());
         robot_state_.addObservations(Timer.getFPGATimestamp(), odometry_velocity, predicted_velocity);
+        robot_state_2.addObservations(Timer.getFPGATimestamp(), odometry_velocity, predicted_velocity);
         left_encoder_prev_distance_ = left_distance;
         right_encoder_prev_distance_ = right_distance;
     }

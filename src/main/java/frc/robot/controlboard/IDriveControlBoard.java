@@ -20,4 +20,6 @@ public interface IDriveControlBoard {
     boolean getEnableClimbMode();
 
     double getClimberThrottle();
+
+    boolean getVisionAssist();
 }

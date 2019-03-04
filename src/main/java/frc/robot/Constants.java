@@ -50,17 +50,14 @@ public class Constants {
     }
     public static class kArm{
         public static final int masterPort = 2;//PWM
-        public static final int scoreLimitPort = 0;//DIO
-        public static final int stowLimitPort = 1;//DIO
-        public static final int startLimitPort = 2;//DIO
     }
     public static class kClimber{
         public static final int mMasterPort = 3;//PWM
     }
     public static class kStrafe{
         public static final int masterPort = 5;//PWM
-        public static final int encoderPort1 = 6;//PWM
-        public static final int encoderPort2 = 7;//PWM
+        public static final int encoderPort1 = 6;//DIO
+        public static final int encoderPort2 = 7;//DIO
         public static final int limitPort = 3;//DIO
     }
     public static class kControlBoard{

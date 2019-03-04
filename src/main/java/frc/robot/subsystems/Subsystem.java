@@ -3,7 +3,7 @@ package frc.robot.subsystems;
 import frc.robot.loops.ILooper;
 
 //TODO transition all states to switch statements?
-public abstract class Subsystem {
+public abstract class Subsystem{
     public abstract void stop();
 
     public abstract void zeroMechanism();

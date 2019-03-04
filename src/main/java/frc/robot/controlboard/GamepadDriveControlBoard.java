@@ -75,4 +75,9 @@ public class GamepadDriveControlBoard implements IDriveControlBoard {
         }
         return 0;
     }
+
+    @Override
+    public boolean getVisionAssist() {
+        return mJoystick.getRawButton(4);
+    }
 }
