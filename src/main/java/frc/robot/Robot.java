@@ -316,6 +316,7 @@ public class Robot extends TimedRobot {
 //        }
         elevator.set(-Util.deadband(mControlBoard.getElevatorThrottle()));
 //        mElevator.getMaster().set(ControlMode.PercentOutput,-Util.deadband(mControlBoard.getElevatorThrottle()));
+        Scheduler.getInstance().run();
     }
 
     @Override
