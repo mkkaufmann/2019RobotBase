@@ -43,13 +43,13 @@ public class Constants {
         //TODO add limit switches
     }
     public static class kMouth{
-        public static final int masterPort = 0;//PWM
+        public static final int masterPort = 1;//PWM
     }
     public static class kClaw{
-        public static final int servoPort = 1;//PWM
+        public static final int servoPort = 2;//PWM
     }
     public static class kArm{
-        public static final int masterPort = 2;//PWM
+        public static final int masterPort = 0;//PWM
     }
     public static class kClimber{
         public static final int mMasterPort = 3;//PWM

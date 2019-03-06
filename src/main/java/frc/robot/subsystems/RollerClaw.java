@@ -8,9 +8,8 @@ import frc.robot.lib.Util;
 public class RollerClaw extends Subsystem {
 
     private static RollerClaw mInstance = null;
-    private ClawState mState = ClawState.IN;
+    private ClawState mState;
     private GenericPWMSpeedController mMaster;
-    private double kTargetThreshold = 3;
 
     private RollerClaw(){
         mMaster = new GenericPWMSpeedController(Constants.kClaw.servoPort);
@@ -61,7 +60,7 @@ public class RollerClaw extends Subsystem {
     public enum ClawState{
         IN(-1),
         OUT(1),
-        HOLDING(-0.1),
+        HOLDING(-0.5),
         NEUTRAL(0);
 
         public double value;

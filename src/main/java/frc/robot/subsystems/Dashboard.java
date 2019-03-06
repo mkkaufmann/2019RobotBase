@@ -46,7 +46,6 @@ public class Dashboard extends Subsystem {
 //        SmartDashboard.putNumber("Robot_State_Y", RobotState.getInstance().getLatestFieldToVehicle().getValue().getTranslation().y());
 //        SmartDashboard.putNumber("Robot_State_R", RobotState.getInstance().getLatestFieldToVehicle().getValue().getRotation().getDegrees());
         SmartDashboard.putString("Mouth_State", Mouth.getInstance().getState().toString());
-        SmartDashboard.putNumber("Mouth_Speed", Mouth.getInstance().getSpeed());
         SmartDashboard.putBoolean("isHatchMode", Superstructure.getInstance().getMode() == Superstructure.MechanismMode.HATCH);
 
         SmartDashboard.putNumber("Turn", mControlBoard.getTurn());

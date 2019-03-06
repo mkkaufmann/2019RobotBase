@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import frc.robot.commands.drive.pathfollowing.PathBuilder;
 import frc.robot.loops.ILooper;
 import frc.robot.loops.Loop;
-import frc.robot.paths.FieldAdapter;
 import frc.robot.statemachines.SuperstructureStateMachine;
 import frc.robot.states.SuperstructureCommand;
 import frc.robot.states.SuperstructureConstants;
@@ -28,26 +27,6 @@ public class Superstructure extends Subsystem{
 
     public MechanismMode getMode() {
         return mMode;
-    }
-
-    public void setMode(MechanismMode mode) {
-        this.mMode = mode;
-        changeIntakeNeutral();
-    }
-
-    public void toggleMode(){
-        mMode = mMode == MechanismMode.CARGO ? MechanismMode.HATCH : MechanismMode.CARGO;
-        changeIntakeNeutral();
-    }
-
-    private void changeIntakeNeutral(){
-        if(this.mMode == MechanismMode.HATCH){
-            mMouth.setState(Mouth.MouthState.NEUTRAL_NO_CARGO);
-        }else{
-            if(mMouth.getState() == Mouth.MouthState.NEUTRAL_NO_CARGO){
-                mMouth.setState(Mouth.MouthState.NEUTRAL_CARGO);
-            }
-        }
     }
 
     private MechanismMode mMode = MechanismMode.HATCH;

@@ -2,33 +2,35 @@ package frc.robot.controlboard;
 
 public interface IButtonControlBoard {
 
-    // Elevator
-    boolean getGoToHighHeight(); //single
+    boolean getCargoIn();
 
-    boolean getGoToNeutralHeight(); //single
+    double getCargoOut();
 
-    boolean getGoToLowHeight(); //single
+    boolean getHatchIn();
 
-    boolean getGoToCargoShipCargoHeight(); //single
+    boolean getHatchOut();
 
-    boolean getHatchOrCargo(); //toggle
+    boolean getCargoLow();
 
-    boolean getArmToggle(); //toggle
+    boolean getCargoShip();
 
-    boolean getClawToggle(); //toggle
+    boolean getCargoMid();
 
-    boolean getCenterStrafe();
+    boolean getCargoHigh();
 
-    // Intake
-    boolean getRunIntake(); //toggle
+    boolean getHatchLow();
+
+    boolean getHatchMid();
+
+    boolean getHatchHigh();
+
+    boolean getJogElevator();
+
+    double getElevatorThrottle();
+
+    double getStrafeThrottle();
 
     void setButtonRumble(boolean on);
 
     void setButtonRumble(boolean left, boolean right);
-
-    double getStrafeThrottle();
-
-    double getElevatorThrottle();
-
-    double getShootSpeed();
 }

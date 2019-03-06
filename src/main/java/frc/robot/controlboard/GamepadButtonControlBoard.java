@@ -22,52 +22,6 @@ public class GamepadButtonControlBoard implements IButtonControlBoard {
         mJoystick = new XboxController(Constants.kControlBoard.kButtonGamepadPort);
     }
 
-    //Elevator
-    @Override
-    public boolean getGoToHighHeight() {
-        return mJoystick.getRawButton(4);
-    }
-
-    @Override
-    public boolean getGoToNeutralHeight() {
-        return mJoystick.getRawButton(2);
-    }
-
-    @Override
-    public boolean getGoToLowHeight() {
-        return mJoystick.getRawButton(1);
-    }
-
-    @Override
-    public boolean getGoToCargoShipCargoHeight() {
-        return mJoystick.getRawButton(3);
-    }
-
-    @Override
-    public boolean getHatchOrCargo() {
-        return mJoystick.getRawButton(6);
-    }
-
-    @Override
-    public boolean getArmToggle() {
-        return mJoystick.getRawButton(5);
-    }
-
-    @Override
-    public boolean getClawToggle() {
-        return Util.deadband(mJoystick.getTriggerAxis(GenericHID.Hand.kRight), 0.2) > 0;
-    }
-
-    @Override
-    public boolean getCenterStrafe() {
-        return Util.deadband(mJoystick.getRawAxis(1), 0.5) > 0;
-    }
-
-    @Override
-    public boolean getRunIntake() {
-        return this.getClawToggle();//TODO make sure implemented properly
-    }
-
     @Override
     public void setButtonRumble(boolean on) {
         setButtonRumble(on, on);
@@ -79,27 +33,73 @@ public class GamepadButtonControlBoard implements IButtonControlBoard {
         mJoystick.setRumble(GenericHID.RumbleType.kRightRumble, right ? 1.0 : 0);
     }
 
-
     @Override
     public double getStrafeThrottle(){
         return Util.deadband(mJoystick.getRawAxis(0),0.05);
     }
 
     @Override
-    public double getElevatorThrottle() {
-        return Util.deadband(mJoystick.getRawAxis(5));
+    public boolean getCargoIn() {
+        return mJoystick.getRawButton(5);
     }
 
     @Override
-    public double getShootSpeed() {
-        double speed = Util.deadband(mJoystick.getTriggerAxis(GenericHID.Hand.kLeft));
+    public double getCargoOut() {
+        return Util.deadband(mJoystick.getTriggerAxis(GenericHID.Hand.kLeft));
+    }
 
-        if(speed == 0){
-            return 0;
-        }else if(speed < 0.5){
-            return 0.5;
-        }else {
-            return 1.0;
-        }
+    @Override
+    public boolean getHatchIn() {
+        return mJoystick.getRawButton(6);
+    }
+
+    @Override
+    public boolean getHatchOut() {
+        return Util.deadband(mJoystick.getTriggerAxis(GenericHID.Hand.kLeft)) > 0;
+    }
+
+    @Override
+    public boolean getCargoLow() {
+        return mJoystick.getPOV() == 180;
+    }
+
+    @Override
+    public boolean getCargoShip() {
+        return mJoystick.getPOV() == 90;
+    }
+
+    @Override
+    public boolean getCargoMid() {
+        return mJoystick.getPOV() == 270;
+    }
+
+    @Override
+    public boolean getCargoHigh() {
+        return mJoystick.getPOV() == 0;
+    }
+
+    @Override
+    public boolean getHatchLow() {
+        return mJoystick.getRawButton(1);
+    }
+
+    @Override
+    public boolean getHatchMid() {
+        return mJoystick.getRawButton(2);
+    }
+
+    @Override
+    public boolean getHatchHigh() {
+        return mJoystick.getRawButton(4);
+    }
+
+    @Override
+    public boolean getJogElevator() {
+        return mJoystick.getRawButton(3);
+    }
+
+    @Override
+    public double getElevatorThrottle() {
+        return Util.deadband(mJoystick.getRawAxis(5));
     }
 }

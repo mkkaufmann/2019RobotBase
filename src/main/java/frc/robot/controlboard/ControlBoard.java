@@ -6,51 +6,6 @@ public class ControlBoard implements IControlBoard {
     GamepadDriveControlBoard mDriveControlBoard = GamepadDriveControlBoard.getInstance();
 
 
-    @Override
-    public boolean getGoToHighHeight() {
-        return mButtonControlBoard.getGoToHighHeight();
-    }
-
-    @Override
-    public boolean getGoToNeutralHeight() {
-        return mButtonControlBoard.getGoToNeutralHeight();
-    }
-
-    @Override
-    public boolean getGoToLowHeight() {
-        return mButtonControlBoard.getGoToLowHeight();
-    }
-
-    @Override
-    public boolean getGoToCargoShipCargoHeight() {
-        return mButtonControlBoard.getGoToCargoShipCargoHeight();//TODO finish
-    }
-
-    @Override
-    public boolean getHatchOrCargo() {
-        return mButtonControlBoard.getHatchOrCargo();
-    }
-
-    @Override
-    public boolean getArmToggle() {
-        return mButtonControlBoard.getArmToggle();
-    }
-
-    @Override
-    public boolean getClawToggle() {
-        return mButtonControlBoard.getClawToggle();
-    }
-
-    @Override
-    public boolean getCenterStrafe() {
-        return mButtonControlBoard.getCenterStrafe();
-    }
-
-    @Override
-    public boolean getRunIntake() {
-        return mButtonControlBoard.getRunIntake();
-    }
-
 
     @Override
     public void setButtonRumble(boolean on) {
@@ -77,6 +32,66 @@ public class ControlBoard implements IControlBoard {
         return mButtonControlBoard.getStrafeThrottle();
     }
 
+
+    @Override
+    public boolean getCargoIn() {
+        return mButtonControlBoard.getCargoIn();
+    }
+
+    @Override
+    public double getCargoOut() {
+        return mButtonControlBoard.getCargoOut();
+    }
+
+    @Override
+    public boolean getHatchIn() {
+        return mButtonControlBoard.getHatchIn();
+    }
+
+    @Override
+    public boolean getHatchOut() {
+        return mButtonControlBoard.getHatchOut();
+    }
+
+    @Override
+    public boolean getCargoLow() {
+        return mButtonControlBoard.getCargoLow();
+    }
+
+    @Override
+    public boolean getCargoShip() {
+        return mButtonControlBoard.getCargoShip();
+    }
+
+    @Override
+    public boolean getCargoMid() {
+        return mButtonControlBoard.getCargoMid();
+    }
+
+    @Override
+    public boolean getCargoHigh() {
+        return mButtonControlBoard.getCargoHigh();
+    }
+
+    @Override
+    public boolean getHatchLow() {
+        return mButtonControlBoard.getHatchLow();
+    }
+
+    @Override
+    public boolean getHatchMid() {
+        return mButtonControlBoard.getHatchMid();
+    }
+
+    @Override
+    public boolean getHatchHigh() {
+        return mButtonControlBoard.getHatchHigh();
+    }
+
+    @Override
+    public boolean getJogElevator() {
+        return mButtonControlBoard.getJogElevator();
+    }
 
     @Override
     public double getElevatorThrottle() {
@@ -121,10 +136,5 @@ public class ControlBoard implements IControlBoard {
     public void setRumble(boolean on){
         setDriverRumble(on);
         setButtonRumble(on);
-    }
-
-    @Override
-    public double getShootSpeed() {
-        return mButtonControlBoard.getShootSpeed();
     }
 }
