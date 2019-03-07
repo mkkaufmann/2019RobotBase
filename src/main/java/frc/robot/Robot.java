@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.actions.arm.ScoreArm;
+import frc.robot.commands.actions.arm.StowArm;
 import frc.robot.commands.actions.claw.ClawHolding;
 import frc.robot.commands.actions.claw.ClawIn;
 import frc.robot.commands.actions.claw.ClawNeutral;
@@ -270,6 +272,11 @@ public class Robot extends TimedRobot {
         }
         if(hatchOutState.released){
             runCommand(new ClawHolding());
+        }
+        if(cargoInState.pressed || cargoOutState.pressed) {
+            runCommand(new StowArm());
+        }else if(hatchInState.pressed || hatchOutState.pressed){
+            runCommand(new ScoreArm());
         }
 
         //TODO rewrite elevator subsystem
