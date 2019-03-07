@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
@@ -54,7 +55,7 @@ public class Robot extends TimedRobot {
     private CheesyDriveHelper mCheesyDriveHelper = new CheesyDriveHelper();
     private ControlBoard mControlBoard = new ControlBoard();
     private Arm mArm = Arm.getInstance();
-    private Claw mClaw = Claw.getInstance();
+//    private Claw mClaw = Claw.getInstance();
     private Climber mClimber = Climber.getInstance();
     private Elevator mElevator = Elevator.getInstance();
     private Mouth mMouth = Mouth.getInstance();
@@ -240,7 +241,7 @@ public class Robot extends TimedRobot {
             if (mControlBoard.getCargoOut() > 0.5) {
                 runCommand(new MouthOut());
             } else {
-                runCommand(new MouthOutSlow());
+                runCommand(new MouthOut());//SLOW?
             }
         }
         if(cargoOutState.released){
@@ -272,8 +273,8 @@ public class Robot extends TimedRobot {
         }
 
         //TODO rewrite elevator subsystem
-        elevator.set(-Util.deadband(mControlBoard.getElevatorThrottle()));
-//        mElevator.getMaster().set(ControlMode.PercentOutput,-Util.deadband(mControlBoard.getElevatorThrottle()));
+        //elevator.set(-Util.deadband(mControlBoard.getElevatorThrottle()));
+        mElevator.getMaster().set(ControlMode.PercentOutput,-Util.deadband(mControlBoard.getElevatorThrottle()));
 //        if(armToggle.update(mControlBoard.getArmToggle())){
 //            mArm.toggleTargetPosition();
 //        }

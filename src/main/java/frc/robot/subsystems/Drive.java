@@ -91,8 +91,8 @@ public class Drive extends Subsystem{
             mLeftMaster.setNeutralMode(NeutralMode.Brake);
             mRightMaster.setNeutralMode(NeutralMode.Brake);
             mState = DriveState.OPEN_LOOP;
-            mLeftMaster.configNeutralDeadband(0.04, 0);
-            mRightMaster.configNeutralDeadband(0.04, 0);
+            mLeftMaster.configNeutralDeadband(0.06, 0);
+            mRightMaster.configNeutralDeadband(0.06, 0);
         }
         mPeriodicIO.wanted_left_demand = left;
         mPeriodicIO.wanted_right_demand = right;

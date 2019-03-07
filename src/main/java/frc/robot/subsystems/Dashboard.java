@@ -36,7 +36,7 @@ public class Dashboard extends Subsystem {
     @Override
     public synchronized void writePeriodicOutputs(){
         SmartDashboard.putNumber("Match_Time", Timer.getMatchTime());
-        SmartDashboard.putBoolean("Claw_Is_Open", Claw.getInstance().getState() == Claw.ClawState.OPEN);
+        //SmartDashboard.putBoolean("Claw_Is_Open", Claw.getInstance().getState() == Claw.ClawState.OPEN);
         SmartDashboard.putNumber("Battery_Voltage", RobotController.getBatteryVoltage());
         SmartDashboard.putNumber("Elevator_Height", Elevator.getInstance().getInchesFromBottom());
         SmartDashboard.putNumber("Robot_State_X", RobotState2.getInstance().getLatestFieldToVehicle().getValue().getTranslation().x());
@@ -51,7 +51,9 @@ public class Dashboard extends Subsystem {
         SmartDashboard.putNumber("Turn", mControlBoard.getTurn());
         SmartDashboard.putNumber("Throttle", mControlBoard.getThrottle());
         SmartDashboard.putBoolean("QuickTurn", mControlBoard.getQuickTurn());
-
+        SmartDashboard.putString("ClawState", RollerClaw.getInstance().getState().toString());
+        SmartDashboard.putString("ProjectorState", Arm.getInstance().getState().toString());
+        SmartDashboard.putString("ProjectorTarget", Arm.getInstance().getPosition().toString());
     }
 
     public double getTargetYaw(){

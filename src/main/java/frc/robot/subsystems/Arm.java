@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import frc.robot.Constants;
+import frc.robot.commands.actions.claw.ClawHolding;
 import frc.robot.lib.GenericPWMSpeedController;
 import frc.robot.loops.ILooper;
 import frc.robot.states.SuperstructureConstants;
@@ -32,8 +33,13 @@ public class Arm extends Subsystem {
     }
 
     public enum ArmPosition{
-        STOW,
-        SCORE
+        STOW(1),
+        SCORE(-1);
+
+        public double value;
+        ArmPosition(double value){
+            this.value = value;
+        }
     }
 
     public enum ArmControlState{
@@ -52,18 +58,22 @@ public class Arm extends Subsystem {
 
     //only called when holding position (i.e. previous position is current position)
     public synchronized void setTargetPosition(ArmPosition wantedTargetPosition){
-        mTargetPosition = wantedTargetPosition;
-        mPeriodicIO.demand = SuperstructureConstants.kArmDefaultSpeed * (wantedTargetPosition == ArmPosition.STOW ? 1 : -1);
-        mControlState = ArmControlState.MOVING_TO_POSITION;
-        timer.reset();
-        timer.start();
-
+        if(!(mTargetPosition == wantedTargetPosition && mControlState == ArmControlState.MOVING_TO_POSITION)){
+            mTargetPosition = wantedTargetPosition;
+            mPeriodicIO.demand = wantedTargetPosition.value;
+            mControlState = ArmControlState.MOVING_TO_POSITION;
+            timer.reset();
+            timer.start();
+        }
     }
 
     @Override
     public synchronized void writePeriodicOutputs(){
         if(!timer.hasPeriodPassed(1)){
             mMaster.set(mPeriodicIO.demand);
+        }else{
+            mMaster.set(0);
+            mControlState = ArmControlState.HOLDING_POSITION;
         }
     }
 

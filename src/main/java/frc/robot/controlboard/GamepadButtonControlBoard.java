@@ -35,7 +35,7 @@ public class GamepadButtonControlBoard implements IButtonControlBoard {
 
     @Override
     public double getStrafeThrottle(){
-        return Util.deadband(mJoystick.getRawAxis(0),0.05);
+        return Util.deadband(mJoystick.getRawAxis(0),0.08);
     }
 
     @Override

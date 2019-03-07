@@ -32,9 +32,9 @@ public class Constants {
 
     public static class kDrivetrain{
         public static final int leftMasterID = 3;//CAN
-        public static final int leftFollowerID = 0;//CAN
+        public static final int leftFollowerID = 4;//CAN
         public static final int rightMasterID = 1;//CAN
-        public static final int rightFollowerID = 4;//CAN
+        public static final int rightFollowerID = 0;//CAN
         public static final double WHEEL_DIAMETER_IN = 6;
         public static final double ENCODER_TICKS_PER_ROTATION = 4096;
     }
