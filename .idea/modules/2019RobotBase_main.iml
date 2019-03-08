@@ -11,31 +11,21 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../libs/api-java-5.12.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../libs/jama-1.0.3.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../libs/navx-java-3.1.344.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="library" name="Gradle: com.kauailabs.navx.frc:navx-java:3.1.344" level="project" />
-    <orderEntry type="library" name="Gradle: edu.wpi.first.wpilibj:wpilibj-java:2019.2.1" level="project" />
-    <orderEntry type="library" name="Gradle: edu.wpi.first.ntcore:ntcore-java:2019.2.1" level="project" />
-    <orderEntry type="library" name="Gradle: edu.wpi.first.wpiutil:wpiutil-java:2019.2.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.kauailabs.navx.frc:navx-java:3.1.366" level="project" />
+    <orderEntry type="library" name="Gradle: edu.wpi.first.wpilibj:wpilibj-java:2019.4.1" level="project" />
+    <orderEntry type="library" name="Gradle: edu.wpi.first.ntcore:ntcore-java:2019.4.1" level="project" />
+    <orderEntry type="library" name="Gradle: edu.wpi.first.wpiutil:wpiutil-java:2019.4.1" level="project" />
     <orderEntry type="library" name="Gradle: edu.wpi.first.thirdparty.frc2019.opencv:opencv-java:3.4.4-4" level="project" />
-    <orderEntry type="library" name="Gradle: edu.wpi.first.cscore:cscore-java:2019.2.1" level="project" />
-    <orderEntry type="library" name="Gradle: edu.wpi.first.cameraserver:cameraserver-java:2019.2.1" level="project" />
-    <orderEntry type="library" name="Gradle: edu.wpi.first.hal:hal-java:2019.2.1" level="project" />
-    <orderEntry type="library" name="Gradle: com.ctre.phoenix:api-java:5.12.1" level="project" />
-    <orderEntry type="library" name="Gradle: com.ctre.phoenix:wpiapi-java:5.12.1" level="project" />
-    <orderEntry type="library" name="jama-1.0.3" level="project" />
+    <orderEntry type="library" name="Gradle: edu.wpi.first.cscore:cscore-java:2019.4.1" level="project" />
+    <orderEntry type="library" name="Gradle: edu.wpi.first.cameraserver:cameraserver-java:2019.4.1" level="project" />
+    <orderEntry type="library" name="Gradle: edu.wpi.first.hal:hal-java:2019.4.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.ctre.phoenix:api-java:5.14.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.ctre.phoenix:wpiapi-java:5.14.0" level="project" />
   </component>
 </module>

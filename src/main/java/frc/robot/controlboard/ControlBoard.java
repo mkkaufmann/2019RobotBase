@@ -32,6 +32,11 @@ public class ControlBoard implements IControlBoard {
         return mButtonControlBoard.getStrafeThrottle();
     }
 
+    @Override
+    public boolean getArmOut() {
+        return mButtonControlBoard.getArmOut();
+    }
+
 
     @Override
     public boolean getCargoIn() {

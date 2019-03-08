@@ -15,10 +15,16 @@ public class MoveArm extends Command {
     @Override
     protected void initialize() {
         mArm.setTargetPosition(mState);
+        setTimeout(1);
     }
 
     @Override
     protected boolean isFinished() {
-        return true;
+        if(isTimedOut()){
+            mArm.setTargetPosition(Arm.ArmPosition.NEUTRAL);
+            return true;
+        }else{
+            return false;
+        }
     }
 }

@@ -78,6 +78,7 @@ public class Robot extends TimedRobot {
     private LatchedBoolean runIntake = new LatchedBoolean();
     private LatchedBoolean enableClimbMode = new LatchedBoolean();
     private LatchedBoolean centerStrafe = new LatchedBoolean();
+    private LatchedBoolean armOut = new LatchedBoolean();
 
     private GState hatchIn = new GState();
     private GState hatchOut = new GState();
@@ -158,14 +159,14 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        m_autoSelected = m_chooser.getSelected();
-        mEnabledLooper.start();
-        mDisabledLooper.stop();
-        // autoSelected = SmartDashboard.getString("Auto Selector",
-        // defaultAuto);
-        command = new ResetPoseDrivePath(new Left_To_Rocket_L());
-        command.start();
-
+//        m_autoSelected = m_chooser.getSelected();
+//        mEnabledLooper.start();
+//        mDisabledLooper.stop();
+//        // autoSelected = SmartDashboard.getString("Auto Selector",
+//        // defaultAuto);
+//        command = new ResetPoseDrivePath(new Left_To_Rocket_L());
+//        command.start();
+        teleopInit();
         //System.out.printlnln("Auto selected: " + m_autoSelected);
     }
 
@@ -174,16 +175,17 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
-        Scheduler.getInstance().run();
-        switch (m_autoSelected) {
-            case kCustomAuto:
-                // Put custom auto code here
-                break;
-            case kDefaultAuto:
-            default:
-                // Put default auto code here
-                break;
-        }
+//        Scheduler.getInstance().run();
+//        switch (m_autoSelected) {
+//            case kCustomAuto:
+//                // Put custom auto code here
+//                break;
+//            case kDefaultAuto:
+//            default:
+//                // Put default auto code here
+//                break;
+//        }
+        teleopPeriodic();
     }
 
     @Override
@@ -273,14 +275,21 @@ public class Robot extends TimedRobot {
         if(hatchOutState.released){
             runCommand(new ClawHolding());
         }
+
         if(cargoInState.pressed || cargoOutState.pressed) {
-            runCommand(new StowArm());
+            runCommand(new ScoreArm());
+            runCommand(new ClawNeutral());
         }else if(hatchInState.pressed || hatchOutState.pressed){
             runCommand(new ScoreArm());
         }
 
+        if(armOut.update(mControlBoard.getArmOut())){
+            runCommand(new StowArm());
+        }
+
         //TODO rewrite elevator subsystem
         //elevator.set(-Util.deadband(mControlBoard.getElevatorThrottle()));
+
         mElevator.getMaster().set(ControlMode.PercentOutput,-Util.deadband(mControlBoard.getElevatorThrottle()));
 //        if(armToggle.update(mControlBoard.getArmToggle())){
 //            mArm.toggleTargetPosition();

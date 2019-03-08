@@ -39,6 +39,11 @@ public class GamepadButtonControlBoard implements IButtonControlBoard {
     }
 
     @Override
+    public boolean getArmOut() {
+        return mJoystick.getRawButton(7) || mJoystick.getRawButton(8);
+    }
+
+    @Override
     public boolean getCargoIn() {
         return mJoystick.getRawButton(5);
     }
@@ -55,7 +60,7 @@ public class GamepadButtonControlBoard implements IButtonControlBoard {
 
     @Override
     public boolean getHatchOut() {
-        return Util.deadband(mJoystick.getTriggerAxis(GenericHID.Hand.kLeft)) > 0;
+        return Util.deadband(mJoystick.getTriggerAxis(GenericHID.Hand.kRight)) > 0;
     }
 
     @Override

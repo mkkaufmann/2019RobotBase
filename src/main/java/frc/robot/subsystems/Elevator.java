@@ -36,6 +36,7 @@ public class Elevator extends Subsystem {
         //TODO config limit switch(es)
         //TODO config PID
         mMaster.setNeutralMode(NeutralMode.Brake);
+//        mMaster.configForwardLimitSwitchSource();
     }
 
     public static Elevator getInstance(){

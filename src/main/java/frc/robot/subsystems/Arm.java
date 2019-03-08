@@ -12,17 +12,15 @@ import frc.robot.states.SuperstructureConstants;
 
 public class Arm extends Subsystem {
 
-    //TODO add timer and fix
+
     private static Arm mInstance = null;
     private final GenericPWMSpeedController mMaster;
-    private static ArmPosition mTargetPosition = ArmPosition.STOW;
-    private static ArmControlState mControlState = ArmControlState.HOLDING_POSITION;
-    private static PeriodicIO mPeriodicIO = new PeriodicIO();
+    private static ArmPosition mTargetPosition = ArmPosition.NEUTRAL;
+//    private static ArmControlState mControlState = ArmControlState.HOLDING_POSITION;
     private static Timer timer = new Timer();
 
     private Arm(){
         mMaster = new GenericPWMSpeedController(Constants.kArm.masterPort);
-        setTargetPosition(mTargetPosition);
     }
 
     public static synchronized Arm getInstance(){
@@ -34,7 +32,8 @@ public class Arm extends Subsystem {
 
     public enum ArmPosition{
         STOW(1),
-        SCORE(-1);
+        SCORE(-1),
+        NEUTRAL(0);
 
         public double value;
         ArmPosition(double value){
@@ -42,14 +41,14 @@ public class Arm extends Subsystem {
         }
     }
 
-    public enum ArmControlState{
-        HOLDING_POSITION,
-        MOVING_TO_POSITION
-    }
+//    public enum ArmControlState{
+//        HOLDING_POSITION,
+//        MOVING_TO_POSITION
+//    }
 
-    public synchronized void toggleTargetPosition(){
-        setTargetPosition(mTargetPosition == ArmPosition.STOW ? ArmPosition.SCORE : ArmPosition.STOW);
-    }
+//    public synchronized void toggleTargetPosition(){
+//        setTargetPosition(mTargetPosition == ArmPosition.STOW ? ArmPosition.SCORE : ArmPosition.STOW);
+//    }
 
     @Override
     public void zeroMechanism(){
@@ -58,39 +57,21 @@ public class Arm extends Subsystem {
 
     //only called when holding position (i.e. previous position is current position)
     public synchronized void setTargetPosition(ArmPosition wantedTargetPosition){
-        if(!(mTargetPosition == wantedTargetPosition && mControlState == ArmControlState.MOVING_TO_POSITION)){
-            mTargetPosition = wantedTargetPosition;
-            mPeriodicIO.demand = wantedTargetPosition.value;
-            mControlState = ArmControlState.MOVING_TO_POSITION;
-            timer.reset();
-            timer.start();
-        }
+        mTargetPosition = wantedTargetPosition;
     }
 
     @Override
     public synchronized void writePeriodicOutputs(){
-        if(!timer.hasPeriodPassed(1)){
-            mMaster.set(mPeriodicIO.demand);
-        }else{
-            mMaster.set(0);
-            mControlState = ArmControlState.HOLDING_POSITION;
-        }
-    }
-
-    public static class PeriodicIO{
-        //INPUTS
-
-        //OUTPUTS
-        public double demand = 0;
+        mMaster.set(mTargetPosition.value);
     }
 
     public ArmPosition getPosition(){
         return mTargetPosition;
     }
 
-    public ArmControlState getState(){
-        return mControlState;
-    }
+//    public ArmControlState getState(){
+//        return mControlState;
+//    }
 
     @Override
     public void stop() {

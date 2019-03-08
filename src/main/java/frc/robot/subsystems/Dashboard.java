@@ -52,7 +52,7 @@ public class Dashboard extends Subsystem {
         SmartDashboard.putNumber("Throttle", mControlBoard.getThrottle());
         SmartDashboard.putBoolean("QuickTurn", mControlBoard.getQuickTurn());
         SmartDashboard.putString("ClawState", RollerClaw.getInstance().getState().toString());
-        SmartDashboard.putString("ProjectorState", Arm.getInstance().getState().toString());
+//        SmartDashboard.putString("ProjectorState", Arm.getInstance().getState().toString());
         SmartDashboard.putString("ProjectorTarget", Arm.getInstance().getPosition().toString());
     }
 
