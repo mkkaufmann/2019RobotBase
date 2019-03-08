@@ -77,7 +77,7 @@ public class Strafe extends Subsystem {
     @Override
     public synchronized void readPeriodicInputs(){
         mPeriodicIO.position_ticks = mEncoder.get();
-        System.out.println("Strafe Encoder: " + mPeriodicIO.position_ticks);
+        //System.out.println("Strafe Encoder: " + mPeriodicIO.position_ticks);
     }
 
     @Override

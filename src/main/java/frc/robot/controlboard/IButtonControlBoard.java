@@ -30,6 +30,8 @@ public interface IButtonControlBoard {
 
     double getStrafeThrottle();
 
+    boolean getArmOut();
+
     void setButtonRumble(boolean on);
 
     void setButtonRumble(boolean left, boolean right);
