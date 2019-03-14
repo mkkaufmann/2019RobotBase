@@ -8,9 +8,11 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,6 +27,7 @@ import frc.robot.commands.actions.mouth.MouthIn;
 import frc.robot.commands.actions.mouth.MouthNeutral;
 import frc.robot.commands.actions.mouth.MouthOut;
 import frc.robot.commands.actions.mouth.MouthOutSlow;
+import frc.robot.commands.drive.DriveAtVelocityForTime;
 import frc.robot.commands.drive.pathfollowing.ResetPoseDrivePath;
 import frc.robot.commands.paths.*;
 import frc.robot.controlboard.ControlBoard;
@@ -118,6 +121,7 @@ public class Robot extends TimedRobot {
         mSubsystemManager.registerDisabledLoops(mDisabledLooper);
         mElevator.registerEnabledLoops(mElevatorLooper);
 //        mElevatorLooper.start();
+        CameraServer.getInstance().startAutomaticCapture();
     }
 
 
@@ -159,15 +163,9 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-//        m_autoSelected = m_chooser.getSelected();
-//        mEnabledLooper.start();
-//        mDisabledLooper.stop();
-//        // autoSelected = SmartDashboard.getString("Auto Selector",
-//        // defaultAuto);
 //        command = new ResetPoseDrivePath(new Left_To_Rocket_L());
 //        command.start();
         teleopInit();
-        //System.out.printlnln("Auto selected: " + m_autoSelected);
     }
 
     /**
@@ -175,17 +173,110 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
-//        Scheduler.getInstance().run();
-//        switch (m_autoSelected) {
-//            case kCustomAuto:
-//                // Put custom auto code here
-//                break;
-//            case kDefaultAuto:
-//            default:
-//                // Put default auto code here
-//                break;
+//        if(Math.abs(mControlBoard.getThrottle()) > 0){
+//            command.cancel();
 //        }
+//        if(!command.isRunning()){
+//            double turn = mControlBoard.getTurn();
+//            double pTurn = turn;//debug
+//            boolean quickTurn = mControlBoard.getQuickTurn() || (Util.deadband(mControlBoard.getThrottle()) == 0 && Math.abs(Util.deadband(turn)) > 0);
+//
+//            if(quickTurn) {
+//                turn = turn / 2;
+//            }
+//
+//            if (mControlBoard.getVisionAssist()) {
+//                turn = Dashboard.getInstance().getTargetYaw() / 250;
+//                quickTurn = true;
+//            }
+//
+//            System.out.println("Yaw" + Dashboard.getInstance().getTargetYaw() + "Vision Assist: " + mControlBoard.getVisionAssist() + " Turn: " + turn + " Quickturn:" + quickTurn + "quickturn pressed: " + mControlBoard.getQuickTurn() + "pturn: " + pTurn);
+//
+//            mDrive.setOpenLoop(mCheesyDriveHelper.cheesyDrive(mControlBoard.getThrottle()*0.85, turn,
+//                    quickTurn));
+//        }
+////        teleopPeriodic();
+//        if(Math.abs(mControlBoard.getStrafeThrottle()) > 0){
+//            mStrafe.setSpeed(mControlBoard.getStrafeThrottle());
+//        }else{
+//            mStrafe.setSpeed(0);
+//            //run automatic
+//        }
+//
+//        if (Timer.getMatchTime() < 30 && Timer.getMatchTime() > 29) {
+//            mControlBoard.setRumble(true);
+//        } else {
+//            mControlBoard.setRumble(false);//TODO this may become a problem if other rumbles are implemented
+//        }
+//
+//        if(enableClimbMode.update(mControlBoard.getEnableClimbMode())){
+//            runCommand(new EnableClimb());
+//        }
+//
+//        if (mClimber.getState() == Climber.ClimberState.PERCENT_OUTPUT) {
+//            mClimber.setOutput(mControlBoard.getClimberThrottle());
+//        }
+//
+//        GState.StateValues cargoOutState = cargoOut.update(mControlBoard.getCargoOut() > 0);
+//        if (cargoOutState.pressed) {
+//            if (mControlBoard.getCargoOut() > 0.5) {
+//                runCommand(new MouthOut());
+//            } else {
+//                runCommand(new MouthOut());//SLOW?
+//            }
+//        }
+//        if(cargoOutState.released){
+//            runCommand(new MouthNeutral());
+//        }
+//
+//        GState.StateValues cargoInState = cargoIn.update(mControlBoard.getCargoIn());
+//        if (cargoInState.pressed) {
+//            runCommand(new MouthIn());
+//        }
+//        if(cargoInState.released){
+//            runCommand(new MouthNeutral());
+//        }
+//
+//        GState.StateValues hatchOutState = hatchOut.update(mControlBoard.getHatchOut());
+//        if(hatchOutState.pressed){
+//            runCommand(new ClawOut());
+//        }
+//        if(hatchOutState.released){
+//            runCommand(new ClawNeutral());
+//        }
+//
+//        GState.StateValues hatchInState = hatchIn.update(mControlBoard.getHatchIn());
+//        if(hatchInState.pressed){
+//            runCommand(new ClawIn());
+//        }else if(hatchInState.released){
+//            runCommand(new ClawHolding());
+//        }
+//
+//        if(cargoInState.pressed || cargoOutState.pressed) {
+//            runCommand(new ClawNeutral());
+//        }else if(hatchInState.pressed || hatchOutState.pressed){
+//            runCommand(new ScoreArm());
+//        }
+//
+//        if(armOut.update(mControlBoard.getArmOut())){
+//            runCommand(new StowArm());
+//        }
+//
+//        //TODO rewrite elevator subsystem
+//        //elevator.set(-Util.deadband(mControlBoard.getElevatorThrottle()));
+//
+//        //System.out.println("Elevator encoder" + mElevator.getMaster().getSelectedSensorPosition());
+//        double elevatorThrottle = mControlBoard.getElevatorThrottle()*0.85;
+//        if((mElevator.getMaster().getSelectedSensorPosition() > -500 && elevatorThrottle > 0)||(mElevator.getMaster().getSelectedSensorPosition() < -64000 && elevatorThrottle < 0)){
+//            elevatorThrottle /= 10;
+//        }
+//        if(elevatorThrottle < 0){
+//            runCommand(new ScoreArm());
+//        }
+//        mElevator.getMaster().set(ControlMode.PercentOutput,-Util.deadband(elevatorThrottle));
         teleopPeriodic();
+        //
+        // Scheduler.getInstance().run();
     }
 
     @Override
@@ -216,7 +307,8 @@ public class Robot extends TimedRobot {
 
         System.out.println("Yaw" + Dashboard.getInstance().getTargetYaw() + "Vision Assist: " + mControlBoard.getVisionAssist() + " Turn: " + turn + " Quickturn:" + quickTurn + "quickturn pressed: " + mControlBoard.getQuickTurn() + "pturn: " + pTurn);
 
-        mDrive.setOpenLoop(mCheesyDriveHelper.cheesyDrive(mControlBoard.getThrottle(), turn,
+        double modifier = Timer.getMatchTime() < 15 ? 1 : 0.85;
+        mDrive.setOpenLoop(mCheesyDriveHelper.cheesyDrive(mControlBoard.getThrottle()*modifier, turn,
                 quickTurn));
 
         if(Math.abs(mControlBoard.getStrafeThrottle()) > 0){
@@ -271,13 +363,11 @@ public class Robot extends TimedRobot {
         GState.StateValues hatchInState = hatchIn.update(mControlBoard.getHatchIn());
         if(hatchInState.pressed){
             runCommand(new ClawIn());
-        }
-        if(hatchOutState.released){
+        }else if(hatchInState.released){
             runCommand(new ClawHolding());
         }
 
         if(cargoInState.pressed || cargoOutState.pressed) {
-            runCommand(new ScoreArm());
             runCommand(new ClawNeutral());
         }else if(hatchInState.pressed || hatchOutState.pressed){
             runCommand(new ScoreArm());
@@ -290,111 +380,15 @@ public class Robot extends TimedRobot {
         //TODO rewrite elevator subsystem
         //elevator.set(-Util.deadband(mControlBoard.getElevatorThrottle()));
 
-        mElevator.getMaster().set(ControlMode.PercentOutput,-Util.deadband(mControlBoard.getElevatorThrottle()));
-//        if(armToggle.update(mControlBoard.getArmToggle())){
-//            mArm.toggleTargetPosition();
+        System.out.println("Elevator encoder" + mElevator.getMaster().getSelectedSensorPosition());
+        double elevatorThrottle = mControlBoard.getElevatorThrottle()*0.85;
+//        if((mElevator.getMaster().getSelectedSensorPosition() > -500 && elevatorThrottle > 0)||(mElevator.getMaster().getSelectedSensorPosition() < -64000 && elevatorThrottle < 0)){
+//            elevatorThrottle /= 10;
 //        }
-//
-//        if(enableClimbMode.update(mControlBoard.getEnableClimbMode())){
-//            mClimber.toggleState();
-//            //System.out.printlnln("climb toggled");
+//        if(elevatorThrottle < 0){
+//            runCommand(new ScoreArm());
 //        }
-//
-////        Strafe.getInstance().getMaster().set(mControlBoard.getStrafeThrottle());
-//
-//        if(mClimber.getState() == Climber.ClimberState.PERCENT_OUTPUT){
-//            mClimber.setOutput(mControlBoard.getClimberThrottle());
-//        }else{
-////            if(Math.abs(mControlBoard.getStrafeThrottle()) > 0){
-////                mStrafe.setSpeed(mControlBoard.getStrafeThrottle());
-////            }else if(mStrafe.getControlState() == Strafe.ControlState.MANUAL){
-////                mStrafe.setSpeed(0);
-////            }
-//            mStrafe.setSpeed(mControlBoard.getStrafeThrottle());
-//            if(centerStrafe.update(mControlBoard.getCenterStrafe())){
-//                mStrafe.setSetpoint(SuperstructureConstants.kStrafeMidEncoderValue);//TODO implement vision
-//            }
-//        }
-//
-//        if(hatchOrCargo.update(mControlBoard.getHatchOrCargo())){
-//            System.out.println("hatch or cargo");
-//
-//            timer.reset();
-//            timer.start();
-//            shortRumble = true;
-//            if(mSuperStructure.getMode() == Superstructure.MechanismMode.HATCH){
-//                mControlBoard.setButtonRumble(false, true);
-//            }else{
-//                mControlBoard.setButtonRumble(true, false);
-//            }
-//        }
-//
-//        if(Timer.getMatchTime() < 30 && Timer.getMatchTime() > 29 && !longRumble){
-//            longRumble = true;
-//            mControlBoard.setRumble(true);
-//        }
-//
-//        if(timer.hasPeriodPassed(0.5) && shortRumble){
-//            shortRumble = false;
-//            mControlBoard.setButtonRumble(false);
-//        }
-//        if(timer.hasPeriodPassed(1) && longRumble){
-//            longRumble = false;
-//            mControlBoard.setRumble(false);
-//        }
-//
-//        if(mSuperStructure.getMode() == Superstructure.MechanismMode.HATCH){
-//            if(clawToggle.update(mControlBoard.getClawToggle())){
-//                mClaw.toggleState();
-//            }
-//
-//            if(goToLowHeight.update(mControlBoard.getGoToLowHeight())){
-//                mElevator.setPositionPID(SuperstructureConstants.kRocketHatchLow);
-//            }else if(goToNeutralHeight.update(mControlBoard.getGoToNeutralHeight())){
-//                mElevator.setPositionPID(SuperstructureConstants.kRocketHatchMiddle);
-//            }else if(goToHighHeight.update(mControlBoard.getGoToHighHeight())){
-//                mElevator.setPositionPID(SuperstructureConstants.kRocketHatchHigh);
-//            }
-//
-//        }else {
-//            if (mControlBoard.getShootSpeed() > 0) {
-//                //System.out.printlnln("shooting");
-//                if(mControlBoard.getShootSpeed() > 0.5){
-////                    mMouth.setState(Mouth.MouthState.OUT);
-//                    runCommand(new MouthOut());
-//                }else{
-////                    mMouth.setState(Mouth.MouthState.OUT_SLOW);
-//                    runCommand(new MouthOutSlow());
-//                }
-//            }else if(mMouth.getState() == Mouth.MouthState.OUT){
-////                mMouth.setState(Mouth.MouthState.NEUTRAL);
-//                runCommand(new MouthNeutral());
-//            }
-//            if (runIntake.update(mControlBoard.getRunIntake())) {
-//                System.out.println("toggled");
-////                mMouth.setState(Mouth.MouthState.IN);
-//                runCommand(new MouthIn());
-//            }
-//            if (goToCargoShipCargoHeight.update(mControlBoard.getGoToCargoShipCargoHeight())) {
-//                mElevator.setPositionPID(SuperstructureConstants.kCargoShipCargo);
-//            }
-//            if(goToLowHeight.update(mControlBoard.getGoToLowHeight())){
-//                mElevator.setPositionPID(SuperstructureConstants.kRocketCargoLow);
-//            }else if(goToNeutralHeight.update(mControlBoard.getGoToNeutralHeight())){
-//                mElevator.setPositionPID(SuperstructureConstants.kRocketCargoMiddle);
-//            }else if(goToHighHeight.update(mControlBoard.getGoToHighHeight())){
-//                mElevator.setPositionPID(SuperstructureConstants.kRocketCargoHigh);
-//            }
-//        }
-//
-//
-////        if(Math.abs(mControlBoard.getElevatorThrottle()) > 0){
-////            mElevator.setOpenLoop(mControlBoard.getElevatorThrottle());
-////        }else if(mElevator.getState() == Elevator.ElevatorState.OPEN_LOOP){
-////            mElevator.setOpenLoop(0);
-////        }
-//        elevator.set(-Util.deadband(mControlBoard.getElevatorThrottle()));
-//        mElevator.getMaster().set(ControlMode.PercentOutput,-Util.deadband(mControlBoard.getElevatorThrottle()));
+        mElevator.getMaster().set(ControlMode.PercentOutput,-Util.deadband(elevatorThrottle));
         Scheduler.getInstance().run();
     }
 

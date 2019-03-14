@@ -31,15 +31,16 @@ public class Constants {
     public static double kPathStopSteeringDistance = 9.0;
 
     public static class kDrivetrain{
-        public static final int leftMasterID = 3;//CAN
-        public static final int leftFollowerID = 4;//CAN
-        public static final int rightMasterID = 1;//CAN
-        public static final int rightFollowerID = 0;//CAN
+        public static final int leftMasterID = 3;//CAN (comp 3)
+        public static final int leftFollowerID = 4;//CAN (comp 4)
+        public static final int rightMasterID = 1;//CAN (comp 1)
+        public static final int rightFollowerID = 0;//CAN (comp 0)
         public static final double WHEEL_DIAMETER_IN = 6;
         public static final double ENCODER_TICKS_PER_ROTATION = 4096;
     }
     public static class kElevator{
-        public static final int masterID = 2;//
+        public static final int masterID = 2;//CAN
+
         //TODO add limit switches
     }
     public static class kMouth{

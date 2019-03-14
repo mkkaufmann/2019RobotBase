@@ -61,7 +61,7 @@ public class Strafe extends Subsystem {
 
     public synchronized void setSpeed(double demand){
         mControlState = ControlState.MANUAL;
-        mPeriodicIO.demand = demand;
+        mPeriodicIO.demand = -demand;
     }
 
     public synchronized void setSetpoint(double demand){
