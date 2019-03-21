@@ -7,12 +7,10 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,13 +24,10 @@ import frc.robot.commands.actions.climber.EnableClimb;
 import frc.robot.commands.actions.mouth.MouthIn;
 import frc.robot.commands.actions.mouth.MouthNeutral;
 import frc.robot.commands.actions.mouth.MouthOut;
-import frc.robot.commands.actions.mouth.MouthOutSlow;
-import frc.robot.commands.drive.DriveAtVelocityForTime;
-import frc.robot.commands.drive.pathfollowing.ResetPoseDrivePath;
-import frc.robot.commands.paths.*;
 import frc.robot.controlboard.ControlBoard;
 import frc.robot.lib.*;
 import frc.robot.loops.Looper;
+import frc.robot.states.SuperstructureConstants;
 import frc.robot.subsystems.*;
 
 import java.util.Arrays;
@@ -70,11 +65,15 @@ public class Robot extends TimedRobot {
     private boolean shortRumble = false;
     private boolean longRumble = false;
 
-    private LatchedBoolean goToHighHeight = new LatchedBoolean();
-    private LatchedBoolean goToNeutralHeight = new LatchedBoolean();
-    private LatchedBoolean goToLowHeight = new LatchedBoolean();
-    private LatchedBoolean goToCargoShipCargoHeight = new LatchedBoolean();
-    private LatchedBoolean hatchOrCargo = new LatchedBoolean();
+    private LatchedBoolean goToLowHatchRocket = new LatchedBoolean();
+    private LatchedBoolean goToMidHatchRocket = new LatchedBoolean();
+    private LatchedBoolean goToHighHatchRocket = new LatchedBoolean();
+    private LatchedBoolean goToLowCargoRocket = new LatchedBoolean();
+    private LatchedBoolean goToMidCargoRocket = new LatchedBoolean();
+    private LatchedBoolean goToHighCargoRocket = new LatchedBoolean();
+    private LatchedBoolean goToCargoShip = new LatchedBoolean();
+    private LatchedBoolean jog = new LatchedBoolean();
+
     private LatchedBoolean armToggle = new LatchedBoolean();
     private LatchedBoolean armToStart = new LatchedBoolean();
     private LatchedBoolean clawToggle = new LatchedBoolean();
@@ -87,21 +86,19 @@ public class Robot extends TimedRobot {
     private GState hatchOut = new GState();
     private GState cargoIn = new GState();
     private GState cargoOut = new GState();
-    private GenericPWMSpeedController elevator = new GenericPWMSpeedController(4);//TODO
 
     private Command command;
-
 
     private final SubsystemManager mSubsystemManager = new SubsystemManager(
             Arrays.asList(
                     Drive.getInstance(),
                     Superstructure.getInstance(),
-                    //Elevator.getInstance(),
-                    //Claw.getInstance(),
+                    Elevator.getInstance(),
                     Arm.getInstance(),
                     Climber.getInstance(),
                     Mouth.getInstance(),
                     RollerClaw.getInstance(),
+                    Vision.getInstance(),
                     Strafe.getInstance(),
                     Dashboard.getInstance(),
                     RobotStateEstimator.getInstance())
@@ -119,7 +116,7 @@ public class Robot extends TimedRobot {
 
         mSubsystemManager.registerEnabledLoops(mEnabledLooper);
         mSubsystemManager.registerDisabledLoops(mDisabledLooper);
-        mElevator.registerEnabledLoops(mElevatorLooper);
+//        mElevator.registerEnabledLoops(mElevatorLooper);
 //        mElevatorLooper.start();
         CameraServer.getInstance().startAutomaticCapture();
     }
@@ -144,6 +141,7 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
 //        mElevator.readPeriodicInputs();
 //        mElevator.writePeriodicOutputs();
+
     }
 
     public void runCommand(Command command) {
@@ -197,9 +195,9 @@ public class Robot extends TimedRobot {
 //        }
 ////        teleopPeriodic();
 //        if(Math.abs(mControlBoard.getStrafeThrottle()) > 0){
-//            mStrafe.setSpeed(mControlBoard.getStrafeThrottle());
+//            mStrafe.setManual(mControlBoard.getStrafeThrottle());
 //        }else{
-//            mStrafe.setSpeed(0);
+//            mStrafe.setManual(0);
 //            //run automatic
 //        }
 //
@@ -292,6 +290,8 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
 
+
+
         double turn = mControlBoard.getTurn();
         double pTurn = turn;//debug
         boolean quickTurn = mControlBoard.getQuickTurn() || (Util.deadband(mControlBoard.getThrottle()) == 0 && Math.abs(Util.deadband(turn)) > 0);
@@ -305,17 +305,16 @@ public class Robot extends TimedRobot {
             quickTurn = true;
         }
 
-        System.out.println("Yaw" + Dashboard.getInstance().getTargetYaw() + "Vision Assist: " + mControlBoard.getVisionAssist() + " Turn: " + turn + " Quickturn:" + quickTurn + "quickturn pressed: " + mControlBoard.getQuickTurn() + "pturn: " + pTurn);
+//        System.out.println("Yaw" + Dashboard.getInstance().getTargetYaw() + "Vision Assist: " + mControlBoard.getVisionAssist() + " Turn: " + turn + " Quickturn:" + quickTurn + "quickturn pressed: " + mControlBoard.getQuickTurn() + "pturn: " + pTurn);
 
         double modifier = Timer.getMatchTime() < 15 ? 1 : 0.85;
         mDrive.setOpenLoop(mCheesyDriveHelper.cheesyDrive(mControlBoard.getThrottle()*modifier, turn,
                 quickTurn));
 
         if(Math.abs(mControlBoard.getStrafeThrottle()) > 0){
-            mStrafe.setSpeed(mControlBoard.getStrafeThrottle());
+            mStrafe.setManual(mControlBoard.getStrafeThrottle());
         }else{
-            mStrafe.setSpeed(0);
-            //run automatic
+            mStrafe.setVision();
         }
 
         if (Timer.getMatchTime() < 30 && Timer.getMatchTime() > 29) {
@@ -380,15 +379,42 @@ public class Robot extends TimedRobot {
         //TODO rewrite elevator subsystem
         //elevator.set(-Util.deadband(mControlBoard.getElevatorThrottle()));
 
-        System.out.println("Elevator encoder" + mElevator.getMaster().getSelectedSensorPosition());
-        double elevatorThrottle = mControlBoard.getElevatorThrottle()*0.85;
-//        if((mElevator.getMaster().getSelectedSensorPosition() > -500 && elevatorThrottle > 0)||(mElevator.getMaster().getSelectedSensorPosition() < -64000 && elevatorThrottle < 0)){
-//            elevatorThrottle /= 10;
-//        }
-//        if(elevatorThrottle < 0){
-//            runCommand(new ScoreArm());
-//        }
-        mElevator.getMaster().set(ControlMode.PercentOutput,-Util.deadband(elevatorThrottle));
+//        System.out.println("Elevator encoder" + mElevator.getMaster().getSelectedSensorPosition());
+        double elevatorThrottle = mControlBoard.getElevatorThrottle();
+        if(elevatorThrottle > 0){
+            runCommand(new ScoreArm());
+        }
+
+        if(goToLowHatchRocket.update(mControlBoard.getHatchLow())){
+            mElevator.setMotionMagic(SuperstructureConstants.kRocketHatchLow);
+        }
+        if(goToMidHatchRocket.update(mControlBoard.getHatchMid())){
+            mElevator.setMotionMagic(SuperstructureConstants.kRocketHatchMiddle);
+        }
+        if(goToHighHatchRocket.update(mControlBoard.getHatchHigh())){
+            mElevator.setMotionMagic(SuperstructureConstants.kRocketHatchHigh);
+        }
+        if(goToLowCargoRocket.update(mControlBoard.getCargoLow())){
+            mElevator.setMotionMagic(SuperstructureConstants.kRocketCargoLow);
+        }
+        if(goToMidCargoRocket.update(mControlBoard.getCargoMid())){
+            mElevator.setMotionMagic(SuperstructureConstants.kRocketCargoMiddle);
+        }
+        if(goToHighCargoRocket.update(mControlBoard.getCargoHigh())){
+            mElevator.setMotionMagic(SuperstructureConstants.kRocketCargoHigh);
+        }
+        if(goToCargoShip.update(mControlBoard.getCargoShip())){
+            mElevator.setMotionMagic(SuperstructureConstants.kCargoShipCargo);
+        }
+        if(jog.update(mControlBoard.getJogElevator())){
+            mElevator.jog(1);
+        }
+
+        if(Math.abs(elevatorThrottle) > 0){
+            mElevator.setOpenLoop(elevatorThrottle);
+        }else if(mElevator.getState() == Elevator.ElevatorState.OPEN_LOOP){
+            mElevator.setOpenLoop(0);
+        }
         Scheduler.getInstance().run();
     }
 

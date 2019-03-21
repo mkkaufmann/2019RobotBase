@@ -40,6 +40,7 @@ public class Constants {
     }
     public static class kElevator{
         public static final int masterID = 2;//CAN
+        public static final int ENCODER_TICKS_PER_INCH = 8192/9;
 
         //TODO add limit switches
     }

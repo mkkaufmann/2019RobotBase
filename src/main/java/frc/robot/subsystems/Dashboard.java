@@ -20,13 +20,9 @@ public class Dashboard extends Subsystem {
     }
 
     private Dashboard(){
-        SmartDashboard.putBoolean("isHatchMode", true);
         mControlBoard = new ControlBoard();
     }
 
-    public static boolean getIsHatchMode(){
-        return SmartDashboard.getBoolean("isHatchMode", true);
-    }
 
     @Override
     public synchronized void readPeriodicInputs(){

@@ -48,7 +48,7 @@ public class Mouth extends Subsystem {
         mState = state;
     }
 
-//    public synchronized void setSpeed(double speed){
+//    public synchronized void setManual(double speed){
 //        mPeriodicIO.demand = speed;
 //    }
 

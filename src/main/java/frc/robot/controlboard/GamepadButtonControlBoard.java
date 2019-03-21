@@ -105,6 +105,6 @@ public class GamepadButtonControlBoard implements IButtonControlBoard {
 
     @Override
     public double getElevatorThrottle() {
-        return Util.deadband(mJoystick.getRawAxis(5));
+        return -Util.deadband(mJoystick.getRawAxis(5));
     }
 }
