@@ -55,6 +55,7 @@ public class Constants {
     }
     public static class kClimber{
         public static final int mMasterPort = 3;//PWM
+        public static final int mPumpPort = 6;//PWM
     }
     public static class kStrafe{
         public static final int masterPort = 5;//PWM

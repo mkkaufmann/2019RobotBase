@@ -3,14 +3,19 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.Robot;
+import frc.robot.commands.actions.arm.ScoreArm;
+import frc.robot.commands.actions.arm.StowArm;
 import frc.robot.controlboard.ControlBoard;
 import frc.robot.poofs.RobotState;
 import frc.robot.poofs.RobotState2;
+import frc.robot.states.SuperstructureConstants;
 
 public class Dashboard extends Subsystem {
 
     private static Dashboard mInstance = null;
     private ControlBoard mControlBoard;
+    private Elevator mElevator = Elevator.getInstance();
 
     public static Dashboard getInstance(){
         if(mInstance == null){
@@ -26,7 +31,47 @@ public class Dashboard extends Subsystem {
 
     @Override
     public synchronized void readPeriodicInputs(){
-
+        if(SmartDashboard.getBoolean("ElevatorHeightChanged", false)){
+            System.out.println("changed");
+            switch(SmartDashboard.getString("ElevatorHeight", "")){
+                case "CargoLow":
+                    mElevator.setMotionMagic(SuperstructureConstants.kRocketCargoLow);
+                    break;
+                case "CargoMid":
+                    mElevator.setMotionMagic(SuperstructureConstants.kRocketCargoMiddle);
+                    break;
+                case "CargoHigh":
+                    mElevator.setMotionMagic(SuperstructureConstants.kRocketCargoHigh);
+                    break;
+                case "CargoShip":
+                    mElevator.setMotionMagic(SuperstructureConstants.kCargoShipCargo);
+                    break;
+                case "HatchLow":
+                    mElevator.setMotionMagic(SuperstructureConstants.kRocketHatchLow);
+                    break;
+                case "HatchMid":
+                    mElevator.setMotionMagic(SuperstructureConstants.kRocketHatchMiddle);
+                    break;
+                case "HatchHigh":
+                    mElevator.setMotionMagic(SuperstructureConstants.kRocketHatchHigh);
+                    break;
+                case "JogUp":
+                    mElevator.jog(2);
+                    break;
+                case "JogDown":
+                    mElevator.jog(-2);
+                    break;
+                case "JogHatchToCargo": mElevator.jog(12);
+                    break;
+                case "ProjectorIn":
+                    Robot.runCommand(new StowArm());
+                    break;
+                case "ProjectorOut":
+                    Robot.runCommand(new ScoreArm());
+                    break;
+            }
+            SmartDashboard.putBoolean("ElevatorHeightChanged", false);
+        };
     }
 
     @Override

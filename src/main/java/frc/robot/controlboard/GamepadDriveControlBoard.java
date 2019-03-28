@@ -80,4 +80,40 @@ public class GamepadDriveControlBoard implements IDriveControlBoard {
     public boolean getVisionAssist() {
         return mJoystick.getRawButton(4);
     }
+
+    @Override
+    public boolean getCargoLow() {
+        return mJoystick.getPOV() == 180  || Util.deadband(mJoystick.getTriggerAxis(GenericHID.Hand.kRight)) > 0;
+    }
+
+    @Override
+    public boolean getCargoShip() {
+        return mJoystick.getPOV() == 90;
+    }
+
+    @Override
+    public boolean getCargoMid() {
+        return mJoystick.getPOV() == 270;
+    }
+
+    @Override
+    public boolean getCargoHigh() {
+        return mJoystick.getPOV() == 0;
+    }
+
+    @Override
+    public boolean getHatchLow() {
+        return mJoystick.getRawButton(1);
+    }
+
+    @Override
+    public boolean getHatchMid() {
+        return mJoystick.getRawButton(2);
+    }
+
+    @Override
+    public boolean getHatchHigh() {
+        return mJoystick.getRawButton(4);
+    }
+
 }

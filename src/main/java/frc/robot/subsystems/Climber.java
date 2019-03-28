@@ -8,11 +8,13 @@ public class Climber extends Subsystem{
 
     private static Climber mInstance = null;
     private GenericPWMSpeedController mMaster;
+    private GenericPWMSpeedController mPump;
     private ClimberState mState = ClimberState.STOWED;
     private PeriodicIO mPeriodicIO = new PeriodicIO();
 
     private Climber(){
         mMaster = new GenericPWMSpeedController(Constants.kClimber.mMasterPort);
+        mPump = new GenericPWMSpeedController(Constants.kClimber.mPumpPort);
     }
 
     public static Climber getInstance(){
@@ -57,8 +59,10 @@ public class Climber extends Subsystem{
     public synchronized void writePeriodicOutputs(){
         if(mState == ClimberState.PERCENT_OUTPUT){
             mMaster.set(mPeriodicIO.demand);
+            mPump.set(1);
         }else{
             mMaster.set(0);
+            mPump.set(0);
         }
     }
 

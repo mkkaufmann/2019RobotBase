@@ -28,8 +28,13 @@ public class ControlBoard implements IControlBoard {
     }
 
     @Override
-    public double getStrafeThrottle() {
-        return mButtonControlBoard.getStrafeThrottle();
+    public double getStrafePosition() {
+        return mButtonControlBoard.getStrafePosition();
+    }
+
+    @Override
+    public boolean getStrafeManual() {
+        return mButtonControlBoard.getStrafeManual();
     }
 
     @Override
@@ -60,7 +65,7 @@ public class ControlBoard implements IControlBoard {
 
     @Override
     public boolean getCargoLow() {
-        return mButtonControlBoard.getCargoLow();
+        return mButtonControlBoard.getHatchLow();
     }
 
     @Override
@@ -70,32 +75,32 @@ public class ControlBoard implements IControlBoard {
 
     @Override
     public boolean getCargoMid() {
-        return mButtonControlBoard.getCargoMid();
-    }
-
-    @Override
-    public boolean getCargoHigh() {
-        return mButtonControlBoard.getCargoHigh();
-    }
-
-    @Override
-    public boolean getHatchLow() {
-        return mButtonControlBoard.getHatchLow();
-    }
-
-    @Override
-    public boolean getHatchMid() {
         return mButtonControlBoard.getHatchMid();
     }
 
     @Override
-    public boolean getHatchHigh() {
+    public boolean getCargoHigh() {
         return mButtonControlBoard.getHatchHigh();
     }
 
     @Override
-    public boolean getJogElevator() {
-        return mButtonControlBoard.getJogElevator();
+    public boolean getHatchLow() {
+        return mButtonControlBoard.getCargoLow() || mDriveControlBoard.getCargoLow();
+    }
+
+    @Override
+    public boolean getHatchMid() {
+        return mButtonControlBoard.getCargoMid();
+    }
+
+    @Override
+    public boolean getHatchHigh() {
+        return mButtonControlBoard.getCargoHigh();
+    }
+
+    @Override
+    public boolean getHoldStrafe() {
+        return mButtonControlBoard.getHoldStrafe();
     }
 
     @Override

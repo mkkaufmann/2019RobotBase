@@ -141,10 +141,11 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
 //        mElevator.readPeriodicInputs();
 //        mElevator.writePeriodicOutputs();
+//        System.out.println(mStrafe.getPotPos());
 
     }
 
-    public void runCommand(Command command) {
+    public static void runCommand(Command command) {
         command.start();
     }
 
@@ -171,110 +172,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
-//        if(Math.abs(mControlBoard.getThrottle()) > 0){
-//            command.cancel();
-//        }
-//        if(!command.isRunning()){
-//            double turn = mControlBoard.getTurn();
-//            double pTurn = turn;//debug
-//            boolean quickTurn = mControlBoard.getQuickTurn() || (Util.deadband(mControlBoard.getThrottle()) == 0 && Math.abs(Util.deadband(turn)) > 0);
-//
-//            if(quickTurn) {
-//                turn = turn / 2;
-//            }
-//
-//            if (mControlBoard.getVisionAssist()) {
-//                turn = Dashboard.getInstance().getTargetYaw() / 250;
-//                quickTurn = true;
-//            }
-//
-//            System.out.println("Yaw" + Dashboard.getInstance().getTargetYaw() + "Vision Assist: " + mControlBoard.getVisionAssist() + " Turn: " + turn + " Quickturn:" + quickTurn + "quickturn pressed: " + mControlBoard.getQuickTurn() + "pturn: " + pTurn);
-//
-//            mDrive.setOpenLoop(mCheesyDriveHelper.cheesyDrive(mControlBoard.getThrottle()*0.85, turn,
-//                    quickTurn));
-//        }
-////        teleopPeriodic();
-//        if(Math.abs(mControlBoard.getStrafeThrottle()) > 0){
-//            mStrafe.setManual(mControlBoard.getStrafeThrottle());
-//        }else{
-//            mStrafe.setManual(0);
-//            //run automatic
-//        }
-//
-//        if (Timer.getMatchTime() < 30 && Timer.getMatchTime() > 29) {
-//            mControlBoard.setRumble(true);
-//        } else {
-//            mControlBoard.setRumble(false);//TODO this may become a problem if other rumbles are implemented
-//        }
-//
-//        if(enableClimbMode.update(mControlBoard.getEnableClimbMode())){
-//            runCommand(new EnableClimb());
-//        }
-//
-//        if (mClimber.getState() == Climber.ClimberState.PERCENT_OUTPUT) {
-//            mClimber.setOutput(mControlBoard.getClimberThrottle());
-//        }
-//
-//        GState.StateValues cargoOutState = cargoOut.update(mControlBoard.getCargoOut() > 0);
-//        if (cargoOutState.pressed) {
-//            if (mControlBoard.getCargoOut() > 0.5) {
-//                runCommand(new MouthOut());
-//            } else {
-//                runCommand(new MouthOut());//SLOW?
-//            }
-//        }
-//        if(cargoOutState.released){
-//            runCommand(new MouthNeutral());
-//        }
-//
-//        GState.StateValues cargoInState = cargoIn.update(mControlBoard.getCargoIn());
-//        if (cargoInState.pressed) {
-//            runCommand(new MouthIn());
-//        }
-//        if(cargoInState.released){
-//            runCommand(new MouthNeutral());
-//        }
-//
-//        GState.StateValues hatchOutState = hatchOut.update(mControlBoard.getHatchOut());
-//        if(hatchOutState.pressed){
-//            runCommand(new ClawOut());
-//        }
-//        if(hatchOutState.released){
-//            runCommand(new ClawNeutral());
-//        }
-//
-//        GState.StateValues hatchInState = hatchIn.update(mControlBoard.getHatchIn());
-//        if(hatchInState.pressed){
-//            runCommand(new ClawIn());
-//        }else if(hatchInState.released){
-//            runCommand(new ClawHolding());
-//        }
-//
-//        if(cargoInState.pressed || cargoOutState.pressed) {
-//            runCommand(new ClawNeutral());
-//        }else if(hatchInState.pressed || hatchOutState.pressed){
-//            runCommand(new ScoreArm());
-//        }
-//
-//        if(armOut.update(mControlBoard.getArmOut())){
-//            runCommand(new StowArm());
-//        }
-//
-//        //TODO rewrite elevator subsystem
-//        //elevator.set(-Util.deadband(mControlBoard.getElevatorThrottle()));
-//
-//        //System.out.println("Elevator encoder" + mElevator.getMaster().getSelectedSensorPosition());
-//        double elevatorThrottle = mControlBoard.getElevatorThrottle()*0.85;
-//        if((mElevator.getMaster().getSelectedSensorPosition() > -500 && elevatorThrottle > 0)||(mElevator.getMaster().getSelectedSensorPosition() < -64000 && elevatorThrottle < 0)){
-//            elevatorThrottle /= 10;
-//        }
-//        if(elevatorThrottle < 0){
-//            runCommand(new ScoreArm());
-//        }
-//        mElevator.getMaster().set(ControlMode.PercentOutput,-Util.deadband(elevatorThrottle));
+
         teleopPeriodic();
-        //
-        // Scheduler.getInstance().run();
     }
 
     @Override
@@ -289,9 +188,6 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-
-
-
         double turn = mControlBoard.getTurn();
         double pTurn = turn;//debug
         boolean quickTurn = mControlBoard.getQuickTurn() || (Util.deadband(mControlBoard.getThrottle()) == 0 && Math.abs(Util.deadband(turn)) > 0);
@@ -310,12 +206,15 @@ public class Robot extends TimedRobot {
         double modifier = Timer.getMatchTime() < 15 ? 1 : 0.85;
         mDrive.setOpenLoop(mCheesyDriveHelper.cheesyDrive(mControlBoard.getThrottle()*modifier, turn,
                 quickTurn));
-
-        if(Math.abs(mControlBoard.getStrafeThrottle()) > 0){
-            mStrafe.setManual(mControlBoard.getStrafeThrottle());
-        }else{
+//        System.out.println(mControlBoard.getStrafeManual() + " " + mControlBoard.getStrafePosition()*-4);
+        if(Math.abs(Util.deadband(mControlBoard.getStrafePosition()))>0){
+            mStrafe.setManual(mControlBoard.getStrafePosition()*-5);
+        }else if(mControlBoard.getHoldStrafe()) {
+            mStrafe.setNeutral();
+        }if(!mControlBoard.getStrafeManual()){
             mStrafe.setVision();
         }
+
 
         if (Timer.getMatchTime() < 30 && Timer.getMatchTime() > 29) {
             mControlBoard.setRumble(true);
@@ -379,7 +278,7 @@ public class Robot extends TimedRobot {
         //TODO rewrite elevator subsystem
         //elevator.set(-Util.deadband(mControlBoard.getElevatorThrottle()));
 
-//        System.out.println("Elevator encoder" + mElevator.getMaster().getSelectedSensorPosition());
+        System.out.println("Elevator encoder" + mElevator.getInchesFromBottom());
         double elevatorThrottle = mControlBoard.getElevatorThrottle();
         if(elevatorThrottle > 0){
             runCommand(new ScoreArm());
@@ -406,9 +305,7 @@ public class Robot extends TimedRobot {
         if(goToCargoShip.update(mControlBoard.getCargoShip())){
             mElevator.setMotionMagic(SuperstructureConstants.kCargoShipCargo);
         }
-        if(jog.update(mControlBoard.getJogElevator())){
-            mElevator.jog(1);
-        }
+
 
         if(Math.abs(elevatorThrottle) > 0){
             mElevator.setOpenLoop(elevatorThrottle);

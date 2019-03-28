@@ -15,7 +15,10 @@ public class Elevator extends Subsystem{
     private Elevator(){
         mMaster = new TalonSRX(Constants.kElevator.masterID);
         mMaster.configFactoryDefault();
+
+        mMaster.setInverted(true);
         mMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 100);
+        mMaster.setSensorPhase(true);
         mMaster.configMotionCruiseVelocity(7350);
         mMaster.configMotionAcceleration(7350);
         mMaster.config_kP(0, 0.5,10);
@@ -37,7 +40,7 @@ public class Elevator extends Subsystem{
     }
 
     public synchronized double getInchesFromBottom(){
-        return mPeriodicIO.encoder_position_ticks / Constants.kElevator.ENCODER_TICKS_PER_INCH;
+        return -(double)mPeriodicIO.encoder_position_ticks / Constants.kElevator.ENCODER_TICKS_PER_INCH;
     }
 
     public void jog(double inches){
@@ -51,7 +54,7 @@ public class Elevator extends Subsystem{
 
     public void setOpenLoop(double demand){
         mState = ElevatorState.OPEN_LOOP;
-        mPeriodicIO.demand = demand;
+        mPeriodicIO.demand = -demand;
     }
 
     @Override
@@ -67,7 +70,7 @@ public class Elevator extends Subsystem{
         switch(mState){
             case OPEN_LOOP:
                 double demand = mPeriodicIO.demand;
-                if((mMaster.getSelectedSensorPosition() < -500 && demand < 0)||(mMaster.getSelectedSensorPosition() > 64000 && demand > 0)){
+                if((getInchesFromBottom() < 4 && demand > 0)||(getInchesFromBottom() > 73.5 && demand < 0)){
                     demand /= 10;
                 }
                 mMaster.set(ControlMode.PercentOutput, demand);
@@ -77,7 +80,7 @@ public class Elevator extends Subsystem{
                 break;
             case MOTION_MAGIC:
                 //System.out.println(mPeriodicIO.demand);
-                mMaster.set(ControlMode.MotionMagic, mPeriodicIO.demand);
+                mMaster.set(ControlMode.MotionMagic, -mPeriodicIO.demand);
                 break;
         }
     }

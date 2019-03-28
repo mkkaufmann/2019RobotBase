@@ -17,7 +17,7 @@ public class Strafe extends Subsystem {
     private AnalogInput input = new AnalogInput(0);
     private double factor = 1.29;
     private double fullRange = 26.25 * factor;
-    private double offset = 0.19 * fullRange;
+    private double offset = 0.19 * fullRange + 14.4;
     private Potentiometer pot = new AnalogPotentiometer(input,fullRange,offset);
 
     private StrafePID pid = new StrafePID();
@@ -25,7 +25,8 @@ public class Strafe extends Subsystem {
     private class StrafePID extends PIDSubsystem {
 
         public StrafePID(){
-            super("Strafe", 2,0,0);
+//            super("Strafe", 0.25,0.01,0.1);//I 0.01?
+            super("Strafe", 0.25,0.01,0.1);
             getPIDController().setContinuous(false);
         }
 
@@ -36,7 +37,7 @@ public class Strafe extends Subsystem {
 
         @Override
         protected void usePIDOutput(double output) {
-            mMaster.pidWrite(output);
+            mMaster.pidWrite(-output);
         }
 
         @Override
@@ -87,12 +88,18 @@ public class Strafe extends Subsystem {
     public synchronized void setManual(double demand){
         mControlState = ControlState.MANUAL;
         mPeriodicIO.demand = -demand;
-        pid.disable();
+        pid.enable();
+//        pid.disable();
     }
 
     public synchronized void setVision(){
         mControlState = ControlState.POSITION;
         pid.enable();
+    }
+
+    public synchronized void setNeutral(){
+        mControlState = ControlState.NEUTRAL;
+        pid.disable();
     }
 
     @Override
@@ -110,14 +117,20 @@ public class Strafe extends Subsystem {
 
     @Override
     public synchronized void writePeriodicOutputs(){
-        System.out.println("pot:" + mPeriodicIO.potPos);
+        //System.out.println("pot:" + mPeriodicIO.potPos);
+
         switch(mControlState){
             case POSITION:
                 pid.setSetpoint(Vision.Tape.getXOffsetInches());
+//                pid.setSetpoint(Vision.Tape.getXOffsetInches());
+                //mMaster.set(0);
                 break;
             case MANUAL:
-                mMaster.set(mPeriodicIO.demand);
+                pid.setSetpoint(mPeriodicIO.demand);
+//                mMaster.set(mPeriodicIO.demand);
                 break;
+            case NEUTRAL:
+                mMaster.set(0);
         }
 //        if(mControlState == ControlState.MANUAL){
 //            mMaster.set(mPeriodicIO.demand);
@@ -157,6 +170,7 @@ public class Strafe extends Subsystem {
 
     public enum ControlState{
         MANUAL,
-        POSITION
+        POSITION,
+        NEUTRAL
     }
 }

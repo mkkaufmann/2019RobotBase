@@ -16,4 +16,18 @@ public interface IDriveControlBoard {
     double getClimberThrottle();
 
     boolean getVisionAssist();
+
+    boolean getCargoLow();
+
+    boolean getCargoShip();
+
+    boolean getCargoMid();
+
+    boolean getCargoHigh();
+
+    boolean getHatchLow();
+
+    boolean getHatchMid();
+
+    boolean getHatchHigh();
 }
