@@ -138,6 +138,22 @@ public class ControlBoard implements IControlBoard {
         mDriveControlBoard.setDriverRumble(left, right);
     }
 
+    @Override
+    public boolean getRemoveLeftHatch(){
+        return mDriveControlBoard.getRemoveLeftHatch();
+    }
+
+    @Override
+    public boolean getRemoveRightHatch(){
+        return mDriveControlBoard.getRemoveRightHatch();
+    }
+
+    @Override
+    public boolean getGrabHAB() {
+        return mDriveControlBoard.getGrabHAB();
+    }
+
+
     public void setRumble(boolean left, boolean right){
         setButtonRumble(left, right);
         setDriverRumble(left, right);

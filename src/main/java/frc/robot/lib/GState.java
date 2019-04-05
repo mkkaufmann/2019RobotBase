@@ -1,5 +1,10 @@
 package frc.robot.lib;
 
+/**
+ * Tracks button presses and releases
+ * @author Michael Kaufmann
+ * @version 2019
+ */
 public class GState {
 
     private LatchedBoolean pressed;

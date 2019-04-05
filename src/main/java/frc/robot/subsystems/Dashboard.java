@@ -2,12 +2,11 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.commands.actions.arm.ScoreArm;
 import frc.robot.commands.actions.arm.StowArm;
+import frc.robot.commands.actions.miscellaneous.RemoveHatch;
 import frc.robot.controlboard.ControlBoard;
-import frc.robot.poofs.RobotState;
 import frc.robot.poofs.RobotState2;
 import frc.robot.states.SuperstructureConstants;
 
@@ -26,6 +25,7 @@ public class Dashboard extends Subsystem {
 
     private Dashboard(){
         mControlBoard = new ControlBoard();
+        SmartDashboard.putBoolean("ElevatorHeightChanged", false);
     }
 
 
@@ -68,6 +68,12 @@ public class Dashboard extends Subsystem {
                     break;
                 case "ProjectorOut":
                     Robot.runCommand(new ScoreArm());
+                    break;
+                case "RemoveHatchLeft":
+                    Robot.runCommand(new RemoveHatch(true));
+                    break;
+                case "RemoveHatchRight":
+                    Robot.runCommand(new RemoveHatch(false));
                     break;
             }
             SmartDashboard.putBoolean("ElevatorHeightChanged", false);

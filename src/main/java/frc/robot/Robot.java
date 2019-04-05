@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.NoCommand;
 import frc.robot.commands.actions.arm.ScoreArm;
 import frc.robot.commands.actions.arm.StowArm;
 import frc.robot.commands.actions.claw.ClawHolding;
@@ -21,6 +22,8 @@ import frc.robot.commands.actions.claw.ClawIn;
 import frc.robot.commands.actions.claw.ClawNeutral;
 import frc.robot.commands.actions.claw.ClawOut;
 import frc.robot.commands.actions.climber.EnableClimb;
+import frc.robot.commands.actions.miscellaneous.RemoveHatch;
+import frc.robot.commands.actions.mouth.MouthHolding;
 import frc.robot.commands.actions.mouth.MouthIn;
 import frc.robot.commands.actions.mouth.MouthNeutral;
 import frc.robot.commands.actions.mouth.MouthOut;
@@ -38,10 +41,11 @@ import java.util.Arrays;
  * documentation. If you change the name of this class or the package after
  * creating this project, you must also update the build.gradle file in the
  * project.
+ * @author Michael Kaufmann
+ * @version 2019
  */
 //TODO add vision and cameras -> Auto align, auto pickup, auto line up, auto grab cargo
 //TODO restrict mechanisms before climb
-//TODO implement toggled controls
 public class Robot extends TimedRobot {
     private static final String kDefaultAuto = "Default";
     private static final String kCustomAuto = "My Auto";
@@ -49,13 +53,11 @@ public class Robot extends TimedRobot {
     private final SendableChooser<String> m_chooser = new SendableChooser<>();
     private Looper mEnabledLooper = new Looper();
     private Looper mDisabledLooper = new Looper();
-    private Looper mElevatorLooper = new Looper();
 
     private Drive mDrive = Drive.getInstance();
     private CheesyDriveHelper mCheesyDriveHelper = new CheesyDriveHelper();
     private ControlBoard mControlBoard = new ControlBoard();
     private Arm mArm = Arm.getInstance();
-//    private Claw mClaw = Claw.getInstance();
     private Climber mClimber = Climber.getInstance();
     private Elevator mElevator = Elevator.getInstance();
     private Mouth mMouth = Mouth.getInstance();
@@ -74,9 +76,9 @@ public class Robot extends TimedRobot {
     private LatchedBoolean goToCargoShip = new LatchedBoolean();
     private LatchedBoolean jog = new LatchedBoolean();
 
-    private LatchedBoolean armToggle = new LatchedBoolean();
-    private LatchedBoolean armToStart = new LatchedBoolean();
-    private LatchedBoolean clawToggle = new LatchedBoolean();
+    private LatchedBoolean removeLeftHatch = new LatchedBoolean();
+    private LatchedBoolean removeRightHatch = new LatchedBoolean();
+    private LatchedBoolean grabHab = new LatchedBoolean();
     private LatchedBoolean runIntake = new LatchedBoolean();
     private LatchedBoolean enableClimbMode = new LatchedBoolean();
     private LatchedBoolean centerStrafe = new LatchedBoolean();
@@ -116,9 +118,8 @@ public class Robot extends TimedRobot {
 
         mSubsystemManager.registerEnabledLoops(mEnabledLooper);
         mSubsystemManager.registerDisabledLoops(mDisabledLooper);
-//        mElevator.registerEnabledLoops(mElevatorLooper);
-//        mElevatorLooper.start();
         CameraServer.getInstance().startAutomaticCapture();
+        mClimber.closeSolenoid();
     }
 
 
@@ -127,6 +128,7 @@ public class Robot extends TimedRobot {
         mEnabledLooper.stop();
         mDisabledLooper.start();
         mSubsystemManager.stop();
+        mClimber.stop();
     }
 
     /**
@@ -139,10 +141,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
-//        mElevator.readPeriodicInputs();
-//        mElevator.writePeriodicOutputs();
-//        System.out.println(mStrafe.getPotPos());
-
+        System.out.println("Vision: "+Vision.Tape.getXOffsetInches());
+        System.out.println(mStrafe.getPotPos());
     }
 
     public static void runCommand(Command command) {
@@ -162,8 +162,9 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-//        command = new ResetPoseDrivePath(new Left_To_Rocket_L());
-//        command.start();
+//        command = new ResetPoseDrivePath(new Straight_Path());
+        command = new NoCommand();
+        command.start();
         teleopInit();
     }
 
@@ -172,8 +173,13 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
-
-        teleopPeriodic();
+        if (command.isRunning() && Math.abs(Util.deadband(mControlBoard.getThrottle(), 0.2)) > 0 || Math.abs(Util.deadband(mControlBoard.getTurn(), 0.2)) > 0){
+            command.cancel();
+        }
+        if(!command.isRunning()){
+            driveManually();
+        }
+        enabledPeriodic();
     }
 
     @Override
@@ -182,38 +188,15 @@ public class Robot extends TimedRobot {
         mEnabledLooper.start();
     }
 
-    /**
-     * This function is called periodically during operator control.
-     * TODO fix claw in ball mode
-     */
-    @Override
-    public void teleopPeriodic() {
-        double turn = mControlBoard.getTurn();
-        double pTurn = turn;//debug
-        boolean quickTurn = mControlBoard.getQuickTurn() || (Util.deadband(mControlBoard.getThrottle()) == 0 && Math.abs(Util.deadband(turn)) > 0);
-
-        if(quickTurn) {
-            turn = turn / 2;
-        }
-
-        if (mControlBoard.getVisionAssist()) {
-            turn = Dashboard.getInstance().getTargetYaw() / 250;
-            quickTurn = true;
-        }
-
-//        System.out.println("Yaw" + Dashboard.getInstance().getTargetYaw() + "Vision Assist: " + mControlBoard.getVisionAssist() + " Turn: " + turn + " Quickturn:" + quickTurn + "quickturn pressed: " + mControlBoard.getQuickTurn() + "pturn: " + pTurn);
-
-        double modifier = Timer.getMatchTime() < 15 ? 1 : 0.85;
-        mDrive.setOpenLoop(mCheesyDriveHelper.cheesyDrive(mControlBoard.getThrottle()*modifier, turn,
-                quickTurn));
-//        System.out.println(mControlBoard.getStrafeManual() + " " + mControlBoard.getStrafePosition()*-4);
-        if(Math.abs(Util.deadband(mControlBoard.getStrafePosition()))>0){
-            mStrafe.setManual(mControlBoard.getStrafePosition()*-5);
-        }else if(mControlBoard.getHoldStrafe()) {
-            mStrafe.setNeutral();
-        }if(!mControlBoard.getStrafeManual()){
-            mStrafe.setVision();
-        }
+    public void enabledPeriodic(){
+//        if(Math.abs(Util.deadband(mControlBoard.getStrafePosition()))>0){
+//            mStrafe.setManual(mControlBoard.getStrafePosition()*-5);
+//        }else if(mControlBoard.getHoldStrafe()) {
+//            mStrafe.setNeutral();
+//        }if(!mControlBoard.getStrafeManual()){
+//            mStrafe.setVision();
+//        }
+        mStrafe.setManual(mControlBoard.getStrafePosition());
 
 
         if (Timer.getMatchTime() < 30 && Timer.getMatchTime() > 29) {
@@ -228,29 +211,28 @@ public class Robot extends TimedRobot {
 
         if (mClimber.getState() == Climber.ClimberState.PERCENT_OUTPUT) {
             mClimber.setOutput(mControlBoard.getClimberThrottle());
+            if(grabHab.update(mControlBoard.getGrabHAB())){
+                mClimber.openSolenoid();
+            }
         }
 
-        GState.StateValues cargoOutState = cargoOut.update(mControlBoard.getCargoOut() > 0);
+        GState.StateValues cargoOutState = cargoOut.update(mControlBoard.getHatchOut());
         if (cargoOutState.pressed) {
-            if (mControlBoard.getCargoOut() > 0.5) {
-                runCommand(new MouthOut());
-            } else {
-                runCommand(new MouthOut());//SLOW?
-            }
+            runCommand(new MouthOut());
         }
         if(cargoOutState.released){
             runCommand(new MouthNeutral());
         }
 
-        GState.StateValues cargoInState = cargoIn.update(mControlBoard.getCargoIn());
+        GState.StateValues cargoInState = cargoIn.update(mControlBoard.getHatchIn());
         if (cargoInState.pressed) {
             runCommand(new MouthIn());
         }
         if(cargoInState.released){
-            runCommand(new MouthNeutral());
+            runCommand(new MouthHolding());
         }
 
-        GState.StateValues hatchOutState = hatchOut.update(mControlBoard.getHatchOut());
+        GState.StateValues hatchOutState = hatchOut.update(mControlBoard.getCargoOut() > 0);
         if(hatchOutState.pressed){
             runCommand(new ClawOut());
         }
@@ -258,7 +240,7 @@ public class Robot extends TimedRobot {
             runCommand(new ClawNeutral());
         }
 
-        GState.StateValues hatchInState = hatchIn.update(mControlBoard.getHatchIn());
+        GState.StateValues hatchInState = hatchIn.update(mControlBoard.getCargoIn());
         if(hatchInState.pressed){
             runCommand(new ClawIn());
         }else if(hatchInState.released){
@@ -274,9 +256,6 @@ public class Robot extends TimedRobot {
         if(armOut.update(mControlBoard.getArmOut())){
             runCommand(new StowArm());
         }
-
-        //TODO rewrite elevator subsystem
-        //elevator.set(-Util.deadband(mControlBoard.getElevatorThrottle()));
 
         System.out.println("Elevator encoder" + mElevator.getInchesFromBottom());
         double elevatorThrottle = mControlBoard.getElevatorThrottle();
@@ -312,7 +291,45 @@ public class Robot extends TimedRobot {
         }else if(mElevator.getState() == Elevator.ElevatorState.OPEN_LOOP){
             mElevator.setOpenLoop(0);
         }
+
+        if(removeLeftHatch.update(mControlBoard.getRemoveLeftHatch())){
+            runCommand(new RemoveHatch(true));
+        }
+        if(removeRightHatch.update(mControlBoard.getRemoveRightHatch())){
+            runCommand(new RemoveHatch(false));
+        }
+
         Scheduler.getInstance().run();
+    }
+
+    public void driveManually(){
+        double turn = mControlBoard.getTurn();
+        double pTurn = turn;//debug
+        boolean quickTurn = mControlBoard.getQuickTurn() || (Util.deadband(mControlBoard.getThrottle()) == 0 && Math.abs(Util.deadband(turn)) > 0);
+
+        if(quickTurn) {
+            turn = turn / 2;
+        }
+
+        if (mControlBoard.getVisionAssist()) {
+            turn = Dashboard.getInstance().getTargetYaw() / 250;
+            quickTurn = true;
+        }
+
+//        System.out.println("Yaw" + Dashboard.getInstance().getTargetYaw() + "Vision Assist: " + mControlBoard.getVisionAssist() + " Turn: " + turn + " Quickturn:" + quickTurn + "quickturn pressed: " + mControlBoard.getQuickTurn() + "pturn: " + pTurn);
+
+        double modifier = Timer.getMatchTime() < 15 ? 1 : 0.9;
+        mDrive.setOpenLoop(mCheesyDriveHelper.cheesyDrive(mControlBoard.getThrottle()*modifier, turn,
+                quickTurn));
+    }
+    /**
+     * This function is called periodically during operator control.
+     * TODO fix claw in ball mode
+     */
+    @Override
+    public void teleopPeriodic() {
+        driveManually();
+        enabledPeriodic();
     }
 
     @Override

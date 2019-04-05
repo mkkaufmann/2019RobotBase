@@ -6,6 +6,11 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import frc.robot.Constants;
 
+/**
+ * Elevator subsystem with manual and automatic controls
+ * @author Michael Kaufmann
+ * @version 2019
+ */
 public class Elevator extends Subsystem{
     private static Elevator mInstance = null;
     private static TalonSRX mMaster;
@@ -24,7 +29,6 @@ public class Elevator extends Subsystem{
         mMaster.config_kP(0, 0.5,10);
         mMaster.config_kI(0, 0,10);
         mMaster.config_kD(0, 0.2,10);
-//        mMaster.config_kF(0, 0,10);
         mMaster.setNeutralMode(NeutralMode.Brake);
     }
 
@@ -43,15 +47,27 @@ public class Elevator extends Subsystem{
         return -(double)mPeriodicIO.encoder_position_ticks / Constants.kElevator.ENCODER_TICKS_PER_INCH;
     }
 
+    /**
+     * Moves the elevator to a point relative to its current height
+     * @param inches inches to move (+ is up)
+     */
     public void jog(double inches){
         setMotionMagic(getInchesFromBottom() + inches);
     }
 
+    /**
+     * Sets automatic movement to height
+     * @param demandInches set height in inches
+     */
     public void setMotionMagic(double demandInches){
         mState = ElevatorState.MOTION_MAGIC;
         mPeriodicIO.demand = demandInches  * Constants.kElevator.ENCODER_TICKS_PER_INCH;
     }
 
+    /**
+     * Set manual control of elevator
+     * @param demand percent output
+     */
     public void setOpenLoop(double demand){
         mState = ElevatorState.OPEN_LOOP;
         mPeriodicIO.demand = -demand;
@@ -61,8 +77,6 @@ public class Elevator extends Subsystem{
     public void readPeriodicInputs(){
         mPeriodicIO.encoder_position_ticks = mMaster.getSelectedSensorPosition();
         mPeriodicIO.encoder_velocity_ticks = mMaster.getSelectedSensorVelocity();
-
-        //System.out.println("Elevator Encoder: " + mPeriodicIO.encoder_position_ticks);
     }
 
     @Override
@@ -70,6 +84,7 @@ public class Elevator extends Subsystem{
         switch(mState){
             case OPEN_LOOP:
                 double demand = mPeriodicIO.demand;
+                //soft limit
                 if((getInchesFromBottom() < 4 && demand > 0)||(getInchesFromBottom() > 73.5 && demand < 0)){
                     demand /= 10;
                 }
@@ -80,7 +95,7 @@ public class Elevator extends Subsystem{
                 break;
             case MOTION_MAGIC:
                 //System.out.println(mPeriodicIO.demand);
-                mMaster.set(ControlMode.MotionMagic, -mPeriodicIO.demand);
+                //mMaster.set(ControlMode.MotionMagic, -mPeriodicIO.demand);//TODO
                 break;
         }
     }

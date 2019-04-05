@@ -1,5 +1,10 @@
 package frc.robot;
 
+/**
+ * Constant values (e.g. motion profiling parameters and port numbers)
+ * @author Michael Kaufmann
+ * @version 2019
+ */
 public class Constants {
 
     public static double kLooperDt = 0.005;
@@ -41,14 +46,12 @@ public class Constants {
     public static class kElevator{
         public static final int masterID = 2;//CAN
         public static final int ENCODER_TICKS_PER_INCH = 8192/9;
-
-        //TODO add limit switches
     }
     public static class kMouth{
-        public static final int masterPort = 1;//PWM
+        public static final int masterPort = 2;//PWM
     }
     public static class kClaw{
-        public static final int servoPort = 2;//PWM
+        public static final int servoPort = 1;//PWM
     }
     public static class kArm{
         public static final int masterPort = 0;//PWM
@@ -56,12 +59,12 @@ public class Constants {
     public static class kClimber{
         public static final int mMasterPort = 3;//PWM
         public static final int mPumpPort = 6;//PWM
+        public static final int mSolenoidPort = 3;//PCM
     }
     public static class kStrafe{
         public static final int masterPort = 5;//PWM
-        public static final int encoderPort1 = 6;//DIO
-        public static final int encoderPort2 = 7;//DIO
-        public static final int limitPort = 3;//DIO
+        public static final int mPotPort = 0;//ANALOG IN
+        //pot wires outside-in -> white, red, black
     }
     public static class kControlBoard{
         public static final int kDriveGamepadPort = 0;

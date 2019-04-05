@@ -30,4 +30,10 @@ public interface IDriveControlBoard {
     boolean getHatchMid();
 
     boolean getHatchHigh();
+
+    boolean getRemoveLeftHatch();
+
+    boolean getRemoveRightHatch();
+
+    boolean getGrabHAB();
 }

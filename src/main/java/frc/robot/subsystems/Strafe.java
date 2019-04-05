@@ -14,10 +14,10 @@ public class Strafe extends Subsystem {
     private GenericPWMSpeedController mMaster;
     private PeriodicIO mPeriodicIO = new PeriodicIO();
 
-    private AnalogInput input = new AnalogInput(0);
+    private AnalogInput input = new AnalogInput(Constants.kStrafe.mPotPort);
     private double factor = 1.29;
     private double fullRange = 26.25 * factor;
-    private double offset = 0.19 * fullRange + 14.4;
+    private double offset = 0.19 * fullRange + 14.9;//positive is right
     private Potentiometer pot = new AnalogPotentiometer(input,fullRange,offset);
 
     private StrafePID pid = new StrafePID();
@@ -26,7 +26,7 @@ public class Strafe extends Subsystem {
 
         public StrafePID(){
 //            super("Strafe", 0.25,0.01,0.1);//I 0.01?
-            super("Strafe", 0.25,0.01,0.1);
+            super("Strafe", 0.25,0.0005,0.0);
             getPIDController().setContinuous(false);
         }
 
@@ -88,13 +88,13 @@ public class Strafe extends Subsystem {
     public synchronized void setManual(double demand){
         mControlState = ControlState.MANUAL;
         mPeriodicIO.demand = -demand;
-        pid.enable();
+        //pid.enable();
 //        pid.disable();
     }
 
     public synchronized void setVision(){
         mControlState = ControlState.POSITION;
-        pid.enable();
+        //pid.enable();
     }
 
     public synchronized void setNeutral(){
@@ -104,7 +104,7 @@ public class Strafe extends Subsystem {
 
     @Override
     public synchronized void readPeriodicInputs(){
-        mPeriodicIO.potPos = fullRange - pot.get();
+        mPeriodicIO.potPos = Math.floor((fullRange - pot.get())*100)/100.0;
         switch(mControlState){
             case POSITION:
 
@@ -121,44 +121,15 @@ public class Strafe extends Subsystem {
 
         switch(mControlState){
             case POSITION:
-                pid.setSetpoint(Vision.Tape.getXOffsetInches());
-//                pid.setSetpoint(Vision.Tape.getXOffsetInches());
+                pid.setSetpoint(Math.min(Math.max(Vision.Tape.getXOffsetInches(),-5),5));
                 //mMaster.set(0);
                 break;
             case MANUAL:
                 pid.setSetpoint(mPeriodicIO.demand);
-//                mMaster.set(mPeriodicIO.demand);
                 break;
             case NEUTRAL:
                 mMaster.set(0);
         }
-//        if(mControlState == ControlState.MANUAL){
-//            mMaster.set(mPeriodicIO.demand);
-//            return;
-//        }
-//        if(mState == StrafeState.HOLDING_POSITION){
-//            return;
-//        }
-//
-//        if(Util.epsilonEquals(mPeriodicIO.position_ticks, mPeriodicIO.demand, kTargetThreshold)){
-//            mState = StrafeState.HOLDING_POSITION;
-//            return;
-//        }
-//
-//        double direction = mPeriodicIO.position_ticks > mPeriodicIO.demand ? -1 : 1;
-//
-//        if(direction == -1){
-//            if(mLimitSwitch.get()){
-//                mState = StrafeState.HOLDING_POSITION;
-//                return;
-//            }
-//        }else{
-//            if(mPeriodicIO.position_ticks >= SuperstructureConstants.kStrafeMaxEncoderValue){//TODO
-//                mState = StrafeState.HOLDING_POSITION;
-//                return;
-//            }
-//        }
-//        mMaster.set(kSpeed * direction);
     }
 
     private static class PeriodicIO{

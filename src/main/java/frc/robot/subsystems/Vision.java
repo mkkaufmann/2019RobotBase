@@ -40,8 +40,8 @@ public class Vision extends Subsystem {
         Tape.centerX = (int)SmartDashboard.getNumber("Vision/targetCenterX", 0);
         Tape.centerY = (int)SmartDashboard.getNumber("Vision/targetCenterY", 0);
         Tape.pitch = (int)SmartDashboard.getNumber("Vision/targetPitch", 0);
-        Tape.distance = SmartDashboard.getNumber("Vision/targetDistance", 0);
-        Tape.xOffset = SmartDashboard.getNumber("Vision/targetPixelsFromCenterX", 0);
+        Tape.distance = Double.parseDouble(SmartDashboard.getString("Vision/targetDistance", "0"));
+        Tape.xOffset = Double.parseDouble(SmartDashboard.getString("Vision/targetPixelsFromCenterX", "0"));
         Tape.detected = SmartDashboard.getBoolean("Vision/tapeDetected", false);
     }
 
@@ -64,7 +64,7 @@ public class Vision extends Subsystem {
         public static double xOffset = 0;
         public static boolean detected = false;
 
-        private static final double X_OFFSET_SCALAR = -0.2;
+        private static final double X_OFFSET_SCALAR = -0.01;
 
         public static double getXOffsetInches(){
             if(!detected){

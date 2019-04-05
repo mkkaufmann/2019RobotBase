@@ -54,7 +54,7 @@ public class RollerClaw extends Subsystem {
 
     @Override
     public synchronized void writePeriodicOutputs(){
-        mMaster.set(-mState.value);
+        mMaster.set(mState.value);
     }
 
     public enum ClawState{

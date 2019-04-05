@@ -116,4 +116,18 @@ public class GamepadDriveControlBoard implements IDriveControlBoard {
         return mJoystick.getRawButton(4);
     }
 
+    @Override
+    public boolean getRemoveLeftHatch(){
+        return mJoystick.getRawButton(5);
+    }
+
+    @Override
+    public boolean getRemoveRightHatch(){
+        return mJoystick.getRawButton(6);
+    }
+
+    @Override
+    public boolean getGrabHAB() {
+        return mJoystick.getRawButton(4);
+    }
 }

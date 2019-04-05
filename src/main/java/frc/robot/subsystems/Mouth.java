@@ -59,7 +59,7 @@ public class Mouth extends Subsystem {
 
     @Override
     public synchronized void writePeriodicOutputs(){
-        mMaster.set(mState.value);
+        mMaster.set(-mState.value);
     }
 
 //    public static class PeriodicIO{
@@ -72,7 +72,7 @@ public class Mouth extends Subsystem {
         NEUTRAL(0),
         IN(-1),
         OUT(1),
-        OUT_SLOW(0.5);
+        HOLDING(-0.2);
 
         public double value;
 

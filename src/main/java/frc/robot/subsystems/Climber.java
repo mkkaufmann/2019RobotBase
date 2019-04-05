@@ -1,9 +1,16 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.Solenoid;
 import frc.robot.Constants;
 import frc.robot.lib.GenericPWMSpeedController;
 
+/**
+ * Climber Subsystem
+ * Once activated, allows manual control of a winch and solenoid
+ *
+ * @author Michael Kaufmann
+ * @version 2019
+ */
 public class Climber extends Subsystem{
 
     private static Climber mInstance = null;
@@ -11,10 +18,12 @@ public class Climber extends Subsystem{
     private GenericPWMSpeedController mPump;
     private ClimberState mState = ClimberState.STOWED;
     private PeriodicIO mPeriodicIO = new PeriodicIO();
+    private Solenoid mSolenoid;
 
     private Climber(){
         mMaster = new GenericPWMSpeedController(Constants.kClimber.mMasterPort);
         mPump = new GenericPWMSpeedController(Constants.kClimber.mPumpPort);
+        mSolenoid = new Solenoid(Constants.kClimber.mSolenoidPort);
     }
 
     public static Climber getInstance(){
@@ -36,6 +45,24 @@ public class Climber extends Subsystem{
         mState = state;
     }
 
+    /**
+     * Attaches to the platform (hopefully)
+     */
+    public synchronized void openSolenoid(){
+        mSolenoid.set(true);
+    }
+
+    /**
+     * Holds pressure in the tank
+     */
+    public synchronized void closeSolenoid(){
+        mSolenoid.set(false);
+    }
+
+    public boolean getSolenoid(){
+        return mSolenoid.get();
+    }
+
     @Override
     public void stop() {
         setState(ClimberState.STOWED);
@@ -51,6 +78,10 @@ public class Climber extends Subsystem{
 
     }
 
+    /**
+     * Updates the output for the climber motor
+     * @param demand speed
+     */
     public void setOutput(double demand){
         mPeriodicIO.demand = demand;
     }
