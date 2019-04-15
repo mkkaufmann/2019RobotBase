@@ -70,4 +70,8 @@ public class Constants {
         public static final int kDriveGamepadPort = 0;
         public static final int kButtonGamepadPort = 1;
     }
+//    public static class kGrabber{
+//        public static final int kPumpPort = 0;
+//        public static final int kFoldPort = 1;
+//    }
 }

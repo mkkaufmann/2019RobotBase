@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
@@ -15,6 +16,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.NoCommand;
+import frc.robot.commands.WaitCommand;
 import frc.robot.commands.actions.arm.ScoreArm;
 import frc.robot.commands.actions.arm.StowArm;
 import frc.robot.commands.actions.claw.ClawHolding;
@@ -79,7 +81,7 @@ public class Robot extends TimedRobot {
     private LatchedBoolean removeLeftHatch = new LatchedBoolean();
     private LatchedBoolean removeRightHatch = new LatchedBoolean();
     private LatchedBoolean grabHab = new LatchedBoolean();
-    private LatchedBoolean runIntake = new LatchedBoolean();
+    private LatchedBoolean startPump = new LatchedBoolean();
     private LatchedBoolean enableClimbMode = new LatchedBoolean();
     private LatchedBoolean centerStrafe = new LatchedBoolean();
     private LatchedBoolean armOut = new LatchedBoolean();
@@ -163,7 +165,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
 //        command = new ResetPoseDrivePath(new Straight_Path());
-        command = new NoCommand();
+        command = new WaitCommand(3);
         command.start();
         teleopInit();
     }
@@ -173,19 +175,24 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
-        if (command.isRunning() && Math.abs(Util.deadband(mControlBoard.getThrottle(), 0.2)) > 0 || Math.abs(Util.deadband(mControlBoard.getTurn(), 0.2)) > 0){
-            command.cancel();
-        }
+//        if (command.isRunning() && Math.abs(Util.deadband(mControlBoard.getThrottle(), 0.2)) > 0 || Math.abs(Util.deadband(mControlBoard.getTurn(), 0.2)) > 0){
+//            command.cancel();
+//        }
         if(!command.isRunning()){
-            driveManually();
+            runStrafe();
+        }else{
+            stopStrafe();
         }
+        driveManually();
         enabledPeriodic();
     }
+
 
     @Override
     public void teleopInit() {
         mDisabledLooper.stop();
         mEnabledLooper.start();
+        mClimber.stopPump();
     }
 
     public void enabledPeriodic(){
@@ -196,7 +203,8 @@ public class Robot extends TimedRobot {
 //        }if(!mControlBoard.getStrafeManual()){
 //            mStrafe.setVision();
 //        }
-        mStrafe.setManual(mControlBoard.getStrafePosition());
+
+
 
 
         if (Timer.getMatchTime() < 30 && Timer.getMatchTime() > 29) {
@@ -205,11 +213,16 @@ public class Robot extends TimedRobot {
             mControlBoard.setRumble(false);//TODO this may become a problem if other rumbles are implemented
         }
 
-        if(enableClimbMode.update(mControlBoard.getEnableClimbMode())){
+        if(startPump.update(Timer.getMatchTime() < 30)){
+            mClimber.startPump();
+        }
+
+        if(enableClimbMode.update(mControlBoard.getEnableClimbMode() || Timer.getMatchTime() < 15)){
             runCommand(new EnableClimb());
         }
 
         if (mClimber.getState() == Climber.ClimberState.PERCENT_OUTPUT) {
+            System.out.println("enabled climb");
             mClimber.setOutput(mControlBoard.getClimberThrottle());
             if(grabHab.update(mControlBoard.getGrabHAB())){
                 mClimber.openSolenoid();
@@ -299,6 +312,9 @@ public class Robot extends TimedRobot {
             runCommand(new RemoveHatch(false));
         }
 
+
+
+
         Scheduler.getInstance().run();
     }
 
@@ -322,6 +338,7 @@ public class Robot extends TimedRobot {
         mDrive.setOpenLoop(mCheesyDriveHelper.cheesyDrive(mControlBoard.getThrottle()*modifier, turn,
                 quickTurn));
     }
+
     /**
      * This function is called periodically during operator control.
      * TODO fix claw in ball mode
@@ -330,6 +347,7 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         driveManually();
         enabledPeriodic();
+        runStrafe();
     }
 
     @Override
@@ -338,6 +356,22 @@ public class Robot extends TimedRobot {
         mDisabledLooper.stop();
     }
 
+
+    public void runStrafe(){
+        System.out.println("Strafe:" + mControlBoard.getStrafePosition());
+        if(Math.abs(Util.deadband(mControlBoard.getStrafePosition()))>0){
+            System.out.println("\nStrafe:" + mControlBoard.getStrafePosition()+"\n");
+            mStrafe.setManual(mControlBoard.getStrafePosition());
+        }else{
+            mStrafe.setVision();
+        }
+        if(mControlBoard.getHoldStrafe()){
+            mStrafe.setNeutral();
+        }
+    }
+    public void stopStrafe(){
+        mStrafe.setNeutral();
+    }
     /**
      * This function is called periodically during test mode.
      */

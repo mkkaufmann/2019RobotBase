@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Solenoid;
 import frc.robot.Constants;
 import frc.robot.lib.GenericPWMSpeedController;
@@ -82,18 +83,25 @@ public class Climber extends Subsystem{
      * Updates the output for the climber motor
      * @param demand speed
      */
-    public void setOutput(double demand){
+    public synchronized void setOutput(double demand){
         mPeriodicIO.demand = demand;
+    }
+
+    public synchronized void startPump(){
+        mPump.set(0.75);
+    }
+
+    public synchronized void stopPump(){
+        mPump.set(0);
     }
 
     @Override
     public synchronized void writePeriodicOutputs(){
         if(mState == ClimberState.PERCENT_OUTPUT){
             mMaster.set(mPeriodicIO.demand);
-            mPump.set(1);
+            startPump();
         }else{
             mMaster.set(0);
-            mPump.set(0);
         }
     }
 

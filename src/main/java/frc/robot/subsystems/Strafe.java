@@ -88,13 +88,13 @@ public class Strafe extends Subsystem {
     public synchronized void setManual(double demand){
         mControlState = ControlState.MANUAL;
         mPeriodicIO.demand = -demand;
-        //pid.enable();
+        pid.enable();
 //        pid.disable();
     }
 
     public synchronized void setVision(){
         mControlState = ControlState.POSITION;
-        //pid.enable();
+        pid.enable();
     }
 
     public synchronized void setNeutral(){

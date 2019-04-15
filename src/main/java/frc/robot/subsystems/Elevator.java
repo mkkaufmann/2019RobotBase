@@ -94,8 +94,8 @@ public class Elevator extends Subsystem{
                 mMaster.set(ControlMode.Position, mPeriodicIO.demand);
                 break;
             case MOTION_MAGIC:
-                //System.out.println(mPeriodicIO.demand);
-                //mMaster.set(ControlMode.MotionMagic, -mPeriodicIO.demand);//TODO
+                System.out.println(mPeriodicIO.demand);
+                mMaster.set(ControlMode.MotionMagic, -mPeriodicIO.demand);
                 break;
         }
     }

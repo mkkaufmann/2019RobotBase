@@ -63,14 +63,15 @@ public class Vision extends Subsystem {
         public static double distance = 0;
         public static double xOffset = 0;
         public static boolean detected = false;
+        public static final double cameraOffset = -6;
 
-        private static final double X_OFFSET_SCALAR = -0.01;
+        private static final double X_OFFSET_SCALAR = -0.001;
 
         public static double getXOffsetInches(){
             if(!detected){
                 return 0;
             }
-            return distance * xOffset * X_OFFSET_SCALAR;
+            return distance * xOffset * X_OFFSET_SCALAR + cameraOffset;
         }
     }
 }
