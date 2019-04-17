@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import frc.robot.commands.drive.pathfollowing.PathBuilder;
 import frc.robot.loops.ILooper;
 import frc.robot.loops.Loop;
 import frc.robot.statemachines.SuperstructureStateMachine;
@@ -13,7 +12,7 @@ public class Superstructure extends Subsystem{
     private static Superstructure mInstance = null;
     private SuperstructureState mState = new SuperstructureState();
     private Elevator mElevator = Elevator.getInstance();
-    private Arm mArm = Arm.getInstance();
+    private Projector mProjector = Projector.getInstance();
     private Climber mClimber = Climber.getInstance();
     private Mouth mMouth = Mouth.getInstance();
     private Strafe mStrafe = Strafe.getInstance();
@@ -72,7 +71,7 @@ public class Superstructure extends Subsystem{
 
     private synchronized void updateObservedState(SuperstructureState state) {
         state.height = mElevator.getInchesFromBottom();
-        state.armExtended = mArm.getPosition() == Arm.ArmPosition.SCORE;
+        state.projectorExtended = mProjector.getPosition() == Projector.ProjectorPosition.SCORE;
 
         //TODO motion planner
 //        state.elevatorSentLastTrajectory = mElevator.hasFinishedTrajectory();
@@ -89,7 +88,7 @@ public class Superstructure extends Subsystem{
                 //TODO implement mElevator.setMotionMagicPosition(commandState.height);
             }
         }
-        //TODO Implement arm etc
+        //TODO Implement projector etc
     }
 
     @Override
@@ -108,11 +107,11 @@ public class Superstructure extends Subsystem{
                 synchronized (Superstructure.this) {
                     updateObservedState(mState);
 
-                    if (!isArmInStartingConfiguration()) {
+                    if (!isProjectorInStartingConfiguration()) {
                         // Kickstand is fired, so not engaged.
                         mStateMachine.setMaxHeight(SuperstructureConstants.kElevatorMaxHeight);
                     } else {
-                        mStateMachine.setMaxHeight(SuperstructureConstants.kElevatorMaxHeightArmAtStart);
+                        mStateMachine.setMaxHeight(SuperstructureConstants.kElevatorMaxHeightProjectorOut);
                     }
 
                     mCommand = mStateMachine.update(timestamp, mWantedAction, mState);
@@ -153,9 +152,9 @@ public class Superstructure extends Subsystem{
         isClimbMode = activated;
     }
 
-    public synchronized boolean isArmInStartingConfiguration() {
-        return mArm.getPosition() == Arm.ArmPosition.STOW;
+    public synchronized boolean isProjectorInStartingConfiguration() {
+        return mProjector.getPosition() == Projector.ProjectorPosition.STOW;
     }
 
-    //TODO add arm, etc. methods and values
+    //TODO add projector, etc. methods and values
 }

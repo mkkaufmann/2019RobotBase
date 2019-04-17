@@ -32,7 +32,7 @@ public interface IButtonControlBoard {
 
     boolean getStrafeManual();
 
-    boolean getArmOut();
+    boolean getProjectorOut();
 
     void setButtonRumble(boolean on);
 

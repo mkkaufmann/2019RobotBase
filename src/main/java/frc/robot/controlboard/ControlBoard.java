@@ -38,8 +38,8 @@ public class ControlBoard implements IControlBoard {
     }
 
     @Override
-    public boolean getArmOut() {
-        return mButtonControlBoard.getArmOut();
+    public boolean getProjectorOut() {
+        return mButtonControlBoard.getProjectorOut();
     }
 
 

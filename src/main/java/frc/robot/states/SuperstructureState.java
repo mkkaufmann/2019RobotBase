@@ -2,15 +2,15 @@ package frc.robot.states;
 
 public class SuperstructureState {
     public double height = SuperstructureConstants.kElevatorMinHeight;
-    public boolean armExtended = false;
+    public boolean projectorExtended = false;
     public boolean clawOpen = false;
 
     public boolean hasCargo = false;
     public boolean hasHatch = false;
 
-    public SuperstructureState(double height, boolean armExtended, boolean clawExtended){
+    public SuperstructureState(double height, boolean projectorExtended, boolean clawExtended){
         this.height = height;
-        this.armExtended = armExtended;
+        this.projectorExtended = projectorExtended;
         this.clawOpen = clawExtended;
     }
 
@@ -20,7 +20,7 @@ public class SuperstructureState {
 
     public SuperstructureState(SuperstructureState other){
         this.height = other.height;
-        this.armExtended = other.armExtended;
+        this.projectorExtended = other.projectorExtended;
         this.clawOpen = other.clawOpen;
     }
 

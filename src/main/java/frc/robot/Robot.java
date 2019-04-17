@@ -8,17 +8,13 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.NoCommand;
 import frc.robot.commands.WaitCommand;
-import frc.robot.commands.actions.arm.ScoreArm;
-import frc.robot.commands.actions.arm.StowArm;
+import frc.robot.commands.actions.projector.ScoreProjector;
+import frc.robot.commands.actions.projector.StowProjector;
 import frc.robot.commands.actions.claw.ClawHolding;
 import frc.robot.commands.actions.claw.ClawIn;
 import frc.robot.commands.actions.claw.ClawNeutral;
@@ -49,23 +45,18 @@ import java.util.Arrays;
 //TODO add vision and cameras -> Auto align, auto pickup, auto line up, auto grab cargo
 //TODO restrict mechanisms before climb
 public class Robot extends TimedRobot {
-    private static final String kDefaultAuto = "Default";
-    private static final String kCustomAuto = "My Auto";
-    private String m_autoSelected;
-    private final SendableChooser<String> m_chooser = new SendableChooser<>();
     private Looper mEnabledLooper = new Looper();
     private Looper mDisabledLooper = new Looper();
 
     private Drive mDrive = Drive.getInstance();
     private CheesyDriveHelper mCheesyDriveHelper = new CheesyDriveHelper();
     private ControlBoard mControlBoard = new ControlBoard();
-    private Arm mArm = Arm.getInstance();
+    private Projector mProjector = Projector.getInstance();
     private Climber mClimber = Climber.getInstance();
     private Elevator mElevator = Elevator.getInstance();
     private Mouth mMouth = Mouth.getInstance();
     private Strafe mStrafe = Strafe.getInstance();
     private Superstructure mSuperStructure = Superstructure.getInstance();
-    private Timer timer = new Timer();
     private boolean shortRumble = false;
     private boolean longRumble = false;
 
@@ -76,15 +67,13 @@ public class Robot extends TimedRobot {
     private LatchedBoolean goToMidCargoRocket = new LatchedBoolean();
     private LatchedBoolean goToHighCargoRocket = new LatchedBoolean();
     private LatchedBoolean goToCargoShip = new LatchedBoolean();
-    private LatchedBoolean jog = new LatchedBoolean();
 
     private LatchedBoolean removeLeftHatch = new LatchedBoolean();
     private LatchedBoolean removeRightHatch = new LatchedBoolean();
     private LatchedBoolean grabHab = new LatchedBoolean();
     private LatchedBoolean startPump = new LatchedBoolean();
     private LatchedBoolean enableClimbMode = new LatchedBoolean();
-    private LatchedBoolean centerStrafe = new LatchedBoolean();
-    private LatchedBoolean armOut = new LatchedBoolean();
+    private LatchedBoolean projectorOut = new LatchedBoolean();
 
     private GState hatchIn = new GState();
     private GState hatchOut = new GState();
@@ -98,7 +87,7 @@ public class Robot extends TimedRobot {
                     Drive.getInstance(),
                     Superstructure.getInstance(),
                     Elevator.getInstance(),
-                    Arm.getInstance(),
+                    Projector.getInstance(),
                     Climber.getInstance(),
                     Mouth.getInstance(),
                     RollerClaw.getInstance(),
@@ -114,10 +103,6 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-        m_chooser.addOption("My Auto", kCustomAuto);
-        SmartDashboard.putData("Auto choices", m_chooser);
-
         mSubsystemManager.registerEnabledLoops(mEnabledLooper);
         mSubsystemManager.registerDisabledLoops(mDisabledLooper);
         CameraServer.getInstance().startAutomaticCapture();
@@ -263,17 +248,17 @@ public class Robot extends TimedRobot {
         if(cargoInState.pressed || cargoOutState.pressed) {
             runCommand(new ClawNeutral());
         }else if(hatchInState.pressed || hatchOutState.pressed){
-            runCommand(new ScoreArm());
+            runCommand(new ScoreProjector());
         }
 
-        if(armOut.update(mControlBoard.getArmOut())){
-            runCommand(new StowArm());
+        if(projectorOut.update(mControlBoard.getProjectorOut())){
+            runCommand(new StowProjector());
         }
 
         System.out.println("Elevator encoder" + mElevator.getInchesFromBottom());
         double elevatorThrottle = mControlBoard.getElevatorThrottle();
         if(elevatorThrottle > 0){
-            runCommand(new ScoreArm());
+            runCommand(new ScoreProjector());
         }
 
         if(goToLowHatchRocket.update(mControlBoard.getHatchLow())){
@@ -320,7 +305,6 @@ public class Robot extends TimedRobot {
 
     public void driveManually(){
         double turn = mControlBoard.getTurn();
-        double pTurn = turn;//debug
         boolean quickTurn = mControlBoard.getQuickTurn() || (Util.deadband(mControlBoard.getThrottle()) == 0 && Math.abs(Util.deadband(turn)) > 0);
 
         if(quickTurn) {
@@ -332,7 +316,6 @@ public class Robot extends TimedRobot {
             quickTurn = true;
         }
 
-//        System.out.println("Yaw" + Dashboard.getInstance().getTargetYaw() + "Vision Assist: " + mControlBoard.getVisionAssist() + " Turn: " + turn + " Quickturn:" + quickTurn + "quickturn pressed: " + mControlBoard.getQuickTurn() + "pturn: " + pTurn);
 
         double modifier = Timer.getMatchTime() < 15 ? 1 : 0.9;
         mDrive.setOpenLoop(mCheesyDriveHelper.cheesyDrive(mControlBoard.getThrottle()*modifier, turn,
@@ -341,7 +324,6 @@ public class Robot extends TimedRobot {
 
     /**
      * This function is called periodically during operator control.
-     * TODO fix claw in ball mode
      */
     @Override
     public void teleopPeriodic() {
@@ -358,9 +340,9 @@ public class Robot extends TimedRobot {
 
 
     public void runStrafe(){
-        System.out.println("Strafe:" + mControlBoard.getStrafePosition());
+//        System.out.println("Strafe:" + mControlBoard.getStrafePosition());//TODO move to telemetry
         if(Math.abs(Util.deadband(mControlBoard.getStrafePosition()))>0){
-            System.out.println("\nStrafe:" + mControlBoard.getStrafePosition()+"\n");
+//            System.out.println("\nStrafe:" + mControlBoard.getStrafePosition()+"\n");
             mStrafe.setManual(mControlBoard.getStrafePosition());
         }else{
             mStrafe.setVision();

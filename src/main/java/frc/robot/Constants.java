@@ -53,7 +53,7 @@ public class Constants {
     public static class kClaw{
         public static final int servoPort = 1;//PWM
     }
-    public static class kArm{
+    public static class kProjector {
         public static final int masterPort = 0;//PWM
     }
     public static class kClimber{

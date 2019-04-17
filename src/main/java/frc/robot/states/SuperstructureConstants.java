@@ -3,7 +3,7 @@ package frc.robot.states;
 //TODO tune
 public class SuperstructureConstants {
     public static final double kElevatorMaxHeight = 74.5; // TUNE THIS?
-    public static final double kElevatorMaxHeightArmAtStart = 30.0;
+    public static final double kElevatorMaxHeightProjectorOut = 30.0;
     public static final double kElevatorMinHeight = 0.0; // TUNE THIS?
 
     // This is in inches / ~20ms
@@ -34,9 +34,6 @@ public class SuperstructureConstants {
     public static final double kStrafeMinEncoderValue = 0;
     public static final double kStrafeMaxEncoderValue = kStrafeInchesWidth * kStrafeEncoderTicksPerInch;//22898
     public static final double kStrafeMidEncoderValue = (kStrafeMinEncoderValue+kStrafeMaxEncoderValue)/2;
-
-    //Arm values
-    public static final double kArmDefaultSpeed = 1;
 
     //mouth
     public static final double kRunningCurrent = 0;

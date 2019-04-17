@@ -45,7 +45,7 @@ public class GamepadButtonControlBoard implements IButtonControlBoard {
     }
 
     @Override
-    public boolean getArmOut() {
+    public boolean getProjectorOut() {
         return mJoystick.getRawButton(7) || mJoystick.getRawButton(8);
     }
 

@@ -3,8 +3,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
-import frc.robot.commands.actions.arm.ScoreArm;
-import frc.robot.commands.actions.arm.StowArm;
+import frc.robot.commands.actions.projector.ScoreProjector;
+import frc.robot.commands.actions.projector.StowProjector;
 import frc.robot.commands.actions.miscellaneous.RemoveHatch;
 import frc.robot.controlboard.ControlBoard;
 import frc.robot.poofs.RobotState2;
@@ -64,10 +64,10 @@ public class Dashboard extends Subsystem {
                 case "JogHatchToCargo": mElevator.jog(12);
                     break;
                 case "ProjectorIn":
-                    Robot.runCommand(new StowArm());
+                    Robot.runCommand(new StowProjector());
                     break;
                 case "ProjectorOut":
-                    Robot.runCommand(new ScoreArm());
+                    Robot.runCommand(new ScoreProjector());
                     break;
                 case "RemoveHatchLeft":
                     Robot.runCommand(new RemoveHatch(true));
@@ -99,8 +99,8 @@ public class Dashboard extends Subsystem {
         SmartDashboard.putNumber("Throttle", mControlBoard.getThrottle());
         SmartDashboard.putBoolean("QuickTurn", mControlBoard.getQuickTurn());
         SmartDashboard.putString("ClawState", RollerClaw.getInstance().getState().toString());
-//        SmartDashboard.putString("ProjectorState", Arm.getInstance().getState().toString());
-        SmartDashboard.putString("ProjectorTarget", Arm.getInstance().getPosition().toString());
+//        SmartDashboard.putString("ProjectorState", Projector.getInstance().getState().toString());
+        SmartDashboard.putString("ProjectorTarget", Projector.getInstance().getPosition().toString());
     }
 
     public double getTargetYaw(){
