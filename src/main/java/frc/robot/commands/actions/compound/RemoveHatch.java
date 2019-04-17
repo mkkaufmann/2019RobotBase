@@ -1,13 +1,11 @@
-package frc.robot.commands.actions.miscellaneous;
+package frc.robot.commands.actions.compound;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.commands.actions.claw.ClawHolding;
 import frc.robot.commands.actions.claw.ClawIn;
-import frc.robot.commands.actions.mouth.MouthIn;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.RollerClaw;
 import frc.robot.subsystems.Strafe;
 
 public class RemoveHatch extends Command {

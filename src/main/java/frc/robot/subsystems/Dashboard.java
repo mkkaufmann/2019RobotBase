@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.commands.actions.projector.ScoreProjector;
 import frc.robot.commands.actions.projector.StowProjector;
-import frc.robot.commands.actions.miscellaneous.RemoveHatch;
+import frc.robot.commands.actions.compound.RemoveHatch;
 import frc.robot.controlboard.ControlBoard;
 import frc.robot.poofs.RobotState2;
 import frc.robot.states.SuperstructureConstants;

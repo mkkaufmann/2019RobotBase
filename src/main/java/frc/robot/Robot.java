@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.robot.commands.WaitCommand;
+import frc.robot.commands.actions.elevator.SetHeight;
 import frc.robot.commands.actions.projector.ScoreProjector;
 import frc.robot.commands.actions.projector.StowProjector;
 import frc.robot.commands.actions.claw.ClawHolding;
@@ -20,13 +21,17 @@ import frc.robot.commands.actions.claw.ClawIn;
 import frc.robot.commands.actions.claw.ClawNeutral;
 import frc.robot.commands.actions.claw.ClawOut;
 import frc.robot.commands.actions.climber.EnableClimb;
-import frc.robot.commands.actions.miscellaneous.RemoveHatch;
+import frc.robot.commands.actions.compound.RemoveHatch;
 import frc.robot.commands.actions.mouth.MouthHolding;
 import frc.robot.commands.actions.mouth.MouthIn;
 import frc.robot.commands.actions.mouth.MouthNeutral;
 import frc.robot.commands.actions.mouth.MouthOut;
+import frc.robot.commands.actions.util.ParallelCommand;
+import frc.robot.commands.actions.util.SequentialCommand;
+import frc.robot.commands.actions.util.WaitUntilTrueCommand;
 import frc.robot.controlboard.ControlBoard;
 import frc.robot.lib.*;
+import frc.robot.lib.Boolean;
 import frc.robot.loops.Looper;
 import frc.robot.states.SuperstructureConstants;
 import frc.robot.subsystems.*;
@@ -254,6 +259,22 @@ public class Robot extends TimedRobot {
         if(projectorOut.update(mControlBoard.getProjectorOut())){
             runCommand(new StowProjector());
         }
+
+        //go up to height
+        //shoot if button is pressed
+        //stop shooting when button released and return to bottom
+//        runCommand(new SequentialCommand(Arrays.asList(new SetHeight(SuperstructureConstants.kRocketCargoMiddle), new WaitUntilTrueCommand(new Boolean() {
+//            @Override
+//            public boolean get() {
+//                return mControlBoard.getCargoMid();
+//            }
+//        }), new MouthIn(), new WaitUntilTrueCommand(new Boolean() {
+//            @Override
+//            public boolean get() {
+//                return !mControlBoard.getCargoMid();
+//            }
+//        }), new MouthNeutral(), new SetHeight(SuperstructureConstants.kRocketHatchLow))));
+
 
         System.out.println("Elevator encoder" + mElevator.getInchesFromBottom());
         double elevatorThrottle = mControlBoard.getElevatorThrottle();
