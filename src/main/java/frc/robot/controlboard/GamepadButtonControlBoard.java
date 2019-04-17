@@ -34,8 +34,14 @@ public class GamepadButtonControlBoard implements IButtonControlBoard {
     }
 
     @Override
-    public double getStrafeThrottle(){
-        return Util.deadband(mJoystick.getRawAxis(0),0.08);
+    public double getStrafePosition(){
+        return mJoystick.getRawAxis(0) * -5;
+//        return Util.deadband(mJoystick.getRawAxis(0),0.08);
+    }
+
+    @Override
+    public boolean getStrafeManual() {
+        return !mJoystick.getRawButton(9);
     }
 
     @Override
@@ -99,12 +105,12 @@ public class GamepadButtonControlBoard implements IButtonControlBoard {
     }
 
     @Override
-    public boolean getJogElevator() {
+    public boolean getHoldStrafe() {
         return mJoystick.getRawButton(3);
     }
 
     @Override
     public double getElevatorThrottle() {
-        return Util.deadband(mJoystick.getRawAxis(5));
+        return -Util.deadband(mJoystick.getRawAxis(5));
     }
 }

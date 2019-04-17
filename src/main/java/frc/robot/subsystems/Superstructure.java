@@ -84,7 +84,7 @@ public class Superstructure extends Subsystem{
             mElevator.setOpenLoop(commandState.openLoopElevatorPercent);
         } else {
             if (isElevatorJogging) {
-                mElevator.setPositionPID(commandState.height);
+//                mElevator.setPositionPID(commandState.height);
             } else {
                 //TODO implement mElevator.setMotionMagicPosition(commandState.height);
             }

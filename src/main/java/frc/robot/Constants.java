@@ -1,5 +1,10 @@
 package frc.robot;
 
+/**
+ * Constant values (e.g. motion profiling parameters and port numbers)
+ * @author Michael Kaufmann
+ * @version 2019
+ */
 public class Constants {
 
     public static double kLooperDt = 0.005;
@@ -31,37 +36,42 @@ public class Constants {
     public static double kPathStopSteeringDistance = 9.0;
 
     public static class kDrivetrain{
-        public static final int leftMasterID = 3;//CAN
-        public static final int leftFollowerID = 4;//CAN
-        public static final int rightMasterID = 1;//CAN
-        public static final int rightFollowerID = 0;//CAN
+        public static final int leftMasterID = 3;//CAN (comp 3)
+        public static final int leftFollowerID = 4;//CAN (comp 4)
+        public static final int rightMasterID = 1;//CAN (comp 1)
+        public static final int rightFollowerID = 0;//CAN (comp 0)
         public static final double WHEEL_DIAMETER_IN = 6;
         public static final double ENCODER_TICKS_PER_ROTATION = 4096;
     }
     public static class kElevator{
-        public static final int masterID = 2;//
-        //TODO add limit switches
+        public static final int masterID = 2;//CAN
+        public static final int ENCODER_TICKS_PER_INCH = 8192/9;
     }
     public static class kMouth{
-        public static final int masterPort = 1;//PWM
+        public static final int masterPort = 2;//PWM
     }
     public static class kClaw{
-        public static final int servoPort = 2;//PWM
+        public static final int servoPort = 1;//PWM
     }
     public static class kArm{
         public static final int masterPort = 0;//PWM
     }
     public static class kClimber{
         public static final int mMasterPort = 3;//PWM
+        public static final int mPumpPort = 6;//PWM
+        public static final int mSolenoidPort = 3;//PCM
     }
     public static class kStrafe{
         public static final int masterPort = 5;//PWM
-        public static final int encoderPort1 = 6;//DIO
-        public static final int encoderPort2 = 7;//DIO
-        public static final int limitPort = 3;//DIO
+        public static final int mPotPort = 0;//ANALOG IN
+        //pot wires outside-in -> white, red, black
     }
     public static class kControlBoard{
         public static final int kDriveGamepadPort = 0;
         public static final int kButtonGamepadPort = 1;
     }
+//    public static class kGrabber{
+//        public static final int kPumpPort = 0;
+//        public static final int kFoldPort = 1;
+//    }
 }

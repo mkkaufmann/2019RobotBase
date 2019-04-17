@@ -2,7 +2,7 @@ package frc.robot.states;
 
 //TODO tune
 public class SuperstructureConstants {
-    public static final double kElevatorMaxHeight = 72.0; // TUNE THIS?
+    public static final double kElevatorMaxHeight = 74.5; // TUNE THIS?
     public static final double kElevatorMaxHeightArmAtStart = 30.0;
     public static final double kElevatorMinHeight = 0.0; // TUNE THIS?
 
@@ -16,17 +16,17 @@ public class SuperstructureConstants {
     private static final double kPortRadius = kPortDiameter / 2;
 
     //Elevator Heights (measured from bottom of mouth)
-    public static final double kRocketCargoLow = 27.5 - kPortRadius;
-    public static final double kRocketCargoMiddle = 55.5 - kPortRadius;
-    public static final double kRocketCargoHigh = 83.5 - kPortRadius >= kElevatorMaxHeight ? kElevatorMaxHeight : 83.5 - kPortRadius;
-
+    public static final double kRocketCargoLow = 27.5 - kPortRadius + 4;
+    public static final double kRocketCargoMiddle = 55.5 - kPortRadius + 4;
+    public static final double kRocketCargoHigh = 83.5 - kPortRadius + 4 >= kElevatorMaxHeight ? kElevatorMaxHeight : 83.5 - kPortRadius + 4;
+//    public static final double kLoadingStation = 37;
 
     private static final double kClawOffset = 19.0;
     public static final double kRocketHatchLow = 19.0 - kClawOffset;
-    public static final double kRocketHatchMiddle = 47.0 - kClawOffset;
-    public static final double kRocketHatchHigh = 75.0 - kClawOffset;
+    public static final double kRocketHatchMiddle = 48.5 - kClawOffset;
+    public static final double kRocketHatchHigh = 76.5 - kClawOffset;
 
-    public static final double kCargoShipCargo = 45.0; // TUNE THIS?
+    public static final double kCargoShipCargo = 37.0; // TUNE THIS?
 
     //Strafe values
     public static final double kStrafeInchesWidth = 16;

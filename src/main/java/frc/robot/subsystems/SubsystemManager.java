@@ -73,7 +73,9 @@ public class SubsystemManager implements ILooper {
 
         @Override
         public void onStart(double timestamp) {
-
+            for (Subsystem s : mAllSubsystems) {
+                s.stop();
+            }
         }
 
         @Override

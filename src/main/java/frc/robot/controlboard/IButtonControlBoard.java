@@ -24,11 +24,13 @@ public interface IButtonControlBoard {
 
     boolean getHatchHigh();
 
-    boolean getJogElevator();
+    boolean getHoldStrafe();
 
     double getElevatorThrottle();
 
-    double getStrafeThrottle();
+    double getStrafePosition();
+
+    boolean getStrafeManual();
 
     boolean getArmOut();
 
