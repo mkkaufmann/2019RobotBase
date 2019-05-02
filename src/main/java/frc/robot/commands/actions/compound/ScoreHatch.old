@@ -1,0 +1,62 @@
+package frc.robot.commands.actions.compound;
+
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.Robot;
+import frc.robot.commands.actions.claw.ClawHolding;
+import frc.robot.commands.actions.claw.ClawOut;
+import frc.robot.commands.actions.elevator.SetHeight;
+import frc.robot.controlboard.ControlBoard;
+import frc.robot.lib.Util;
+import frc.robot.subsystems.Elevator;
+
+public class ScoreHatch extends Command {
+
+    private Timer timer = new Timer();
+    private double elevatorHeight;
+    private double elevatorHeightThreshold;
+    private Elevator mElevator;
+    private boolean shotHatch;
+    private ControlBoard mControlBoard;
+    private Button button;
+
+    public ScoreHatch(double elevatorHeight, double elevatorHeightThreshold, Button button)
+    {
+        this.elevatorHeight = elevatorHeight;
+        this.elevatorHeightThreshold = elevatorHeightThreshold;
+        this.mElevator = Elevator.getInstance();
+        this.button = button;
+        shotHatch = false;
+        mControlBoard = new ControlBoard();
+    }
+
+    public ScoreHatch(double elevatorHeight, Button button){
+        this(elevatorHeight, 2, button);
+    }
+
+    @Override
+    protected void initialize() {
+        Robot.runCommand(new SetHeight(elevatorHeight));
+    }
+
+    @Override
+    protected void execute(){
+        if(Util.epsilonEquals(mElevator.getInchesFromBottom(), elevatorHeight, elevatorHeightThreshold) && !shotHatch && button.get()){
+            Robot.runCommand(new ClawOut());
+            shotHatch = true;
+            timer.start();
+        }
+    }
+
+    @Override
+    protected boolean isFinished() {
+        if(!button.get()){
+            if(shotHatch){
+                Robot.runCommand(new ClawHolding());
+                Robot.runCommand(new SetHeight(0));
+            }
+            return true;
+        }
+        return false;
+    }
+}

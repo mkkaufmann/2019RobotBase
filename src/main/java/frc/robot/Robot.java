@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import frc.robot.commands.NoCommand;
+import frc.robot.commands.PrintCommand;
 import frc.robot.commands.WaitCommand;
 import frc.robot.commands.actions.elevator.SetHeight;
 import frc.robot.commands.actions.projector.ScoreProjector;
@@ -28,8 +30,10 @@ import frc.robot.commands.actions.mouth.MouthNeutral;
 import frc.robot.commands.actions.mouth.MouthOut;
 import frc.robot.commands.actions.util.ParallelCommand;
 import frc.robot.commands.actions.util.SequentialCommand;
+import frc.robot.commands.actions.util.WaitUntilFalseCommand;
 import frc.robot.commands.actions.util.WaitUntilTrueCommand;
 import frc.robot.controlboard.ControlBoard;
+import frc.robot.controlboard.buttons.*;
 import frc.robot.lib.*;
 import frc.robot.lib.Boolean;
 import frc.robot.loops.Looper;
@@ -37,6 +41,7 @@ import frc.robot.states.SuperstructureConstants;
 import frc.robot.subsystems.*;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -55,7 +60,7 @@ public class Robot extends TimedRobot {
 
     private Drive mDrive = Drive.getInstance();
     private CheesyDriveHelper mCheesyDriveHelper = new CheesyDriveHelper();
-    private ControlBoard mControlBoard = new ControlBoard();
+    private static ControlBoard mControlBoard = new ControlBoard();
     private Projector mProjector = Projector.getInstance();
     private Climber mClimber = Climber.getInstance();
     private Elevator mElevator = Elevator.getInstance();
@@ -85,6 +90,11 @@ public class Robot extends TimedRobot {
     private GState cargoIn = new GState();
     private GState cargoOut = new GState();
 
+    private HeightButton cargoLow = new CargoLow();
+    private HeightButton cargoShip = new CargoShip();
+    private HeightButton cargoMid = new CargoMid();
+    private HeightButton cargoHigh = new CargoHigh();
+
     private Command command;
 
     private final SubsystemManager mSubsystemManager = new SubsystemManager(
@@ -101,6 +111,10 @@ public class Robot extends TimedRobot {
                     Dashboard.getInstance(),
                     RobotStateEstimator.getInstance())
     );
+
+    public static ControlBoard getControlBoard() {
+        return mControlBoard;
+    }
 
     /**
      * This function is run when the robot is first started up and should be
@@ -133,8 +147,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
-        System.out.println("Vision: "+Vision.Tape.getXOffsetInches());
-        System.out.println(mStrafe.getPotPos());
+//        System.out.println("Vision: "+Vision.Tape.getXOffsetInches());
+//        System.out.println(mStrafe.getPotPos());
     }
 
     public static void runCommand(Command command) {
@@ -185,6 +199,14 @@ public class Robot extends TimedRobot {
         mClimber.stopPump();
     }
 
+    public void scoreCargo(double height, Boolean button){
+        runCommand(new SequentialCommand(new LinkedList<>(Arrays.asList(new SetHeight(height), new PrintCommand("set height"), new WaitUntilTrueCommand(()->Util.epsilonEquals(mElevator.getInchesFromBottom(), height,1)), new PrintCommand("reached height"),new WaitUntilTrueCommand(button), new PrintCommand("button pressed"), new MouthOut(), new PrintCommand("intake out"), new WaitUntilFalseCommand(button), new PrintCommand("button released"), new MouthNeutral(), new PrintCommand("intake off"), new SetHeight(0), new PrintCommand("height to bottom"), new NoCommand()))));
+    }
+
+    public void scoreCargo(HeightButton heightButton){
+        scoreCargo(heightButton.getHeight(), heightButton.getButton());
+    }
+
     public void enabledPeriodic(){
 //        if(Math.abs(Util.deadband(mControlBoard.getStrafePosition()))>0){
 //            mStrafe.setManual(mControlBoard.getStrafePosition()*-5);
@@ -212,7 +234,7 @@ public class Robot extends TimedRobot {
         }
 
         if (mClimber.getState() == Climber.ClimberState.PERCENT_OUTPUT) {
-            System.out.println("enabled climb");
+//            System.out.println("enabled climb");
             mClimber.setOutput(mControlBoard.getClimberThrottle());
             if(grabHab.update(mControlBoard.getGrabHAB())){
                 mClimber.openSolenoid();
@@ -260,23 +282,8 @@ public class Robot extends TimedRobot {
             runCommand(new StowProjector());
         }
 
-        //go up to height
-        //shoot if button is pressed
-        //stop shooting when button released and return to bottom
-//        runCommand(new SequentialCommand(Arrays.asList(new SetHeight(SuperstructureConstants.kRocketCargoMiddle), new WaitUntilTrueCommand(new Boolean() {
-//            @Override
-//            public boolean get() {
-//                return mControlBoard.getCargoMid();
-//            }
-//        }), new MouthIn(), new WaitUntilTrueCommand(new Boolean() {
-//            @Override
-//            public boolean get() {
-//                return !mControlBoard.getCargoMid();
-//            }
-//        }), new MouthNeutral(), new SetHeight(SuperstructureConstants.kRocketHatchLow))));
 
-
-        System.out.println("Elevator encoder" + mElevator.getInchesFromBottom());
+//        System.out.println("Elevator encoder" + mElevator.getInchesFromBottom());
         double elevatorThrottle = mControlBoard.getElevatorThrottle();
         if(elevatorThrottle > 0){
             runCommand(new ScoreProjector());
@@ -292,16 +299,19 @@ public class Robot extends TimedRobot {
             mElevator.setMotionMagic(SuperstructureConstants.kRocketHatchHigh);
         }
         if(goToLowCargoRocket.update(mControlBoard.getCargoLow())){
-            mElevator.setMotionMagic(SuperstructureConstants.kRocketCargoLow);
+            scoreCargo(cargoLow);
         }
         if(goToMidCargoRocket.update(mControlBoard.getCargoMid())){
-            mElevator.setMotionMagic(SuperstructureConstants.kRocketCargoMiddle);
+//            mElevator.setMotionMagic(SuperstructureConstants.kRocketCargoMiddle);
+            scoreCargo(cargoMid);
         }
         if(goToHighCargoRocket.update(mControlBoard.getCargoHigh())){
-            mElevator.setMotionMagic(SuperstructureConstants.kRocketCargoHigh);
+//            mElevator.setMotionMagic(SuperstructureConstants.kRocketCargoHigh);
+            scoreCargo(cargoHigh);
         }
         if(goToCargoShip.update(mControlBoard.getCargoShip())){
-            mElevator.setMotionMagic(SuperstructureConstants.kCargoShipCargo);
+//            mElevator.setMotionMagic(SuperstructureConstants.kCargoShipCargo);
+            scoreCargo(cargoShip);
         }
 
 
