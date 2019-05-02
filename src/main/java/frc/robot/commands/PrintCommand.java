@@ -7,19 +7,22 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.command.InstantCommand;
+import edu.wpi.first.wpilibj.command.Command;
 
-public class PrintCommand extends InstantCommand {
+public class PrintCommand extends Command {
   
   
   private String mPrintMessage;
   public PrintCommand(String message) {
-    super();
     this.mPrintMessage = message;
   }
 
-  protected void initialize() {
-    //System.out.printlnln(this.mPrintMessage);
+  @Override
+  protected boolean isFinished() {
+    System.out.println(mPrintMessage);
+    this.cancel();
+    return true;
   }
+
 
 }
