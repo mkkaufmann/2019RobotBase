@@ -94,6 +94,10 @@ public class Robot extends TimedRobot {
     private HeightButton cargoShip = new CargoShip();
     private HeightButton cargoMid = new CargoMid();
     private HeightButton cargoHigh = new CargoHigh();
+    private HeightButton hatchHigh = new HatchHigh();
+    private HeightButton hatchMid = new HatchMid();
+    private HeightButton hatchLow = new HatchLow();
+
 
     private Command command;
 
@@ -200,11 +204,34 @@ public class Robot extends TimedRobot {
     }
 
     public void scoreCargo(double height, Boolean button){
-        runCommand(new SequentialCommand(new LinkedList<>(Arrays.asList(new SetHeight(height), new PrintCommand("set height"), new WaitUntilTrueCommand(()->Util.epsilonEquals(mElevator.getInchesFromBottom(), height,1)), new PrintCommand("reached height"),new WaitUntilTrueCommand(button), new PrintCommand("button pressed"), new MouthOut(), new PrintCommand("intake out"), new WaitUntilFalseCommand(button), new PrintCommand("button released"), new MouthNeutral(), new PrintCommand("intake off"), new SetHeight(0), new PrintCommand("height to bottom")))));
+        runCommand(new SequentialCommand(new LinkedList<>(Arrays.asList(
+                new SetHeight(height),
+                new WaitUntilTrueCommand(()->Util.epsilonEquals(mElevator.getInchesFromBottom(), height,1) && button.get()),
+                new MouthOut(),
+                new WaitUntilFalseCommand(button),
+                new MouthNeutral(),
+                new SetHeight(0)
+        ))));
     }
 
     public void scoreCargo(HeightButton heightButton){
         scoreCargo(heightButton.getHeight(), heightButton.getButton());
+    }
+
+    public void scoreHatch(double height, Boolean button){
+        runCommand(new SequentialCommand(new LinkedList<>(Arrays.asList(
+                new SetHeight(height),
+                new WaitUntilTrueCommand(()->Util.epsilonEquals(mElevator.getInchesFromBottom(), height,1) && button.get()),
+                new ScoreProjector(),
+                new ClawOut(),
+                new WaitUntilFalseCommand(button),
+                new ClawNeutral(),
+                new SetHeight(0)
+        ))));
+    }
+
+    public void scoreHatch(HeightButton heightButton){
+        scoreHatch(heightButton.getHeight(), heightButton.getButton());
     }
 
     public void enabledPeriodic(){
@@ -290,13 +317,13 @@ public class Robot extends TimedRobot {
         }
 
         if(goToLowHatchRocket.update(mControlBoard.getHatchLow())){
-            mElevator.setMotionMagic(SuperstructureConstants.kRocketHatchLow);
+            scoreHatch(hatchLow);
         }
         if(goToMidHatchRocket.update(mControlBoard.getHatchMid())){
-            mElevator.setMotionMagic(SuperstructureConstants.kRocketHatchMiddle);
+            scoreHatch(hatchMid);
         }
         if(goToHighHatchRocket.update(mControlBoard.getHatchHigh())){
-            mElevator.setMotionMagic(SuperstructureConstants.kRocketHatchHigh);
+            scoreHatch(hatchHigh);
         }
         if(goToLowCargoRocket.update(mControlBoard.getCargoLow())){
             scoreCargo(cargoLow);
