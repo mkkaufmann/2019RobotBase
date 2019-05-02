@@ -200,7 +200,7 @@ public class Robot extends TimedRobot {
     }
 
     public void scoreCargo(double height, Boolean button){
-        runCommand(new SequentialCommand(new LinkedList<>(Arrays.asList(new SetHeight(height), new PrintCommand("set height"), new WaitUntilTrueCommand(()->Util.epsilonEquals(mElevator.getInchesFromBottom(), height,1)), new PrintCommand("reached height"),new WaitUntilTrueCommand(button), new PrintCommand("button pressed"), new MouthOut(), new PrintCommand("intake out"), new WaitUntilFalseCommand(button), new PrintCommand("button released"), new MouthNeutral(), new PrintCommand("intake off"), new SetHeight(0), new PrintCommand("height to bottom"), new NoCommand()))));
+        runCommand(new SequentialCommand(new LinkedList<>(Arrays.asList(new SetHeight(height), new PrintCommand("set height"), new WaitUntilTrueCommand(()->Util.epsilonEquals(mElevator.getInchesFromBottom(), height,1)), new PrintCommand("reached height"),new WaitUntilTrueCommand(button), new PrintCommand("button pressed"), new MouthOut(), new PrintCommand("intake out"), new WaitUntilFalseCommand(button), new PrintCommand("button released"), new MouthNeutral(), new PrintCommand("intake off"), new SetHeight(0), new PrintCommand("height to bottom")))));
     }
 
     public void scoreCargo(HeightButton heightButton){
