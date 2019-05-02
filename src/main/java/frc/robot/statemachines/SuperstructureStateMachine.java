@@ -175,7 +175,7 @@ public class SuperstructureStateMachine {
         mCommand.openLoopElevator = false;
     }
 
-    // MANUAL
+    // MANUAL_POSITION
     private SystemState handleManualTransitions(WantedAction wantedAction,
                                                 SuperstructureState currentState) {
         if (wantedAction != WantedAction.WANT_MANUAL) {
