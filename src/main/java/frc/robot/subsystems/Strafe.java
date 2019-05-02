@@ -5,8 +5,6 @@ import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 import frc.robot.Constants;
 import frc.robot.lib.GenericPWMSpeedController;
-import frc.robot.lib.Util;
-import frc.robot.states.SuperstructureConstants;
 
 public class Strafe extends Subsystem {
 
@@ -49,7 +47,7 @@ public class Strafe extends Subsystem {
         return mControlState;
     }
 
-    private ControlState mControlState = ControlState.MANUAL;
+    private ControlState mControlState = ControlState.MANUAL_POSITION;
 
     private Strafe(){
         mMaster = new GenericPWMSpeedController(Constants.kStrafe.masterPort);
@@ -60,6 +58,10 @@ public class Strafe extends Subsystem {
             mInstance = new Strafe();
         }
         return mInstance;
+    }
+
+    public boolean getPotIsBroken(){
+        return getPotPos() < -6 || getPotPos() > 6;
     }
 
     public double getPotPos(){
@@ -86,15 +88,23 @@ public class Strafe extends Subsystem {
     }
 
     public synchronized void setManual(double demand){
-        mControlState = ControlState.MANUAL;
+        if(getPotIsBroken()){
+            mControlState = ControlState.PERCENT_OUTPUT;
+            pid.disable();
+        }else{
+            mControlState = ControlState.MANUAL_POSITION;
+            pid.enable();
+        }
         mPeriodicIO.demand = -demand;
-        pid.enable();
-//        pid.disable();
     }
 
     public synchronized void setVision(){
-        mControlState = ControlState.POSITION;
-        pid.enable();
+        if (getPotIsBroken()) {
+            setNeutral();
+        }else {
+            mControlState = ControlState.VISION;
+            pid.enable();
+        }
     }
 
     public synchronized void setNeutral(){
@@ -105,27 +115,22 @@ public class Strafe extends Subsystem {
     @Override
     public synchronized void readPeriodicInputs(){
         mPeriodicIO.potPos = Math.floor((fullRange - pot.get())*100)/100.0;
-        switch(mControlState){
-            case POSITION:
-
-                break;
-            case MANUAL:
-
-                break;
-        }
     }
 
     @Override
     public synchronized void writePeriodicOutputs(){
-        //System.out.println("pot:" + mPeriodicIO.potPos);
+        System.out.println("pot:" + mPeriodicIO.potPos);
 
         switch(mControlState){
-            case POSITION:
+            case VISION:
                 pid.setSetpoint(Math.min(Math.max(Vision.Tape.getXOffsetInches(),-5),5));
                 //mMaster.set(0);
                 break;
-            case MANUAL:
-                pid.setSetpoint(mPeriodicIO.demand);
+            case MANUAL_POSITION:
+                pid.setSetpoint(mPeriodicIO.demand * -5);
+                break;
+            case PERCENT_OUTPUT:
+                mMaster.set(mPeriodicIO.demand);
                 break;
             case NEUTRAL:
                 mMaster.set(0);
@@ -140,8 +145,9 @@ public class Strafe extends Subsystem {
     }
 
     public enum ControlState{
-        MANUAL,
-        POSITION,
-        NEUTRAL
+        MANUAL_POSITION,
+        VISION,
+        NEUTRAL,
+        PERCENT_OUTPUT
     }
 }
