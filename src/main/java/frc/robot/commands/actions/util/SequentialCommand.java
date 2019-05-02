@@ -16,6 +16,13 @@ public class SequentialCommand extends Command {
     }
 
     public SequentialCommand(List<Command> list){
+        this(list, true);
+    }
+
+    private SequentialCommand(List<Command> list, boolean init){
+        if(init){
+            list.add(new NoCommand());
+        }
         if(list.isEmpty()){
             this.a = new NoCommand();
             this.b = new NoCommand();
@@ -27,7 +34,7 @@ public class SequentialCommand extends Command {
             this.b = list.get(1);
         }else{
             this.a = list.remove(0);
-            this.b = new SequentialCommand(list);
+            this.b = new SequentialCommand(list, false);
         }
     }
 

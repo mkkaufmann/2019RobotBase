@@ -11,9 +11,9 @@
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/2019Robot.iws" beforeDir="false" afterPath="$PROJECT_DIR$/2019Robot.iws" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/libs/2019RobotBase.jar" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/2019RobotBase.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/controlboard/GamepadButtonControlBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/controlboard/GamepadButtonControlBoard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/statemachines/SuperstructureStateMachine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/statemachines/SuperstructureStateMachine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/Strafe.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/Strafe.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/Robot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/Robot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/util/ParallelCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/util/ParallelCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/util/SequentialCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/util/SequentialCommand.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -76,11 +76,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/Robot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="367">
-              <caret line="378" column="30" selection-start-line="378" selection-start-column="30" selection-end-line="378" selection-end-column="30" />
+            <state relative-caret-position="441">
+              <caret line="217" lean-forward="true" selection-start-line="217" selection-end-line="217" />
               <folding>
                 <element signature="e#4843#4844#0" expanded="true" />
                 <element signature="e#4879#4880#0" expanded="true" />
@@ -91,16 +91,29 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/subsystems/Strafe.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="113" lean-forward="true" selection-start-line="113" selection-end-line="113" />
+            <state relative-caret-position="561">
+              <caret line="124" column="24" lean-forward="true" selection-start-line="124" selection-start-column="24" selection-end-line="124" selection-end-column="24" />
               <folding>
                 <element signature="e#2052#2053#0" expanded="true" />
                 <element signature="e#2110#2111#0" expanded="true" />
                 <element signature="e#1853#1854#0" expanded="true" />
                 <element signature="e#1894#1895#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/util/ParallelCommand.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="238">
+              <caret line="17" column="29" lean-forward="true" selection-start-line="17" selection-start-column="29" selection-end-line="17" selection-end-column="29" />
+              <folding>
+                <element signature="e#388#389#0" expanded="true" />
+                <element signature="e#420#421#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -162,8 +175,15 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/util/SequentialCommand.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="17" column="49" selection-start-line="17" selection-start-column="49" selection-end-line="17" selection-end-column="49" />
+            <state relative-caret-position="561">
+              <caret line="36" column="56" lean-forward="true" selection-start-line="36" selection-start-column="56" selection-end-line="36" selection-end-column="56" />
+              <folding>
+                <element signature="e#394#395#0" expanded="true" />
+                <element signature="e#416#417#0" expanded="true" />
+                <element signature="e#1012#1013#0" expanded="true" />
+                <element signature="e#1037#1038#0" expanded="true" />
+                <element signature="e#1306#1307#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -173,20 +193,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="68">
               <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/controlboard/buttons/CargoShip.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="10" selection-start-line="10" selection-end-line="10" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#229#230#0" expanded="true" />
-                <element signature="e#337#338#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -218,15 +224,16 @@
         <option value="$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/compound/ScoreCargo.java" />
         <option value="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/Elevator.java" />
         <option value="$PROJECT_DIR$/src/main/java/frc/robot/commands/PrintCommand.java" />
-        <option value="$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/util/SequentialCommand.java" />
         <option value="$PROJECT_DIR$/src/main/java/frc/robot/controlboard/buttons/RocketLow.java" />
         <option value="$PROJECT_DIR$/src/main/java/frc/robot/controlboard/buttons/CargoLow.java" />
         <option value="$PROJECT_DIR$/src/main/java/frc/robot/controlboard/buttons/CargoMid.java" />
         <option value="$PROJECT_DIR$/src/main/java/frc/robot/controlboard/buttons/CargoHigh.java" />
-        <option value="$PROJECT_DIR$/src/main/java/frc/robot/Robot.java" />
         <option value="$PROJECT_DIR$/src/main/java/frc/robot/lib/Util.java" />
         <option value="$PROJECT_DIR$/src/main/java/frc/robot/controlboard/GamepadButtonControlBoard.java" />
         <option value="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/Strafe.java" />
+        <option value="$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/util/ParallelCommand.java" />
+        <option value="$PROJECT_DIR$/src/main/java/frc/robot/Robot.java" />
+        <option value="$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/util/SequentialCommand.java" />
       </list>
     </option>
   </component>
@@ -393,7 +400,7 @@
     <property name="MemberChooser.sorted" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556832364651" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556833704803" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/2019RobotBase.ipr" />
   </component>
   <component name="RecentsManager">
@@ -469,7 +476,7 @@
       <workItem from="1554764042925" duration="322000" />
       <workItem from="1554764449872" duration="82000" />
       <workItem from="1555531840184" duration="12000" />
-      <workItem from="1555620243121" duration="11478000" />
+      <workItem from="1555620243121" duration="12785000" />
     </task>
     <task id="LOCAL-00001" summary="set to different heights using compound commands">
       <created>1556827374902</created>
@@ -478,11 +485,18 @@
       <option name="project" value="LOCAL" />
       <updated>1556827374902</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="go to manual input when string pot is unplugged">
+      <created>1556832426889</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1556832426889</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="12277000" />
+    <option name="totallyTimeSpent" value="13584000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1928" y="-8" width="1936" height="1056" extended-state="6" />
@@ -529,7 +543,8 @@
   <component name="VcsManagerConfiguration">
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="true" />
     <MESSAGE value="set to different heights using compound commands" />
-    <option name="LAST_COMMIT_MESSAGE" value="set to different heights using compound commands" />
+    <MESSAGE value="go to manual input when string pot is unplugged" />
+    <option name="LAST_COMMIT_MESSAGE" value="go to manual input when string pot is unplugged" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
   </component>
   <component name="editorHistoryManager">
@@ -635,13 +650,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/util/SequentialCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="17" column="49" selection-start-line="17" selection-start-column="49" selection-end-line="17" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/controlboard/buttons/CargoHigh.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -681,28 +689,53 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/Robot.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/util/SequentialCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="367">
-          <caret line="378" column="30" selection-start-line="378" selection-start-column="30" selection-end-line="378" selection-end-column="30" />
+        <state relative-caret-position="561">
+          <caret line="36" column="56" lean-forward="true" selection-start-line="36" selection-start-column="56" selection-end-line="36" selection-end-column="56" />
           <folding>
-            <element signature="e#4843#4844#0" expanded="true" />
-            <element signature="e#4879#4880#0" expanded="true" />
-            <element signature="e#5960#5961#0" expanded="true" />
-            <element signature="e#5991#5992#0" expanded="true" />
+            <element signature="e#394#395#0" expanded="true" />
+            <element signature="e#416#417#0" expanded="true" />
+            <element signature="e#1012#1013#0" expanded="true" />
+            <element signature="e#1037#1038#0" expanded="true" />
+            <element signature="e#1306#1307#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/subsystems/Strafe.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="113" lean-forward="true" selection-start-line="113" selection-end-line="113" />
+        <state relative-caret-position="561">
+          <caret line="124" column="24" lean-forward="true" selection-start-line="124" selection-start-column="24" selection-end-line="124" selection-end-column="24" />
           <folding>
             <element signature="e#2052#2053#0" expanded="true" />
             <element signature="e#2110#2111#0" expanded="true" />
             <element signature="e#1853#1854#0" expanded="true" />
             <element signature="e#1894#1895#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/commands/actions/util/ParallelCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="17" column="29" lean-forward="true" selection-start-line="17" selection-start-column="29" selection-end-line="17" selection-end-column="29" />
+          <folding>
+            <element signature="e#388#389#0" expanded="true" />
+            <element signature="e#420#421#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/frc/robot/Robot.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="441">
+          <caret line="217" lean-forward="true" selection-start-line="217" selection-end-line="217" />
+          <folding>
+            <element signature="e#4843#4844#0" expanded="true" />
+            <element signature="e#4879#4880#0" expanded="true" />
+            <element signature="e#5960#5961#0" expanded="true" />
+            <element signature="e#5991#5992#0" expanded="true" />
           </folding>
         </state>
       </provider>
